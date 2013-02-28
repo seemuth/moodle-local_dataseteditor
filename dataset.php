@@ -28,9 +28,9 @@ require_once(dirname(__FILE__) . '/../../config.php');
 
 $categoryid = required_param('categoryid', PARAM_INT);
 
-require_login();
-
 $syscontext = context_system::instance();
+require_login($syscontext);
+
 require_capability('local/dataseteditor:view', $syscontext);
 
 $PAGE->set_url(PLUGINPREFIX.'/dataset.php', array('categoryid' => $categoryid));
