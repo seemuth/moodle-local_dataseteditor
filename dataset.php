@@ -28,7 +28,11 @@ require_once(dirname(__FILE__) . '/../../config.php');
 
 $categoryid = required_param('categoryid', PARAM_INT);
 $definitions = $DB->get_records(
-    'question_dataset_definitions', array('category' => $categoryid), 'id,name,type', MUST_EXIST
+    'question_dataset_definitions',
+    array('category' => $categoryid),
+    'id',
+    'id,name,type',
+    MUST_EXIST
 );
 
 require_login();
