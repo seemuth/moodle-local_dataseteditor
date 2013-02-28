@@ -73,7 +73,10 @@ print_object($definitions);
 
 $wildcardform = new dataset_wildcard_form(
     null,
-    array('numwildcards' => count($definitions) + 3)
+    array(
+        'numwildcards' => count($definitions) + 3,
+        'categoryid' => $categoryid,
+    )
 );
 
 if ($wildcardform->is_cancelled()) {

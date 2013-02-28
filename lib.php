@@ -79,7 +79,19 @@ class dataset_wildcard_form extends moodleform {
             $numwildcards = 5;
         }
 
+        $categoryid = $this->_customdata['categoryid'];
+        if (! $categoryid) {
+            $categoryid = 0;
+        }
+
+
         $mform =& $this->_form;
+
+        $mform->addElement(
+            'hidden',
+            'categoryid',
+            $categoryid
+        );
 
         for ($i = 1; $i <= $numwildcards; $i++) {
             $prefix = 'sub_'.$i.'_';
