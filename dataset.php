@@ -70,6 +70,28 @@ $data_items = $DB->get_records_list(
 
 print_object($definitions);
 
+
+$wildcardform = new dataset_wildcard_form(
+    null,
+    array('numwildcards' => count($definitions) + 3)
+);
+
+if ($wildcardform->is_cancelled()) {
+    // Nothing to do for cancel
+
+} else if ($fromform = $wildcardform->get_data()) {
+    echo '<p>Received wildcard data!<br />';
+    print_object($fromform);
+    echo '</p>';
+
+} else {
+    // Set default data
+    // TODO
+
+    $wildcardform->display();
+}
+
+
 foreach ($data_items as $row) {
     print_object($row);
 }

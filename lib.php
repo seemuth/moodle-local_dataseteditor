@@ -27,6 +27,10 @@ defined('MOODLE_INTERNAL') || die;
 
 require_once(dirname(__FILE__) . '/config.php');
 
+//moodleform is defined in formslib.php
+require_once("$CFG->libdir/formslib.php");
+
+
 function local_dataseteditor_extends_settings_navigation($settings, $context) {
     $courseid = optional_param('courseid', 0, PARAM_INT);
 
@@ -64,3 +68,27 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
         );
     }
 }
+
+
+class dataset_wildcard_form extends moodleform {
+    function definition() {
+        global $CFG;
+
+        $numwildcards = $this->_customdata['numwildcards'];
+        if (! $numwildcards) {
+            $numwildcards = 5;
+        }
+
+        $mform =& $this->_form;
+
+        for ($i = 1; $i <= $numwildcards; $i++) {
+            $prefix = 'sub_'.$i.'_';
+
+            $mform->addElement(
+                'text',
+                $prefix.'name',
+                get_string('wildcardX', 'local_dataseteditor')
+            );
+            $mform->setType($prefix.'name', PARAM_TEXT);
+        }
+    }

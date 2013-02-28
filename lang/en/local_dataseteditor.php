@@ -30,6 +30,9 @@ $string['index'] = 'Index';
 $string['view'] = 'View';
 $string['editdataset'] = 'Edit Dataset';
 
+// Form strings
+$string['wildcardX'] = 'Wildcard {$a}';
+
 // Permissions
 $string['dataseteditor:view'] = 'View Datasets';
 $string['dataseteditor:edit'] = 'Edit Datasets';
