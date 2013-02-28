@@ -47,13 +47,30 @@ $PAGE->set_pagelayout('incourse');
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pluginname', 'local_dataseteditor'));
 
-$result = $DB->get_records(
+$definitions = $DB->get_records(
     'question_dataset_definitions',
     array('category' => $categoryid),
     'id',
     'id,name,type'
 );
-foreach ($result as $row) {
+
+$definition_ids = array();
+
+foreach $definitions as $row) {
+    array_push($definition_ids, $row->id);
+}
+
+$data_items = $DB->get_records_list(
+    'question_dataset_items',
+    'definition',
+    $definition_ids,
+    'definition,itemnumber',
+    '*'
+);
+
+print_object($definitions);
+
+foreach ($data_items as $row) {
     print_object($row);
 }
 
