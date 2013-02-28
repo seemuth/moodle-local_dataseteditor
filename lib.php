@@ -92,3 +92,4 @@ class dataset_wildcard_form extends moodleform {
             $mform->setType($prefix.'name', PARAM_TEXT);
         }
     }
+}
