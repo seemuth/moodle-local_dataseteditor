@@ -87,7 +87,7 @@ class dataset_wildcard_form extends moodleform {
             $mform->addElement(
                 'text',
                 $prefix.'name',
-                get_string('wildcardX', 'local_dataseteditor')
+                get_string('wildcardX', 'local_dataseteditor', $i)
             );
             $mform->setType($prefix.'name', PARAM_TEXT);
         }
