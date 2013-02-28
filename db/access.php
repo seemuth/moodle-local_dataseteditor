@@ -27,41 +27,41 @@ defined('MOODLE_INTERNAL') || die;
 
 $capabilities = array(
     'local/dataseteditor:view' => array(
-	'captype' => 'read',
-	'contextlevel' => CONTEXT_COURSE,
-	'archetypes' => array(
-	    'teacher' => CAP_PREVENT,
-	    'editingteacher' => CAP_ALLOW,
-	    'admin' => CAP_ALLOW,
-	),
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'teacher' => CAP_PREVENT,
+            'editingteacher' => CAP_ALLOW,
+            'admin' => CAP_ALLOW,
+        ),
     ),
     'local/dataseteditor:edit' => array(
-	'captype' => 'write',
-	'contextlevel' => CONTEXT_COURSE,
-	'riskbitmask' => RISK_DATALOSS,
-	'archetypes' => array(
-	    'teacher' => CAP_PREVENT,
-	    'editingteacher' => CAP_ALLOW,
-	    'admin' => CAP_ALLOW,
-	),
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'riskbitmask' => RISK_DATALOSS,
+        'archetypes' => array(
+            'teacher' => CAP_PREVENT,
+            'editingteacher' => CAP_ALLOW,
+            'admin' => CAP_ALLOW,
+        ),
     ),
     'local/dataseteditor:export' => array(
-	'captype' => 'read',
-	'contextlevel' => CONTEXT_COURSE,
-	'archetypes' => array(
-	    'teacher' => CAP_PREVENT,
-	    'editingteacher' => CAP_ALLOW,
-	    'admin' => CAP_ALLOW,
-	),
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_COURSE,
+        'archetypes' => array(
+            'teacher' => CAP_PREVENT,
+            'editingteacher' => CAP_ALLOW,
+            'admin' => CAP_ALLOW,
+        ),
     ),
     'local/dataseteditor:import' => array(
-	'captype' => 'write',
-	'contextlevel' => CONTEXT_COURSE,
-	'riskbitmask' => RISK_DATALOSS,
-	'archetypes' => array(
-	    'teacher' => CAP_PREVENT,
-	    'editingteacher' => CAP_ALLOW,
-	    'admin' => CAP_ALLOW,
-	),
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_COURSE,
+        'riskbitmask' => RISK_DATALOSS,
+        'archetypes' => array(
+            'teacher' => CAP_PREVENT,
+            'editingteacher' => CAP_ALLOW,
+            'admin' => CAP_ALLOW,
+        ),
     ),
 );

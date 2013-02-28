@@ -31,36 +31,36 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
     $courseid = optional_param('courseid', 0, PARAM_INT);
 
     $settingnode = $settings->add(
-	get_string('setting', 'local_dataseteditor')
+        get_string('setting', 'local_dataseteditor')
     );
     $indexnode = $settingnode->add(
-	get_string('index', 'local_dataseteditor'),
-	new moodle_url(PLUGINPREFIX.'/index.php')
+        get_string('index', 'local_dataseteditor'),
+        new moodle_url(PLUGINPREFIX.'/index.php')
     );
 
     if ($courseid) {
-	$coursecontext = context_course::instance($courseid);
-	if (!has_capability('local/dataseteditor:view', $coursecontext)) {
-	    $courseid = 0;
-	    $coursecontext = NULL;
-	}
+        $coursecontext = context_course::instance($courseid);
+        if (!has_capability('local/dataseteditor:view', $coursecontext)) {
+            $courseid = 0;
+            $coursecontext = NULL;
+        }
     }
 
     if ($courseid) {
-	global $DB;
+        global $DB;
 
-	$course = $DB->get_record(
-	    'course', array('id' => $courseid), 'id,shortname', MUST_EXIST
-	);
+        $course = $DB->get_record(
+            'course', array('id' => $courseid), 'id,shortname', MUST_EXIST
+        );
 
-	$coursenode = $settingnode->add($course->shortname);
+        $coursenode = $settingnode->add($course->shortname);
 
-	$viewnode = $coursenode->add(
-	    get_string('view', 'local_dataseteditor'),
-	    new moodle_url(
-		PLUGINPREFIX.'/course.php',
-		array('courseid' => $courseid)
-	    )
-	);
+        $viewnode = $coursenode->add(
+            get_string('view', 'local_dataseteditor'),
+            new moodle_url(
+                PLUGINPREFIX.'/course.php',
+                array('courseid' => $courseid)
+            )
+        );
     }
 }

@@ -45,15 +45,15 @@ $table->data = array();
 foreach ($result as $row) {
     $coursecontext = context_course::instance($row->id);
     if (!has_capability('local/dataseteditor:view', $coursecontext)) {
-	continue;
+        continue;
     }
 
     $link = html_writer::link(
-	new moodle_url(
-	    PLUGINPREFIX.'/course.php',
-	    array('courseid' => $row->id)
-	),
-	$row->fullname
+        new moodle_url(
+            PLUGINPREFIX.'/course.php',
+            array('courseid' => $row->id)
+        ),
+        $row->fullname
     );
     array_push($table->data, array($row->id, $link));
 }
