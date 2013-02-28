@@ -51,8 +51,7 @@ $result = $DB->get_records(
     'question_dataset_definitions',
     array('category' => $categoryid),
     'id',
-    'id,name,type',
-    MUST_EXIST
+    'id,name,type'
 );
 foreach ($result as $row) {
     print_object($row);
