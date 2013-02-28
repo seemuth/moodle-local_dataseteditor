@@ -56,7 +56,7 @@ $definitions = $DB->get_records(
 
 $definition_ids = array();
 
-foreach $definitions as $row) {
+foreach ($definitions as $row) {
     array_push($definition_ids, $row->id);
 }
 
