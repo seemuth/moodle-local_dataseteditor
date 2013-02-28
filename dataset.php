@@ -27,13 +27,6 @@ require_once(dirname(__FILE__) . '/config.php');
 require_once(dirname(__FILE__) . '/../../config.php');
 
 $categoryid = required_param('categoryid', PARAM_INT);
-$definitions = $DB->get_records(
-    'question_dataset_definitions',
-    array('category' => $categoryid),
-    'id',
-    'id,name,type',
-    MUST_EXIST
-);
 
 require_login();
 
@@ -53,5 +46,16 @@ $PAGE->set_pagelayout('incourse');
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pluginname', 'local_dataseteditor'));
-print_object($definitions);
+
+$result = $DB->get_records(
+    'question_dataset_definitions',
+    array('category' => $categoryid),
+    'id',
+    'id,name,type',
+    MUST_EXIST
+);
+foreach ($result as $row) {
+    print_object($row);
+}
+
 echo $OUTPUT->footer();
