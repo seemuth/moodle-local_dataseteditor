@@ -28,6 +28,7 @@ $string['pluginname'] = 'Dataset Editor';
 $string['setting'] = 'Dataset Editor';
 $string['index'] = 'Index';
 $string['view'] = 'View';
+$string['editdataset'] = 'Edit Dataset';
 
 // Permissions
 $string['dataseteditor:view'] = 'View Datasets';
