@@ -91,5 +91,8 @@ class dataset_wildcard_form extends moodleform {
             );
             $mform->setType($prefix.'name', PARAM_TEXT);
         }
+
+        // Add submit and reset buttons (no cancel button)
+        $this->add_action_buttons(false);
     }
 }
