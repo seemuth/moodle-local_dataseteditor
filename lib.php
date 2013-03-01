@@ -123,6 +123,6 @@ class dataset_wildcard_form extends moodleform {
             get_string('revert')
         );
         $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
-        $mform->closeHeadersBefore('buttonar');
+        $mform->closeHeaderBefore('buttonar');
     }
 }
