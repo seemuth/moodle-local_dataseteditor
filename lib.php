@@ -89,6 +89,12 @@ class dataset_wildcard_form extends moodleform {
 
         $mform->addElement(
             'hidden',
+            'numwildcards',
+            $numwildcards
+        );
+
+        $mform->addElement(
+            'hidden',
             'categoryid',
             $categoryid
         );
