@@ -57,7 +57,7 @@ $definitions = $DB->get_records(
 $definition_ids = array();
 
 foreach ($definitions as $row) {
-    array_push($definition_ids, $row->id);
+    $definition_ids[] = $row->id;
 }
 
 $data_items = $DB->get_records_list(
