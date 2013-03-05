@@ -66,13 +66,13 @@ function get_wildcards($categoryid, $val_limit=4) {
         'definition',
         array_keys($wildcards),
         'itemnumber',
-        'definition,value',
-        0,
-        $val_limit
+        'definition,value'
     );
 
     foreach ($value_results as $row) {
-        $wildcards[$row->definition]->values[] = $row->value;
+        if (count($wildcards[$row->definition]->values) < $val_limit) {
+            $wildcards[$row->definition]->values[] = $row->value;
+        }
     }
 
     return $wildcards;
