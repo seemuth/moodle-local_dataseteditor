@@ -53,7 +53,7 @@ $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 
 $wildcards = get_wildcards($categoryid);
 
-$form_dest = $PAGE->get_url();
+$form_dest = $PAGE->url;
 $renderer->render_wildcard_form($wildcards, count($wildcards)+3, $form_dest);
 
 print_object($_POST);
