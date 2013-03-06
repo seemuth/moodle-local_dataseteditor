@@ -25,6 +25,7 @@
 
 require_once(dirname(__FILE__) . '/config.php');
 require_once(dirname(__FILE__) . '/../../config.php');
+require_once(dirname(__FILE__) . '/locallib.php');
 
 $categoryid = required_param('categoryid', PARAM_INT);
 
@@ -47,56 +48,14 @@ $PAGE->set_pagelayout('incourse');
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pluginname', 'local_dataseteditor'));
 
-$definitions = $DB->get_records(
-    'question_dataset_definitions',
-    array('category' => $categoryid),
-    'id',
-    'id,name,type'
-);
-
-$definition_ids = array();
-
-foreach ($definitions as $row) {
-    $definition_ids[] = $row->id;
-}
-
-$data_items = $DB->get_records_list(
-    'question_dataset_items',
-    'definition',
-    $definition_ids,
-    'definition,itemnumber',
-    '*'
-);
-
-print_object($definitions);
+$renderer = $PAGE->theme->get_renderer('local_dataseteditor', $PAGE);
 
 
-$wildcardform = new dataset_wildcard_form(
-    null,
-    array(
-        'numwildcards' => count($definitions) + 3,
-        'categoryid' => $categoryid,
-    )
-);
+$wildcards = get_wildcards($categoryid);
 
-if ($wildcardform->is_cancelled()) {
-    // Nothing to do for cancel
+$form_dest = $PAGE->get_url();
+$renderer->render_wildcard_form($wildcards, count($wildcards)+3, $form_dest);
 
-} else if ($fromform = $wildcardform->get_data()) {
-    echo '<p>Received wildcard data!<br />';
-    print_object($fromform);
-    echo '</p>';
-
-} else {
-    // Set default data
-    // TODO
-
-    $wildcardform->display();
-}
-
-
-foreach ($data_items as $row) {
-    print_object($row);
-}
+print_object($_POST);
 
 echo $OUTPUT->footer();
