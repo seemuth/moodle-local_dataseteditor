@@ -48,7 +48,7 @@ $PAGE->set_pagelayout('incourse');
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pluginname', 'local_dataseteditor'));
 
-$renderer = $PAGE->theme->get_renderer('local_dataseteditor', $PAGE);
+$renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 
 
 $wildcards = get_wildcards($categoryid);
