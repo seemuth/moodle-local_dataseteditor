@@ -56,6 +56,7 @@ function get_wildcards($categoryid, $val_limit=4) {
         $wc->id = $row->id;
         $wc->name = $row->name;
         $wc->values = array();
+        $wc->num_more_values = 0;   // Number of values not returned
 
         $wildcards[$wc->id] = $wc;
     }
@@ -72,6 +73,8 @@ function get_wildcards($categoryid, $val_limit=4) {
     foreach ($value_results as $row) {
         if (count($wildcards[$row->definition]->values) < $val_limit) {
             $wildcards[$row->definition]->values[] = $row->value;
+        } else {
+            $wildcards[$row->definition]->num_more_values++;
         }
     }
 
