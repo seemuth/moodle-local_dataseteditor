@@ -147,7 +147,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         $sesskey_contents = 'KEY' . html_writer::tag('input', '', array(
             'type' => 'text',
             'name' => 'sesskey',
-            'value' => $sesskey,
+            'value' => sesskey(),
         ));
         $form_contents .= html_writer::tag('p', $sesskey_contents);
 
