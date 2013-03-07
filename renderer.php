@@ -61,7 +61,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         $table->head = array(
             get_string('name', 'local_dataseteditor'),
             get_string('curvals', 'local_dataseteditor'),
-            get_string('del_p', 'local_dataseteditor'),
+            get_string('delete_p', 'local_dataseteditor'),
         );
         $table->data = array();
 
