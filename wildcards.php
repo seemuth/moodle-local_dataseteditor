@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Show and edit the dataset for a given category.
+ * Show and edit the wildcards for a given category.
  *
  * @package    local
  * @subpackage dataseteditor
@@ -49,6 +49,10 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pluginname', 'local_dataseteditor'));
 
 $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
+
+if (isset($_POST)) {
+    require_sesskey();
+}
 
 
 $wildcards = get_wildcards($categoryid);
