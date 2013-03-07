@@ -46,7 +46,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
      * @param url $form_dest URL to which this form submits
      * @return string html code
      */
-    protected function render_wildcard_form($wildcards, $min_rows, $form_dest) {
+    public function render_wildcard_form($wildcards, $min_rows, $form_dest) {
         $form = new html_form();
         $form->url = $form_dest;
         $form->button->text = 'TEST TEXT';
