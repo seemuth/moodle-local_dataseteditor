@@ -26,13 +26,16 @@
 
 $string['pluginname'] = 'Dataset Editor';
 $string['setting'] = 'Dataset Editor';
-$string['index'] = 'Index';
 $string['view'] = 'View';
-$string['editdataset'] = 'Edit Dataset';
 $string['name'] = 'Name';
 $string['curvals'] = 'Current Values';
 $string['delete_p'] = 'Del?';
 $string['id'] = 'ID';
+
+// Pages
+$string['index'] = 'Index';
+$string['editwildcards'] = 'Edit Wildcards';
+$string['editdataset'] = 'Edit Dataset';
 
 // Form strings
 $string['wildcardX'] = 'Wildcard {$a}';

@@ -46,7 +46,7 @@ $PAGE->set_title(
 $PAGE->set_pagelayout('incourse');
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('pluginname', 'local_dataseteditor'));
+echo $OUTPUT->heading(get_string('editwildcards', 'local_dataseteditor'));
 
 $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 
