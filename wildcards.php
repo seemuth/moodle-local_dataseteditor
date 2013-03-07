@@ -34,7 +34,7 @@ require_login($syscontext);
 
 require_capability('local/dataseteditor:view', $syscontext);
 
-$PAGE->set_url(PLUGINPREFIX.'/dataset.php', array('categoryid' => $categoryid));
+$PAGE->set_url(PLUGINPREFIX.'/wildcards.php', array('categoryid' => $categoryid));
 $PAGE->set_heading($SITE->fullname);
 $PAGE->set_title(
     $SITE->fullname .
