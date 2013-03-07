@@ -98,14 +98,14 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             $suffix = "_$i";
 
             $data_id = $wc->id;
-            $data_id .= html_writer::tag('input', '', array(
+            $data_id .= html_writer::empty_tag('input', array(
                 'type' => 'hidden',
                 'name' => 'wc_id'. $suffix,
                 'value' => $wc->id,
             ));
 
             $data_name = '{';
-            $data_name .= html_writer::tag('input', '', array(
+            $data_name .= html_writer::empty_tag('input', array(
                 'type' => 'text',
                 'name' => 'wc_name' . $suffix,
                 'value' => $wc->name,
@@ -115,12 +115,12 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             $data_values = implode(', ', $wc->values);
 
             if ($wc->id > 0) {
-                $data_del = html_writer::tag('input', '', array(
+                $data_del = html_writer::empty_tag('input', array(
                     'type' => 'hidden',
                     'name' => 'wc_del' . $suffix,
                     'value' => '',
                 ));
-                $data_del .= html_writer::tag('input', '', array(
+                $data_del .= html_writer::empty_tag('input', array(
                     'type' => 'checkbox',
                     'name' => 'wc_del' . $suffix,
                     'value' => 'yes',
@@ -138,35 +138,35 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
         $form_contents .= html_writer::table($table);
 
-        $form_contents .= html_writer::tag('input', '', array(
+        $form_contents .= html_writer::empty_tag('input', array(
             'type' => 'hidden',
             'name' => 'num_wildcard_rows',
             'value' => $num_wildcard_rows,
         ));
 
-        $sesskey_contents = 'KEY' . html_writer::tag('input', '', array(
+        $sesskey_contents = 'KEY' . html_writer::empty_tag('input', array(
             'type' => 'text',
             'name' => 'sesskey',
             'value' => sesskey(),
         ));
         $form_contents .= html_writer::tag('p', $sesskey_contents);
 
-        $button_contents = html_writer::tag('input', '', array(
+        $button_contents = html_writer::empty_tag('input', array(
             'type' => 'submit',
             'name' => 'submit_save',
             'value' => get_string('save', 'local_dataseteditor'),
         ));
-        $button_contents .= html_writer::tag('input', '', array(
+        $button_contents .= html_writer::empty_tag('input', array(
             'type' => 'submit',
             'name' => 'submit_saveandadd',
             'value' => get_string('saveandadd', 'local_dataseteditor'),
         ));
-        $button_contents .= html_writer::tag('input', '', array(
+        $button_contents .= html_writer::empty_tag('input', array(
             'type' => 'submit',
             'name' => 'submit_cancel',
             'value' => get_string('cancel', 'local_dataseteditor'),
         ));
-        $button_contents .= html_writer::tag('input', '', array(
+        $button_contents .= html_writer::empty_tag('input', array(
             'type' => 'reset',
             'value' => get_string('reset', 'local_dataseteditor'),
         ));
