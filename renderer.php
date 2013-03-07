@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__) . '/config.php');
 require_once(dirname(__FILE__) . '/../../config.php');
+require_once("$CFG->libdir/outputcomponents.php");
 
 /**
  * Dataset editor renderer class
@@ -50,11 +51,11 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
      * @return string html code
      */
     public function render_wildcard_form($wildcards, $min_rows, $form_dest) {
-        $form = new html_form();
-        $form->url = $form_dest;
-        $form->button->text = 'TEST TEXT';
-
-        $contents = '';
+        $form_attributes = array(
+            'target' => $form_dest->out(),
+            'method' => 'POST'
+        );
+        $form_contents = '';
 
         $table = new html_table();
         $table->head = array('Name', 'Current Values', 'Del?');
@@ -96,21 +97,34 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         foreach ($wildcards as $wc) {
             $suffix = "_$i";
 
-            $data_id = <<<EOT
-$wc->id<input type="hidden" name="wc_id$suffix" value="$wc->id" />
-EOT;
+            $data_id = $wc->id;
+            $data_id .= html_writer::tag('input', '', array(
+                'type' => 'hidden',
+                'name' => 'wc_id'. $suffix,
+                'value' => $wc->id,
+            ));
 
-            $data_name = <<<EOT
-<input type="input" name="wc_name$suffix" value="$wc->name" />
-EOT;
+            $data_name = '{';
+            $data_name .= html_writer::tag('input', '', array(
+                'type' => 'text',
+                'name' => 'wc_name' . $suffix,
+                'value' => $wc->name,
+            ));
+            $data_name .= '}';
 
             $data_values = implode(', ', $wc->values);
 
             if ($wc->id > 0) {
-                $data_del = <<<EOT
-<input type="hidden" name="wc_del$suffix" value="" />
-<input type="checkbox" name="wc_del$suffix" value="yes" />
-EOT;
+                $data_del = html_writer::tag('input', '', array(
+                    'type' => 'hidden',
+                    'name' => 'wc_del' . $suffix,
+                    'value' => '',
+                ));
+                $data_del .= html_writer::tag('input', '', array(
+                    'type' => 'checkbox',
+                    'name' => 'wc_del' . $suffix,
+                    'value' => 'yes',
+                ));
             } else {
                 $data_del = '';
             }
@@ -120,9 +134,45 @@ EOT;
             $i++;
         }
 
-        $contents .= html_writer::table($table);
+        $num_wildcard_rows = $i;
 
-        return $this->output->form($form, $contents);
+        $form_contents .= html_writer::table($table);
+
+        $form_contents .= html_writer::tag('input', '', array(
+            'type' => 'hidden',
+            'name' => 'num_wildcard_rows',
+            'value' => $num_wildcard_rows,
+        ));
+
+        $sesskey_contents = 'KEY' . html_writer::tag('input', '', array(
+            'type' => 'text',
+            'name' => 'sesskey',
+            'value' => $sesskey,
+        ));
+        $form_contents .= html_writer::tag('p', $sesskey_contents);
+
+        $button_contents = html_writer::tag('input', '', array(
+            'type' => 'submit',
+            'name' => 'submit_save',
+            'value' => get_string('save', 'local_dataseteditor'),
+        ));
+        $button_contents .= html_writer::tag('input', '', array(
+            'type' => 'submit',
+            'name' => 'submit_saveandadd',
+            'value' => get_string('saveandadd', 'local_dataseteditor'),
+        ));
+        $button_contents .= html_writer::tag('input', '', array(
+            'type' => 'submit',
+            'name' => 'submit_cancel',
+            'value' => get_string('cancel', 'local_dataseteditor'),
+        ));
+        $button_contents .= html_writer::tag('input', '', array(
+            'type' => 'reset',
+            'value' => get_string('reset', 'local_dataseteditor'),
+        ));
+        $form_contents .= html_writer::tag('p', $button_contents);
+
+        return html_writer::tag('form', $form_contents, $form_attributes);
     }
 
 }

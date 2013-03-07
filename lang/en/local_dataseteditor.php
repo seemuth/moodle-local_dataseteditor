@@ -32,6 +32,10 @@ $string['editdataset'] = 'Edit Dataset';
 
 // Form strings
 $string['wildcardX'] = 'Wildcard {$a}';
+$string['save'] = 'Save changes';
+$string['saveandadd'] = 'Save changes and add rows';
+$string['cancel'] = 'Cancel changes';
+$string['reset'] = 'Reset form';
 
 // Permissions
 $string['dataseteditor:view'] = 'View Datasets';
