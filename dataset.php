@@ -52,7 +52,7 @@ $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 
 
 $wildcards = get_wildcards($categoryid);
-foreach ($wildcard as $k => $wc) {
+foreach ($wildcards as $k => $wc) {
     if ($wc->num_more_values > 0) {
         $wc->values[count($wc->values)-1] = '...';
     }
