@@ -52,6 +52,11 @@ $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 
 
 $wildcards = get_wildcards($categoryid);
+foreach ($wildcard as $k => $wc) {
+    if ($wc->num_more_values > 0) {
+        $wc->values[count($wc->values)-1] = '...';
+    }
+}
 
 $form_dest = $PAGE->url;
 echo $renderer->render_wildcard_form($wildcards, count($wildcards)+3, $form_dest);
