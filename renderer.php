@@ -151,24 +151,26 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         ));
         $form_contents .= html_writer::tag('p', $sesskey_contents);
 
-        $button_contents = html_writer::empty_tag('input', array(
-            'type' => 'submit',
-            'name' => 'submit_save',
-            'value' => get_string('save', 'local_dataseteditor'),
-        ));
+        $button_contents = '';
         $button_contents .= html_writer::empty_tag('input', array(
             'type' => 'submit',
             'name' => 'submit_saveandadd',
             'value' => get_string('saveandadd', 'local_dataseteditor'),
         ));
         $button_contents .= html_writer::empty_tag('input', array(
+            'type' => 'reset',
+            'value' => get_string('reset', 'local_dataseteditor'),
+        ));
+        $button_contents .= html_writer::empty_tag('br');
+        $button_contents .= html_writer::empty_tag('input', array(
+            'type' => 'submit',
+            'name' => 'submit_save',
+            'value' => get_string('save', 'local_dataseteditor'),
+        ));
+        $button_contents .= html_writer::empty_tag('input', array(
             'type' => 'submit',
             'name' => 'submit_cancel',
             'value' => get_string('cancel', 'local_dataseteditor'),
-        ));
-        $button_contents .= html_writer::empty_tag('input', array(
-            'type' => 'reset',
-            'value' => get_string('reset', 'local_dataseteditor'),
         ));
         $form_contents .= html_writer::tag('p', $button_contents);
 
