@@ -66,7 +66,7 @@ function get_wildcards($categoryid, $val_limit=4) {
         'definition',
         array_keys($wildcards),
         'itemnumber',
-        'definition,value'
+        'id,definition,value'
     );
 
     foreach ($value_results as $row) {
