@@ -50,7 +50,7 @@ echo $OUTPUT->heading(get_string('pluginname', 'local_dataseteditor'));
 
 $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 
-if (isset($_POST)) {
+if (!empty($_POST)) {
     require_sesskey();
 }
 
