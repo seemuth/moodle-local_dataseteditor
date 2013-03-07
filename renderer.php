@@ -158,12 +158,11 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             'value' => $num_wildcard_rows,
         ));
 
-        $sesskey_contents = 'KEY' . html_writer::empty_tag('input', array(
-            'type' => 'text',
+        $form_contents .= html_writer::empty_tag('input', array(
+            'type' => 'hidden',
             'name' => 'sesskey',
             'value' => sesskey(),
         ));
-        $form_contents .= html_writer::tag('p', $sesskey_contents);
 
         $button_contents = '';
         $button_contents .= html_writer::empty_tag('input', array(
