@@ -61,6 +61,10 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         $table->head = array('Name', 'Current Values', 'Del?');
         $table->data = array();
 
+        if (LOCAL_DATASETEDITOR_DEBUG) {
+            array_unshift($table->head, 'ID');
+        }
+
         /**
          * Sort wildcards by name, then id.
          */
@@ -129,7 +133,11 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 $data_del = '';
             }
 
-            $table->data[] = array($data_id, $data_name, $data_values, $data_del);
+            $data_row = array($data_name, $data_values, $data_del);
+            if (LOCAL_DATASETEDITOR_DEBUG) {
+                array_unshift($data_row, $data_id);
+            }
+            $table->data[] = $data_row;
 
             $i++;
         }

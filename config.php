@@ -24,3 +24,4 @@
  */
 
 define('PLUGINPREFIX', '/local/dataseteditor');
+define('LOCAL_DATASETEDITOR_DEBUG', true);
