@@ -58,11 +58,17 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         $form_contents = '';
 
         $table = new html_table();
-        $table->head = array('Name', 'Current Values', 'Del?');
+        $table->head = array(
+            get_string('name', 'local_dataseteditor'),
+            get_string('curvals', 'local_dataseteditor'),
+            get_string('del_p', 'local_dataseteditor'),
+        );
         $table->data = array();
 
         if (LOCAL_DATASETEDITOR_DEBUG) {
-            array_unshift($table->head, 'ID');
+            array_unshift($table->head,
+                get_string('id', 'local_dataseteditor')
+            );
         }
 
         /**

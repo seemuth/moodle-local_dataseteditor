@@ -29,6 +29,10 @@ $string['setting'] = 'Dataset Editor';
 $string['index'] = 'Index';
 $string['view'] = 'View';
 $string['editdataset'] = 'Edit Dataset';
+$string['name'] = 'Name';
+$string['curvals'] = 'Current Values';
+$string['delete_p'] = 'Del?';
+$string['id'] = 'ID';
 
 // Form strings
 $string['wildcardX'] = 'Wildcard {$a}';
