@@ -52,7 +52,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
      */
     public function render_wildcard_form($wildcards, $min_rows, $form_dest) {
         $form_attributes = array(
-            'target' => $form_dest->out(),
+            'action' => $form_dest->out(),
             'method' => 'POST'
         );
         $form_contents = '';
