@@ -77,7 +77,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             }
         }
 
-        uasort($wildcards, wildcard_cmp);
+        uasort($wildcards, 'wildcard_cmp');
 
         /**
          * Make sure we have the minimum number of wildcard fields.
