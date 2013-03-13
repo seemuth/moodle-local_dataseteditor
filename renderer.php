@@ -123,20 +123,16 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
             $data_values = implode(', ', $wc->values);
 
-            if ($wc->id > 0) {
-                $data_del = html_writer::empty_tag('input', array(
-                    'type' => 'hidden',
-                    'name' => 'wc_del' . $suffix,
-                    'value' => '',
-                ));
-                $data_del .= html_writer::empty_tag('input', array(
-                    'type' => 'checkbox',
-                    'name' => 'wc_del' . $suffix,
-                    'value' => 'yes',
-                ));
-            } else {
-                $data_del = '';
-            }
+            $data_del = html_writer::empty_tag('input', array(
+                'type' => 'hidden',
+                'name' => 'wc_del' . $suffix,
+                'value' => '',
+            ));
+            $data_del .= html_writer::empty_tag('input', array(
+                'type' => 'checkbox',
+                'name' => 'wc_del' . $suffix,
+                'value' => 'yes',
+            ));
 
             $data_row = array($data_name, $data_values, $data_del);
             if (LOCAL_DATASETEDITOR_DEBUG) {
