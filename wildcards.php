@@ -41,7 +41,7 @@ $PAGE->set_title(
     ': ' .
     get_string('pluginname', 'local_dataseteditor') .
     ': ' .
-    get_string('editdataset', 'local_dataseteditor')
+    get_string('editwildcards', 'local_dataseteditor')
 );
 $PAGE->set_pagelayout('incourse');
 
