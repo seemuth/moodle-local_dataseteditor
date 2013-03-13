@@ -80,3 +80,41 @@ function get_wildcards($categoryid, $val_limit=4) {
 
     return $wildcards;
 }
+
+
+/**
+ * Returns array of itemnum => array(defnum => item)
+ *
+ * @param array $wildcardids Retrieve values matching these wildcard IDs
+ * @return array array[itemnum] => array(defnum => stdClass{->id ->val})
+ */
+function get_dataset_items($wildcardids) {
+    global $DB;
+
+    $table_values = 'question_dataset_items';
+
+    $value_results = $DB->get_records_list(
+        $table_values,
+        'definition',
+        $wildcardids,
+        '',
+        'id,definition,itemnumber,value'
+    );
+
+    $items = array();
+
+    /* Retrieve wildcard definitions. */
+    foreach ($value_results as $row) {
+        $item = new stdClass();
+        $item->id = $row->id;
+        $item->val = $row->value;
+
+        if (! isset($items[$row->itemnumber])) {
+            $items[$row->itemnumber] = array();
+        }
+
+        $items[$row->itemnumber][$item->definition] = $item;
+    }
+
+    return $items;
+}
