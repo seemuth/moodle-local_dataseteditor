@@ -113,7 +113,7 @@ function get_dataset_items($wildcardids) {
             $items[$row->itemnumber] = array();
         }
 
-        $items[$row->itemnumber][$item->definition] = $item;
+        $items[$row->itemnumber][$row->definition] = $item;
     }
 
     return $items;
