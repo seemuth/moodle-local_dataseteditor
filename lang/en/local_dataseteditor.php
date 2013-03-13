@@ -31,6 +31,7 @@ $string['name'] = 'Name';
 $string['curvals'] = 'Current Values';
 $string['delete_p'] = 'Del?';
 $string['id'] = 'ID';
+$string['itemnum'] = 'Item Number';
 
 // Pages
 $string['index'] = 'Index';
