@@ -56,29 +56,7 @@ if (!empty($_POST)) {
 
 
 $wildcards = get_wildcards($categoryid, 0); // Don't need any data values
-
-function fake_val($id, $val) {
-    $ret = new stdClass();
-    $ret->id = $id;
-    $ret->val = $val;
-    return $ret;
-}
-$items = array(
-    1 => array(
-        3 => fake_val(22, 1.33),
-        4 => fake_val(23, 2.5),
-        6 => fake_val(24, 10.01),
-    ),
-    2 => array(
-        4 => fake_val(35, 20),
-    ),
-    3 => array(
-        6 => fake_val(45, 21),
-    ),
-    5 => array(
-        3 => fake_val(55, 22),
-    ),
-);
+$items = get_dataset_items(array_keys($wildcards));
 
 $form_dest = $PAGE->url;
 echo $renderer->render_dataset_form(
