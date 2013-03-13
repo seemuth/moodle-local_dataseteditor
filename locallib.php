@@ -33,7 +33,7 @@ require_once(dirname(__FILE__).'/lib.php');     // we extend this library here
  *
  * @param int $categoryid Category from which to retrieve wildcards
  * @param int $val_limit Limit values to this many results
- * @return array array[id] => stdclass{->id ->name ->values}
+ * @return array array[id] => stdClass{->id ->name ->values}
  */
 function get_wildcards($categoryid, $val_limit=4) {
     global $DB;
