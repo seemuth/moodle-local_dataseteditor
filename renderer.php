@@ -235,6 +235,8 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             $table->head[] = '{' . $wc->name . '}';
         }
 
+        $table->head[] = get_string('delete_p', 'local_dataseteditor');
+
 
         /**
          * Make sure we have the minimum number of item fields.
