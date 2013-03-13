@@ -271,7 +271,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                     $val = '';
                 }
 
-                $data_id .= html_writer::empty_tag('input', array(
+                $data_id = html_writer::empty_tag('input', array(
                     'type' => 'hidden',
                     'name' => 'data_id'. $suffix,
                     'value' => $id,
@@ -281,7 +281,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                     $data_id .= $id;
                 }
 
-                $data_name .= html_writer::empty_tag('input', array(
+                $data_name = html_writer::empty_tag('input', array(
                     'type' => 'text',
                     'name' => 'data_val' . $suffix,
                     'value' => $val,
