@@ -262,6 +262,8 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 $suffix = '_i' . $itemkey . '_w' . $wc->id;
 
                 if (isset($item[$wc->id])) {
+                    $any_data = true;
+
                     $id = $item[$wc->id]->id;
                     $val = $item[$wc->id]->val;
                 } else {
