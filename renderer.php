@@ -107,8 +107,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         foreach ($wildcards as $wc) {
             $suffix = "_$i";
 
-            $data_id = $wc->id;
-            $data_id .= html_writer::empty_tag('input', array(
+            $data_id = html_writer::empty_tag('input', array(
                 'type' => 'hidden',
                 'name' => 'wc_id'. $suffix,
                 'value' => $wc->id,
@@ -141,8 +140,9 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
             $data_row = array($data_name, $data_values, $data_del);
             if (LOCAL_DATASETEDITOR_DEBUG) {
-                array_unshift($data_row, $data_id);
+                $data_id .= $wc->id;
             }
+            array_unshift($data_row, $data_id);
             $table->data[] = $data_row;
 
             $i++;
