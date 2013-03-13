@@ -52,6 +52,16 @@ $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 
 if (!empty($_POST)) {
     require_sesskey();
+
+    if (isset($_POST['submit_cancel'])) {
+        echo '<p>Cancel!</p>';
+    } elseif (isset($_POST['submit_saveandadd'])) {
+        echo '<p>Save and add!</p>';
+    } elseif (isset($_POST['submit_save'])) {
+        echo '<p>Save!</p>';
+    } else {
+        echo '<p>ERROR ERROR ERROR!</p>';
+    }
 }
 
 
