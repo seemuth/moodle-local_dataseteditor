@@ -195,7 +195,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
      * Renders dataset edit form
      *
      * @param array $wildcards[id] = stdClass(->id ->name ->values)
-     * @param array $items[itemnum] = array(defnum => stdClass(->id ->value))
+     * @param array $items[itemnum] = array(defnum => stdClass(->id ->val))
      * @param int $min_rows Minimum number of item rows to show
      * @param url $form_dest URL to which this form submits
      * @return string html code
