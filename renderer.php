@@ -258,7 +258,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
             $any_data = false;  /* True if any data is currently defined */
 
-            $data_row = array($itemkey);
+            $data_row = array();
 
             foreach ($wildcards as $wc) {
                 $suffix = '_i' . $itemkey . '_w' . $wc->id;
@@ -292,20 +292,26 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 $data_row[] = $data_id . $data_name;
             }
 
+            /**
+             * Add row label, including annotation for new data.
+             */
+            $rowlabel = $itemkey;
             if ($any_data) {
-                $data_del = html_writer::empty_tag('input', array(
-                    'type' => 'hidden',
-                    'name' => 'data_del_i' . $itemkey,
-                    'value' => '',
-                ));
-                $data_del .= html_writer::empty_tag('input', array(
-                    'type' => 'checkbox',
-                    'name' => 'data_del_i' . $itemkey,
-                    'value' => 'yes',
-                ));
-            } else {
-                $data_del = '';
+                $rowlabel .= ' ' . get_string('paren_newdata',
+                    'local_dataseteditor');
             }
+            array_unshift($data_row, $rowlabel);
+
+            $data_del = html_writer::empty_tag('input', array(
+                'type' => 'hidden',
+                'name' => 'data_del_i' . $itemkey,
+                'value' => '',
+            ));
+            $data_del .= html_writer::empty_tag('input', array(
+                'type' => 'checkbox',
+                'name' => 'data_del_i' . $itemkey,
+                'value' => 'yes',
+            ));
             $data_row[] = $data_del;
 
             $table->data[] = $data_row;

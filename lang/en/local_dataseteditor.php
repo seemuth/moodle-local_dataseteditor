@@ -44,6 +44,7 @@ $string['save'] = 'Save changes';
 $string['saveandadd'] = 'Save changes and add rows';
 $string['cancel'] = 'Cancel changes';
 $string['reset'] = 'Reset form';
+$string['paren_newdata'] = '(new data)';
 
 // Permissions
 $string['dataseteditor:view'] = 'View Datasets';
