@@ -280,7 +280,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 ));
 
                 if (LOCAL_DATASETEDITOR_DEBUG) {
-                    $data_id .= $id;
+                    $data_id .= $id . ' ';
                 }
 
                 $data_name = html_writer::empty_tag('input', array(
