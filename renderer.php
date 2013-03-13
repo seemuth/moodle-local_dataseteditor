@@ -296,7 +296,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
              * Add row label, including annotation for new data.
              */
             $rowlabel = $itemkey;
-            if ($any_data) {
+            if (! $any_data) {
                 $rowlabel .= ' ' . get_string('paren_newdata',
                     'local_dataseteditor');
             }
