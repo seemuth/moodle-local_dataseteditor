@@ -83,7 +83,7 @@ $items = array(
 $form_dest = $PAGE->url;
 echo $renderer->render_dataset_form(
     $wildcards, $items,
-    count($wildcards)+3, $form_dest
+    count($items)+3, $form_dest
 );
 
 print_object($_POST);
