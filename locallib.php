@@ -81,6 +81,50 @@ function get_wildcards($categoryid, $val_limit=4) {
     return $wildcards;
 }
 
+/**
+ * Updates database with changed wildcard names.
+ *
+ * @param array $wildcards[] = stdClass(->id ->name ->del ->orig)
+ * @param stdClass $defaults Default values for category, type, options,
+ * itemcount
+ * @return null
+ */
+function update_wildcards($wildcards, $defaults) {
+    $table = 'question_dataset_definitions';
+
+    $fields = array('category', 'name', 'type', 'options', 'itemcount');
+
+    foreach ($wildcards as $wc) {
+        if ($wc->id > 0) {
+            /**
+             * Existing wildcard! Update only if changed.
+             */
+            if ($wc->name != $wc->orig) {
+                $DB->set_field($table, 'name', $wc->name, array(
+                    'id' => $wc->id,
+                ));
+            }
+        } else {
+            /**
+             * New wildcard! Insert into database.
+             */
+            $new_wc = new stdClass();
+
+            foreach ($fields as $field) {
+                if (isset($wc->$field)) {
+                    $new_wc->$field = $wc->field;
+                } elseif (isset($wc->$field)) {
+                    $new_wc->$field = $defaults->$field;
+                } else {
+                    throw new coding_exception('Undefined field ' . $field);
+                }
+            }
+
+            $DB->insert_record($table, $new_wc);
+        }
+    }
+}
+
 
 /**
  * Returns array of itemnum => array(defnum => item)
