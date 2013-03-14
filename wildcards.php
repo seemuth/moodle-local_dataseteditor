@@ -67,7 +67,7 @@ if (!empty($_POST)) {
         $suffix = '_' . $i;
         $wc = new stdClass();
 
-        for ($attr_types as $n => $t) {
+        foreach ($attr_types as $n => $t) {
             $varname = 'wc_' . $n . $suffix;
             $val = require_param($varname, $t);
             $wc->$n = $val;
