@@ -105,7 +105,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         /* Add fields to edit each wildcard. */
         $i = 0;
         foreach ($wildcards as $wc) {
-            $suffix = "_$i";
+            $suffix = '_' . $i;
 
             $data_id = html_writer::empty_tag('input', array(
                 'type' => 'hidden',
