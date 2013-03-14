@@ -94,6 +94,8 @@ function save_wildcard_names($wildcards, $defaults) {
 
     $fields = array('category', 'name', 'type', 'options', 'itemcount');
 
+    global $DB;
+
     foreach ($wildcards as $wc) {
         if ($wc->id > 0) {
             /**
