@@ -27,6 +27,12 @@ require_once(dirname(__FILE__) . '/config.php');
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/locallib.php');
 
+define('NUM_EXTRA_ROWS', 3);
+define('DEFAULT_TYPE', 1);
+define('DEFAULT_OPTIONS', 'uniform:1.0:10.0:1');
+define('DEFAULT_ITEMCOUNT', 0);
+
+
 $categoryid = required_param('categoryid', PARAM_INT);
 
 $syscontext = context_system::instance();
@@ -68,6 +74,7 @@ if (!empty($_POST)) {
     $num_rows = required_param('num_wildcard_rows', PARAM_INT);
 
     $new_wildcards = array();
+    $wildcards_from_user = true;
 
     for ($i = 0; $i < $num_rows; $i++) {
         $suffix = '_' . $i;
@@ -82,16 +89,38 @@ if (!empty($_POST)) {
         $new_wildcards[] = $wc;
     }
 
+
+    /**
+     * Defaults for new wildcards.
+     */
+    $wildcard_defaults = array(
+        'category' => $categoryid,
+        'type' => DEFAULT_TYPE,
+        'options' => DEFAULT_OPTIONS,
+        'itemcount' => DEFAULT_ITEMCOUNT,
+    );
+
+
     if (isset($_POST['submit_cancel'])) {
-        echo '<p>Cancel!</p>';
+        $wildcards_from_user = false;
+
     } elseif (isset($_POST['submit_saveandadd'])) {
-        echo '<p>Save and add!</p>';
-        echo '<p>Using new data!</p>';
-        $wildcards_from_user = true;
+        $min_rows = $num_rows + NUM_EXTRA_ROWS;
+        update_wildcards($new_wildcards, $wildcard_defaults);
+        echo $renderer->render_message(
+            get_string('saved_wildcards', 'local_dataseteditor')
+        );
+        $wildcards_from_user = false;
+
     } elseif (isset($_POST['submit_save'])) {
-        echo '<p>Save!</p>';
+        update_wildcards($new_wildcards, $wildcard_defaults);
+        echo $renderer->render_message(
+            get_string('saved_wildcards', 'local_dataseteditor')
+        );
+        $wildcards_from_user = false;
+
     } else {
-        echo '<p>ERROR ERROR ERROR!</p>';
+        throw new coding_exception('Invalid submit button');
     }
 
     print_object($new_wildcards);
@@ -107,8 +136,11 @@ foreach ($wildcards as $k => $wc) {
 
 $form_dest = $PAGE->url;
 $uservals = ($wildcards_from_user) ? $new_wildcards : array();
+if (! isset($min_rows)) {
+    $min_rows = count($wildcards) + NUM_EXTRA_ROWS;
+}
 echo $renderer->render_wildcard_form($wildcards, $uservals,
-    count($wildcards)+3, $form_dest);
+    $min_rows, $form_dest);
 
 print_object($_POST);
 
