@@ -97,6 +97,11 @@ function save_wildcard_names($wildcards, $defaults) {
     global $DB;
 
     foreach ($wildcards as $wc) {
+        if (! $wc->name) {
+            /* Empty name. Do not modify. */
+            continue;
+        }
+
         if ($wc->id > 0) {
             /**
              * Existing wildcard! Update only if changed.
@@ -108,8 +113,13 @@ function save_wildcard_names($wildcards, $defaults) {
             }
         } else {
             /**
-             * New wildcard! Insert into database.
+             * New wildcard!
+             * Insert into database if not marked for deletion.
              */
+            if ($wc->del) {
+                continue;
+            }
+
             $new_wc = new stdClass();
 
             foreach ($fields as $field) {
