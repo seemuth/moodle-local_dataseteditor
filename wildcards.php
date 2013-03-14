@@ -95,9 +95,9 @@ if (!empty($_POST)) {
      */
     $wildcard_defaults = new stdClass();
     $wildcard_defaults->category = $categoryid;
-    $wildcard_defailts->type = DEFAULT_TYPE;
-    $wildcard_defailts->options = DEFAULT_OPTIONS;
-    $wildcard_defailts->itemcount = DEFAULT_ITEMCOUNT;
+    $wildcard_defaults->type = DEFAULT_TYPE;
+    $wildcard_defaults->options = DEFAULT_OPTIONS;
+    $wildcard_defaults->itemcount = DEFAULT_ITEMCOUNT;
 
 
     if (isset($_POST['submit_cancel'])) {
