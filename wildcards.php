@@ -121,8 +121,6 @@ if (!empty($_POST)) {
     } else {
         throw new coding_exception('Invalid submit button');
     }
-
-    print_object($new_wildcards);
 }
 
 
