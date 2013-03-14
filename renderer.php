@@ -46,8 +46,8 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
      * Renders wildcard edit form
      *
      * @param array $wildcards[] = stdClass(->id ->name ->values)
-     * @param array $uservals[] = stdClass(->id ->name) Override starting
-     * value in text input box
+     * @param array $uservals[] = stdClass(->id ->name ->del ->orig)
+     * Override starting values on form
      * @param int $min_rows Minimum number of wildcard rows to show
      * @param url $form_dest URL to which this form submits
      * @return string html code
@@ -96,29 +96,34 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
         /**
          * Split $newvals into two arrays:
-         *      $val_override[id] = $name
-         *      $new_vals[] = $name
+         *      $val_override[id] = stdClass
+         *      $new_vals[] = stdClass
          */
 
         $val_override = array();
         $new_vals = array();
         foreach ($uservals as $uv) {
             if ($uv->id > 0) {
-                $val_override[$uv->id] = $uv->name;
+                $val_override[$uv->id] = $uv;
             } else {
-                $new_vals[] = $uv->name;
+                $new_vals[] = $uv;
             }
         }
 
+        $override_fields = array('name', 'del', 'orig');
+
 
         /**
-         * Set orig for each wildcard, then override name as needed.
+         * Set defaults for each wildcard, then override fields as needed.
          */
         foreach ($wildcards as $wc) {
             $wc->orig = $wc->name;
+            $wc->del = 0;
 
             if (isset($val_override[$wc->id])) {
-                $wc->name = $val_override[$wc->id];
+                foreach ($override_fields as $field) {
+                    $wc->$field = $val_override[$wc->id]->$field;
+                }
             }
         }
 
@@ -130,13 +135,15 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         for ($i = 0; $i < $need; $i++) {
             $wc = new stdClass();
             $wc->id = 0;
+            $wc->name = '';
             $wc->orig = '';
+            $wc->del = 0;
             $wc->values = array();
 
             if (isset($new_vals[$i])) {
-                $wc->name = $new_vals[$i];
-            } else {
-                $wc->name = '';
+                foreach ($override_fields as $field) {
+                    $wc->$field = $new_vals[$i]->$field;
+                }
             }
 
             $wildcards[] = $wc;
@@ -174,11 +181,15 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 'name' => 'wc_del' . $suffix,
                 'value' => '',
             ));
-            $data_del .= html_writer::empty_tag('input', array(
+            $del_checkbox_attr = array(
                 'type' => 'checkbox',
                 'name' => 'wc_del' . $suffix,
                 'value' => 'yes',
-            ));
+            );
+            if ($wc->del) {
+                $del_checkbox_attr['checked'] = 'checked';
+            }
+            $data_del .= html_writer::empty_tag('input', $del_checkbox_attr);
 
             $data_row = array($data_name, $data_values, $data_del);
             if (LOCAL_DATASETEDITOR_DEBUG) {
