@@ -112,7 +112,7 @@ function save_wildcard_names($wildcards, $defaults) {
 
             foreach ($fields as $field) {
                 if (isset($wc->$field)) {
-                    $new_wc->$field = $wc->field;
+                    $new_wc->$field = $wc->$field;
                 } elseif (isset($defaults->$field)) {
                     $new_wc->$field = $defaults->$field;
                 } else {
