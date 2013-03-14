@@ -45,7 +45,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
     /**
      * Renders wildcard edit form
      *
-     * @param array $wildcards[id] = stdClass(->id ->name ->values)
+     * @param array $wildcards[] = stdClass(->id ->name ->values)
      * @param int $min_rows Minimum number of wildcard rows to show
      * @param url $form_dest URL to which this form submits
      * @return string html code
