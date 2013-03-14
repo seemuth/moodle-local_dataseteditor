@@ -59,7 +59,7 @@ if (!empty($_POST)) {
         'del' => PARAM_BOOL,
     );
 
-    $num_rows = require_param('num_wildcard_rows', PARAM_INT);
+    $num_rows = required_param('num_wildcard_rows', PARAM_INT);
 
     $new_wildcards = array();
 
@@ -69,7 +69,7 @@ if (!empty($_POST)) {
 
         foreach ($attr_types as $n => $t) {
             $varname = 'wc_' . $n . $suffix;
-            $val = require_param($varname, $t);
+            $val = required_param($varname, $t);
             $wc->$n = $val;
         }
 
