@@ -120,6 +120,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 'value' => $wc->name,
             ));
             $data_name .= '}';
+            $data_name .= $data_id;
 
             $data_values = implode(', ', $wc->values);
 
@@ -136,9 +137,8 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
             $data_row = array($data_name, $data_values, $data_del);
             if (LOCAL_DATASETEDITOR_DEBUG) {
-                $data_id .= $wc->id;
+                array_unshift($data_row, $wc->id);
             }
-            array_unshift($data_row, $data_id);
             $table->data[] = $data_row;
 
             $i++;
