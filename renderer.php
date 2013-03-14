@@ -46,11 +46,15 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
      * Renders wildcard edit form
      *
      * @param array $wildcards[] = stdClass(->id ->name ->values)
+     * @param array $uservals[] = stdClass(->id ->name) Override starting
+     * value in text input box
      * @param int $min_rows Minimum number of wildcard rows to show
      * @param url $form_dest URL to which this form submits
      * @return string html code
      */
-    public function render_wildcard_form($wildcards, $min_rows, $form_dest) {
+    public function render_wildcard_form($wildcards, $uservals,
+        $min_rows, $form_dest
+    ) {
         $form_attributes = array(
             'action' => $form_dest->out(),
             'method' => 'POST'
@@ -89,6 +93,36 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
         uasort($wildcards, 'wildcard_cmp');
 
+
+        /**
+         * Split $newvals into two arrays:
+         *      $val_override[id] = $name
+         *      $new_vals[] = $name
+         */
+
+        $val_override = array();
+        $new_vals = array();
+        foreach ($uservals as $uv) {
+            if ($uv->id > 0) {
+                $val_override[$uv->id] = $uv->name;
+            } else {
+                $new_vals[] = $uv->name;
+            }
+        }
+
+
+        /**
+         * Set orig for each wildcard, then override name as needed.
+         */
+        foreach ($wildcards as $wc) {
+            $wc->orig = $wc->name;
+
+            if (isset($val_override[$wc->id])) {
+                $wc->name = $val_override[$wc->id];
+            }
+        }
+
+
         /**
          * Make sure we have the minimum number of wildcard fields.
          */
@@ -96,8 +130,14 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         for ($i = 0; $i < $need; $i++) {
             $wc = new stdClass();
             $wc->id = 0;
-            $wc->name = '';
+            $wc->orig = '';
             $wc->values = array();
+
+            if (isset($new_vals[$i])) {
+                $wc->name = $new_vals[$i];
+            } else {
+                $wc->name = '';
+            }
 
             $wildcards[] = $wc;
         }
@@ -121,6 +161,11 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             ));
             $data_name .= '}';
             $data_name .= $data_id;
+            $data_name .= html_writer::empty_tag('input', array(
+                'type' => 'hidden',
+                'name' => 'wc_orig' . $suffix,
+                'value' => $wc->orig,
+            ));
 
             $data_values = implode(', ', $wc->values);
 

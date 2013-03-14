@@ -50,6 +50,11 @@ echo $OUTPUT->heading(get_string('editwildcards', 'local_dataseteditor'));
 
 $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 
+/**
+ * Set to true to use wildcards from user-submitted form.
+ */
+$wildcards_from_user = false;
+
 if (!empty($_POST)) {
     require_sesskey();
 
@@ -80,6 +85,8 @@ if (!empty($_POST)) {
         echo '<p>Cancel!</p>';
     } elseif (isset($_POST['submit_saveandadd'])) {
         echo '<p>Save and add!</p>';
+        echo '<p>Using new data!</p>';
+        $wildcards_from_user = true;
     } elseif (isset($_POST['submit_save'])) {
         echo '<p>Save!</p>';
     } else {
@@ -98,7 +105,9 @@ foreach ($wildcards as $k => $wc) {
 }
 
 $form_dest = $PAGE->url;
-echo $renderer->render_wildcard_form($wildcards, count($wildcards)+3, $form_dest);
+$uservals = ($wildcards_from_user) ? $new_wildcards : array();
+echo $renderer->render_wildcard_form($wildcards, $uservals,
+    count($wildcards)+3, $form_dest);
 
 print_object($_POST);
 
