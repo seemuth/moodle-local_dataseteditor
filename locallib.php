@@ -89,7 +89,7 @@ function get_wildcards($categoryid, $val_limit=4) {
  * itemcount
  * @return null
  */
-function update_wildcards($wildcards, $defaults) {
+function save_wildcard_names($wildcards, $defaults) {
     $table = 'question_dataset_definitions';
 
     $fields = array('category', 'name', 'type', 'options', 'itemcount');
