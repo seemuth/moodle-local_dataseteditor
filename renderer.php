@@ -43,6 +43,15 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
     ////////////////////////////////////////////////////////////////////////////
 
     /**
+     * Renders message of the desired type.
+     */
+    public function render_message($text, $type='info') {
+        $inner = html_writer::tag('span', $text);
+        return $this->output->container($inner, array('message', $type));
+    }
+
+
+    /**
      * Renders wildcard edit form
      *
      * @param array $wildcards[] = stdClass(->id ->name ->values)
