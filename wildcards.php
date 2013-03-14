@@ -93,12 +93,11 @@ if (!empty($_POST)) {
     /**
      * Defaults for new wildcards.
      */
-    $wildcard_defaults = array(
-        'category' => $categoryid,
-        'type' => DEFAULT_TYPE,
-        'options' => DEFAULT_OPTIONS,
-        'itemcount' => DEFAULT_ITEMCOUNT,
-    );
+    $wildcard_defaults = new stdClass();
+    $wildcard_defaults->category = $categoryid;
+    $wildcard_defailts->type = DEFAULT_TYPE;
+    $wildcard_defailts->options = DEFAULT_OPTIONS;
+    $wildcard_defailts->itemcount = DEFAULT_ITEMCOUNT;
 
 
     if (isset($_POST['submit_cancel'])) {
