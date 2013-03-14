@@ -82,15 +82,17 @@ function get_wildcards($categoryid, $val_limit=4) {
 }
 
 /**
- * Updates database with changed wildcard names.
+ * Updates database with changed wildcard names. Also deletes orphan dataset
+ * item values.
  *
  * @param array $wildcards[] = stdClass(->id ->name ->del ->orig)
  * @param stdClass $defaults Default values for category, type, options,
  * itemcount
  * @return null
  */
-function save_wildcard_names($wildcards, $defaults) {
-    $table = 'question_dataset_definitions';
+function save_wildcards($wildcards, $defaults) {
+    $table_definitions = 'question_dataset_definitions';
+    $table_values = 'question_dataset_items';
 
     $fields = array('category', 'name', 'type', 'options', 'itemcount');
 
@@ -103,14 +105,28 @@ function save_wildcard_names($wildcards, $defaults) {
         }
 
         if ($wc->id > 0) {
-            /**
-             * Existing wildcard! Update only if changed.
-             */
-            if ($wc->name != $wc->orig) {
-                $DB->set_field($table, 'name', $wc->name, array(
+            if ($wc->del) {
+                /**
+                 * Delete this wildcard and its dataset item values.
+                 */
+                $DB->delete_records($table_definitions, array(
                     'id' => $wc->id,
                 ));
+                $DB->delete_records($table_values, array(
+                    'definition' => $wc->id,
+                ));
+
+            } else {
+                /**
+                 * Existing wildcard! Update only if changed.
+                 */
+                if ($wc->name != $wc->orig) {
+                    $DB->set_field($table_definitions, 'name', $wc->name,
+                        array('id' => $wc->id));
+                }
+
             }
+
         } else {
             /**
              * New wildcard!
@@ -132,7 +148,7 @@ function save_wildcard_names($wildcards, $defaults) {
                 }
             }
 
-            $DB->insert_record($table, $new_wc);
+            $DB->insert_record($table_definitions, $new_wc);
         }
     }
 }
