@@ -53,6 +53,29 @@ $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 if (!empty($_POST)) {
     require_sesskey();
 
+    $attr_types = array(
+        'id' => PARAM_INT,
+        'name' => PARAM_NOTAGS,
+        'del', => PARAM_BOOL,
+    );
+
+    $num_rows = require_param('num_wildcard_rows', PARAM_INT);
+
+    $new_wildcards = array();
+
+    for ($i = 0; $i < $num_rows; $i++) {
+        $suffix = '_' . $i;
+        $wc = new stdClass();
+
+        for ($attr_types as $n => $t) {
+            $varname = 'wc_' . $n . $suffix;
+            $val = require_param($varname, $t);
+            $wc->$n = $val;
+        }
+
+        $new_wildcards[] = $wc;
+    }
+
     if (isset($_POST['submit_cancel'])) {
         echo '<p>Cancel!</p>';
     } elseif (isset($_POST['submit_saveandadd'])) {
@@ -62,6 +85,8 @@ if (!empty($_POST)) {
     } else {
         echo '<p>ERROR ERROR ERROR!</p>';
     }
+
+    print_object($new_wildcards);
 }
 
 
