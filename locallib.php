@@ -190,3 +190,61 @@ function get_dataset_items($wildcardids) {
 
     return $items;
 }
+
+/**
+ * Updates database with changed dataset items.
+ *
+ * @param array
+ *      $items[itemnum] => array(defnum => stdClass{->id ->val ->orig ->del})
+ * @return null
+ */
+function save_dataset_items($items) {
+    $table_values = 'question_dataset_items';
+
+    global $DB;
+
+    foreach ($items as $itemnum => $def2val) {
+        foreach ($def2val as $defnum => $item) {
+            if (empty($item->val)) {
+                /* Empty value. Treat as deleted. */
+                $item->del = 1;
+            }
+
+            if ($item->id > 0) {
+                if ($item->del) {
+                    /**
+                     * Delete this item.
+                     */
+                    $DB->delete_records($table_values, array(
+                        'id' => $item->id,
+                    ));
+
+                } else {
+                    /**
+                     * Existing value! Update only if changed.
+                     */
+                    if ($item->val != $item->orig) {
+                        $DB->set_field($table_values, 'value', $item->val,
+                            array('id' => $item->id));
+                    }
+                }
+
+            } else {
+                /**
+                 * New value!
+                 * Insert into database if not marked for deletion.
+                 */
+                if ($item->del) {
+                    continue;
+                }
+
+                $new_item = new stdClass();
+                $new_item->definition = $defnum;
+                $new_item->itemnumber = $itemnum;
+                $new_item->value = $item->val;
+
+                $DB->insert_record($table_values, $new_item);
+            }
+        }
+    }
+}
