@@ -99,9 +99,9 @@ function save_wildcards($wildcards, $defaults) {
     global $DB;
 
     foreach ($wildcards as $wc) {
-        if (! $wc->name) {
-            /* Empty name. Do not modify. */
-            continue;
+        if (empty($wc->name)) {
+            /* Empty name. Treat as deleted. */
+            $wc->del = 1;
         }
 
         if ($wc->id > 0) {
