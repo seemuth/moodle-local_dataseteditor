@@ -66,8 +66,8 @@ if (!empty($_POST)) {
 
     $attr_types = array(
         'id' => PARAM_INT,
-        'name' => PARAM_NOTAGS,
-        'orig' => PARAM_NOTAGS,
+        'name' => PARAM_ALPHANUMEXT,
+        'orig' => PARAM_ALPHANUMEXT,
         'del' => PARAM_BOOL,
     );
 
