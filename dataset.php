@@ -64,6 +64,8 @@ echo $renderer->render_dataset_form(
     count($items)+3, $form_dest
 );
 
-print_object($_POST);
+if (LOCAL_DATASETEDITOR_DEBUG) {
+    print_object($_POST);
+}
 
 echo $OUTPUT->footer();

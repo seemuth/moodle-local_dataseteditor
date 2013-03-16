@@ -139,6 +139,8 @@ if (! isset($min_rows)) {
 echo $renderer->render_wildcard_form($wildcards, $uservals,
     $min_rows, $form_dest);
 
-print_object($_POST);
+if (LOCAL_DATASETEDITOR_DEBUG) {
+    print_object($_POST);
+}
 
 echo $OUTPUT->footer();
