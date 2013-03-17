@@ -339,9 +339,9 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 }
                 $orig = $val;
 
-                if (isset($uservals[$items][$wc->id])) {
-                    $val = $uservals[$items][$wc->id]->val;
-                    $orig = $uservals[$items][$wc->id]->orig;
+                if (isset($uservals[$itemkey][$wc->id])) {
+                    $val = $uservals[$itemkey][$wc->id]->val;
+                    $orig = $uservals[$itemkey][$wc->id]->orig;
                 }
 
                 $data_id = html_writer::empty_tag('input', array(
@@ -362,7 +362,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 $data_val .= html_writer::empty_tag('input', array(
                     'type' => 'hidden',
                     'name' => 'data_orig' . $suffix,
-                    'value' => $val,
+                    'value' => $orig,
                 ));
 
                 $data_row[] = $data_id . $data_val;
