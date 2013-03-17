@@ -106,7 +106,7 @@ if (!empty($_POST)) {
                 $item->$n = $val;
             }
 
-            $new_items[$itemnum][$wc] = $item;
+            $new_items[$i][$wc] = $item;
         }
     }
 
