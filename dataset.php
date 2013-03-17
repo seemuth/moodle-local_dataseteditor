@@ -67,10 +67,10 @@ if (!empty($_POST)) {
         'orig' => PARAM_RAW,
     );
 
-    $itemkeys = array_map(intval,
+    $itemkeys = array_map('intval',
         explode(',', required_param('itemkeys', PARAM_SEQUENCE))
     );
-    $wc_keys = array_map(intval,
+    $wc_keys = array_map('intval',
         explode(',', required_param('wc_keys', PARAM_SEQUENCE))
     );
 
