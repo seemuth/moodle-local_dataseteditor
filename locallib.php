@@ -195,48 +195,75 @@ function get_dataset_items($wildcardids) {
  * Updates database with changed dataset items.
  *
  * @param array
- *      $items[itemnum] => array(defnum => stdClass{->id ->val ->orig ->del})
+ *      $items[itemnum] => array(defnum => stdClass{->id ->val ->orig})
+ * @param array $deleteitems[itemnum] = i (use keys, ignore values)
+ *      Delete items with these itemnums
  * @return null
  */
-function save_dataset_items($items) {
+function save_dataset_items($items, $deleteitems) {
     $table_values = 'question_dataset_items';
 
     global $DB;
 
+    ksort($items);
+
+    /**
+     * Keep track of how many item numbers deleted so far.
+     * Modify subsequent item numbers by subtracting this number.
+     * This ensures that item numbers always start at 1 and are consecutive.
+     */
+    $num_deleted = 0;
+
     foreach ($items as $itemnum => $def2val) {
+        if (isset($deleteitems[$itemnum])) {
+            /**
+             * Delete dataset items with this item number and matching
+             * the definition IDs.
+             */
+
+            foreach ($def2val as $defnum => $item) {
+                $DB->delete_records($table_values, array(
+                    'definition' => $defnum,
+                    'itemnumber' => $itemnum,
+                ));
+            }
+
+            $num_deleted++;
+            continue;
+        }
+
+        /**
+         * Not marked for deletion! Update $itemnum as needed.
+         */
+        $itemnum -= $num_deleted;
+
         foreach ($def2val as $defnum => $item) {
             if (empty($item->val)) {
-                /* Empty value. Treat as deleted. */
-                $item->del = 1;
+                /* Empty value. Ignore. */
+                continue;
             }
 
             if ($item->id > 0) {
-                if ($item->del) {
-                    /**
-                     * Delete this item.
-                     */
-                    $DB->delete_records($table_values, array(
-                        'id' => $item->id,
-                    ));
+                /**
+                 * Existing value! Update only if changed.
+                 */
+                if ($item->val != $item->orig) {
+                    $DB->set_field($table_values, 'value', $item->val,
+                        array('id' => $item->id));
+                }
 
-                } else {
-                    /**
-                     * Existing value! Update only if changed.
-                     */
-                    if ($item->val != $item->orig) {
-                        $DB->set_field($table_values, 'value', $item->val,
-                            array('id' => $item->id));
-                    }
+                /**
+                 * Update item number if any items have been deleted.
+                 */
+                if ($num_deleted) {
+                    $DB->set_field($table_values, 'itemnumber', $itemnum,
+                        array('id' => $item->id));
                 }
 
             } else {
                 /**
-                 * New value!
-                 * Insert into database if not marked for deletion.
+                 * New value! Insert into database.
                  */
-                if ($item->del) {
-                    continue;
-                }
 
                 $new_item = new stdClass();
                 $new_item->definition = $defnum;
