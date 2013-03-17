@@ -257,11 +257,15 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
      *
      * @param array $wildcards[id] = stdClass(->id ->name ->values)
      * @param array $items[itemnum] = array(defnum => stdClass(->id ->val))
+     * @param array $uservals[itemnum] = array(defnum => stdClass(->val))
+     * @param array $deleteitems[itemnum] = (don't care)
      * @param int $min_rows Minimum number of item rows to show
      * @param url $form_dest URL to which this form submits
      * @return string html code
      */
-    public function render_dataset_form($wildcards, $items, $min_rows, $form_dest) {
+    public function render_dataset_form($wildcards, $items,
+        $uservals, $deleteitems, $min_rows, $form_dest
+    ) {
         $form_attributes = array(
             'action' => $form_dest->out(),
             'method' => 'POST'
@@ -333,6 +337,12 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                     $id = 0;
                     $val = '';
                 }
+                $orig = $val;
+
+                if (isset($uservals[$items][$wc->id])) {
+                    $val = $uservals[$items][$wc->id]->val;
+                    $orig = $uservals[$items][$wc->id]->orig;
+                }
 
                 $data_id = html_writer::empty_tag('input', array(
                     'type' => 'hidden',
@@ -373,11 +383,15 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 'name' => 'data_del_i' . $itemkey,
                 'value' => '',
             ));
-            $data_del .= html_writer::empty_tag('input', array(
+            $del_checkbox_attr = array(
                 'type' => 'checkbox',
                 'name' => 'data_del_i' . $itemkey,
                 'value' => 'yes',
-            ));
+            );
+            if (isset($deleteitems[$itemkey])) {
+                $del_checkbox_attr['checked'] = 'checked';
+            }
+            $data_del .= html_writer::empty_tag('input', $del_checkbox_attr);
             $data_row[] = $data_del;
 
             $table->data[] = $data_row;

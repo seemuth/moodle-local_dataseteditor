@@ -140,11 +140,14 @@ $wildcards = get_wildcards($categoryid, 0); // Don't need any data values
 $items = get_dataset_items(array_keys($wildcards));
 
 $form_dest = $PAGE->url;
+$uservals = ($show_user_data) ? $new_items : array();
+$deleteitems_form = ($show_user_data) ? $deleteitems : array();
 if (! isset($min_rows)) {
     $min_rows = count($items) + NUM_EXTRA_ROWS;
 }
 echo $renderer->render_dataset_form(
     $wildcards, $items,
+    $uservals, $deleteitems_form,
     $min_rows, $form_dest
 );
 
