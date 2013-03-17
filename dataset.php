@@ -27,6 +27,9 @@ require_once(dirname(__FILE__) . '/config.php');
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/locallib.php');
 
+define('NUM_EXTRA_ROWS', 5);
+
+
 $categoryid = required_param('categoryid', PARAM_INT);
 
 $syscontext = context_system::instance();
@@ -50,8 +53,86 @@ echo $OUTPUT->heading(get_string('editdataset', 'local_dataseteditor'));
 
 $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 
+/**
+ * Set to true to use data from user-submitted form.
+ */
+$show_user_data = false;
+
 if (!empty($_POST)) {
     require_sesskey();
+
+    $attr_types = array(
+        'id' => PARAM_INT,
+        'val' => PARAM_RAW,
+        'orig' => PARAM_RAW,
+    );
+
+    $itemkeys = array_map(intval,
+        explode(',', required_param('itemkeys', PARAM_SEQUENCE))
+    );
+    $wc_keys = array_map(intval,
+        explode(',', required_param('wc_keys', PARAM_SEQUENCE))
+    );
+
+    $num_rows = count($itemkeys);
+
+
+    $new_items = array();
+    $deleteitems = array();
+    $show_user_data = true;
+
+    foreach ($itemkeys as $i) {
+        $suffix = '_i' . $i;
+
+        $varname = 'data_del' . $suffix;
+        $val = required_param($varname, PARAM_BOOL);
+        if ($val) {
+            $deleteitems[$i] = 1;
+        }
+
+        foreach ($wc_keys as $wc) {
+            $suffix = '_i' . $i . '_w' . $wc;
+            $item = new stdClass();
+
+            foreach ($attr_types as $n => $t) {
+                $varname = 'data_' . $n . $suffix;
+                $val = required_param($varname, $t);
+
+                if ($t == PARAM_RAW) {
+                    /* Convert to float. */
+                    $val = unformat_float($val);
+                }
+
+                $item->$n = $val;
+            }
+
+            $new_items[$itemnum][$wc] = $item;
+        }
+    }
+
+
+
+    if (isset($_POST['submit_cancel'])) {
+        $show_user_data = false;
+
+    } elseif (isset($_POST['submit_saveandadd'])) {
+        $min_rows = $num_rows + NUM_EXTRA_ROWS;
+        save_dataset_items($new_items, $deleteitems);
+        echo $renderer->render_message(
+            get_string('saved_dataset_items', 'local_dataseteditor')
+        );
+        $show_user_data = false;
+
+    } elseif (isset($_POST['submit_save'])) {
+        save_dataset_items($new_items, $deleteitems);
+        echo $renderer->render_message(
+            get_string('saved_dataset_items', 'local_dataseteditor')
+        );
+        $show_user_data = false;
+
+    } else {
+        throw new coding_exception('Invalid submit button');
+    }
 }
 
 
@@ -59,9 +140,12 @@ $wildcards = get_wildcards($categoryid, 0); // Don't need any data values
 $items = get_dataset_items(array_keys($wildcards));
 
 $form_dest = $PAGE->url;
+if (! isset($min_rows)) {
+    $min_rows = count($items) + NUM_EXTRA_ROWS;
+}
 echo $renderer->render_dataset_form(
     $wildcards, $items,
-    count($items)+3, $form_dest
+    $min_rows, $form_dest
 );
 
 if (LOCAL_DATASETEDITOR_DEBUG) {
