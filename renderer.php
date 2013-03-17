@@ -349,6 +349,11 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                     'name' => 'data_val' . $suffix,
                     'value' => $val,
                 ));
+                $data_val .= html_writer::empty_tag('input', array(
+                    'type' => 'hidden',
+                    'name' => 'data_orig' . $suffix,
+                    'value' => $val,
+                ));
 
                 $data_row[] = $data_id . $data_val;
             }
