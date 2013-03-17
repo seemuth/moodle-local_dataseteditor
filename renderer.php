@@ -344,13 +344,13 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                     $data_id .= $id . ' ';
                 }
 
-                $data_name = html_writer::empty_tag('input', array(
+                $data_val = html_writer::empty_tag('input', array(
                     'type' => 'text',
                     'name' => 'data_val' . $suffix,
                     'value' => $val,
                 ));
 
-                $data_row[] = $data_id . $data_name;
+                $data_row[] = $data_id . $data_val;
             }
 
             /**
