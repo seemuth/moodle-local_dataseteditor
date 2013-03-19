@@ -494,7 +494,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                     $any_values = false;
                     foreach ($cat->wildcards as $wc) {
                         if (isset($wc->values[$i])) {
-                            $v = $wc->values[$i]
+                            $v = $wc->values[$i];
                             $any_values = true;
                         } else {
                             $v = '';
