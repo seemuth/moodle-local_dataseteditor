@@ -94,16 +94,20 @@ function fake_cat($id, $name, $numquestions, $wildcards, $values) {
     return $cat;
 }
 
-$fake_context2cats = array(
-    $coursecontext => array(
-        fake_cat(4, 'Cat4', 1,
-        array(
-            3 => 'A',
-            6 => 'ans_AB',
-            4 => 'B',
-        ),
-        array(array(3 => 2, 6 => 2, 4 => 6)))
+$fake_entry1 = new stdClass;
+$fake_entry1->context = $coursecontext;
+$fake_entry1->categories = array(
+    fake_cat(4, 'Cat4', 1,
+    array(
+        3 => 'A',
+        6 => 'ans_AB',
+        4 => 'B',
     ),
+    array(array(3 => 2, 6 => 2, 4 => 6)))
+);
+
+$fake_context2cats = array(
+    $fake_entry1,
 );
 
 echo $renderer->render_category_tables(

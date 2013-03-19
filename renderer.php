@@ -447,14 +447,14 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
     /**
      * Renders category list page with links to edit wildcards and datasets
      *
-     * @param array $context2cats[context] = array(
-     *      stdClass(->id ->name ->numquestions ->wildcards ->values)
+     * @param array $context2cats[] = array(stdClass(->context ->categories=
+     *      array(stdClass(->id ->name ->numquestions ->wildcards ->values))
      * )
      * @param url $wildcard_url URL for editing wildcards
      * @param url $value_url URL for editing values
      * @return string html code
      */
-    public function render_category_tables($context2cats,
+    public function render_category_tables($context_cats,
         $wildcard_url, $value_url
     ) {
 
@@ -475,7 +475,10 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
         $contents = '';
 
-        foreach ($context2cats as $context => $cats) {
+        foreach ($context_cats as $context_cat) {
+            $context = $context_cat->context;
+            $cats = $context_cat->categories;
+
             $table = new html_table();
             $table->head = array(
                 get_string('name', 'local_dataseteditor'),
