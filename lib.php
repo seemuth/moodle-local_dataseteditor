@@ -36,22 +36,35 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
     $cmid = optional_param('cmid', 0, PARAM_INT);
 
     $urlargs = array();
-    if ($context->contextlevel == CONTEXT_COURSE) {
-        $urlargs['courseid'] = $context->instanceid;
+    if ($cmid > 0) {
+        $modulecontext = context_module::instance($cmid);
+
+    } elseif ($courseid > 0) {
+        $coursecontext = context_course::instance($courseid);
+
+    } elseif ($context->contextlevel == CONTEXT_COURSE) {
         $courseid = $context->instanceid;
         $coursecontext = $context;
 
     } elseif($context->contextlevel == CONTEXT_MODULE) {
-        $urlargs['cmid'] = $context->instanceid;
         $cmid = $context->instanceid;
-
-        $coursecontext = $context->get_course_context(false);
-        if ($coursecontext) {
-            $courseid = $coursecontext->instanceid;
-        }
+        $modulecontext = $context;
 
     } else {
         return;
+    }
+
+    if ($cmid > 0) {
+        $urlargs['cmid'] = $cmid;
+        $coursecontext = $modulecontext->get_course_context(false);
+
+        if ($coursecontext) {
+            $courseid = $coursecontext->instanceid;
+        }
+    }
+
+    if ($courseid > 0) {
+        $urlargs['courseid'] = $courseid;
     }
 
     $settingnode = $settings->add(
