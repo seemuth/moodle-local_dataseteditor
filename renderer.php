@@ -443,4 +443,67 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         return html_writer::tag('form', $form_contents, $form_attributes);
     }
 
+
+    /**
+     * Renders category list page with links to edit wildcards and datasets
+     *
+     * @param array $context2cats[context] = array(
+     *      stdClass(->id ->name ->numquestions ->wildcards ->values)
+     * )
+     * @param url $wildcard_url URL for editing wildcards
+     * @param url $value_url URL for editing values
+     * @return string html code
+     */
+    public function render_category_tables($context2cats,
+        $wildcard_url, $value_url
+    ) {
+        $contents = '';
+
+        foreach ($context2cats as $context => $cats) {
+            $table = new html_table();
+            $table->head = array(
+                get_string('name', 'local_dataseteditor'),
+                get_string('num_questions', 'local_dataseteditor'),
+                get_string('editwildcards', 'local_dataseteditor'),
+                get_string('editdataset', 'local_dataseteditor'),
+            );
+            $table->data = array();
+
+            foreach ($cats as $cat) {
+                $w_url = new moodle_url($wildcard_url);
+                $w_url->param('categoryid', $cat->id);
+                $d_url = new moodle_url($wildcard_url);
+                $d_url->param('categoryid', $cat->id);
+
+                $wildcards = array();
+                foreach ($cat->wildcards as $wc) {
+                    $wildcards[] = '{' . $wc . '}';
+                }
+                $wildcards = implode(', ', $wildcards);
+
+                $values = implode(', ', $values);
+
+                $row = array();
+                $row[] = $cat->name;
+                $row[] = $cat->numquestions;
+                $row[] = html_writer::tag('a', $wildcards, array(
+                    'href' => $w_url->out(),
+                ));
+                $row[] = html_writer::tag('a', $values, array(
+                    'href' => $d_url->out(),
+                ));
+
+                $table->data[] = $row;
+            }
+
+            $context_contents = $context->get_context_name(true);
+            $context_contents .= html_writer::empty_tag('br');
+            $context_contents .= html_writer::table($table);
+
+            $contents .= html_writer::tag('p', $context_contents);
+        }
+
+        return $contents;
+    }
+
 }
