@@ -33,13 +33,33 @@ require_once("$CFG->libdir/formslib.php");
 
 function local_dataseteditor_extends_settings_navigation($settings, $context) {
     $courseid = optional_param('courseid', 0, PARAM_INT);
+    $cmid = optional_param('cmid', 0, PARAM_INT);
+
+    $urlargs = array();
+    if ($context->contextlevel == CONTEXT_COURSE) {
+        $urlargs['courseid'] = $context->instanceid;
+        $courseid = $context->instanceid;
+        $coursecontext = $context;
+
+    } elseif($context->contextlevel == CONTEXT_MODULE) {
+        $urlargs['cmid'] = $context->instanceid;
+        $cmid = $context->instanceid;
+
+        $coursecontext = $context->get_course_context(false);
+        if ($coursecontext) {
+            $courseid = $coursecontext->instanceid;
+        }
+
+    } else {
+        return;
+    }
 
     $settingnode = $settings->add(
         get_string('setting', 'local_dataseteditor')
     );
     $indexnode = $settingnode->add(
         get_string('index', 'local_dataseteditor'),
-        new moodle_url(PLUGINPREFIX.'/index.php')
+        new moodle_url(PLUGINPREFIX.'/index.php', $urlargs)
     );
 
     if ($courseid) {
@@ -62,7 +82,7 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
         $viewnode = $coursenode->add(
             get_string('view', 'local_dataseteditor'),
             new moodle_url(
-                PLUGINPREFIX.'/course.php',
+                PLUGINPREFIX.'/categories.php',
                 array('courseid' => $courseid)
             )
         );
