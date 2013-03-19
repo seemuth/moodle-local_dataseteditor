@@ -27,6 +27,8 @@ require_once(dirname(__FILE__) . '/config.php');
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/locallib.php');
 
+define('NUM_VALUESETS', 1);
+
 
 $courseid = required_param('courseid', PARAM_INT);
 $cmid = optional_param('cmid', 0, PARAM_INT);
@@ -75,43 +77,43 @@ $dataset_url = new moodle_url(
     $urlargs
 );
 
-function fake_cat($id, $name, $numquestions, $wildcards, $values) {
-    $ret_wildcards = array();
-    foreach ($wildcards as $wcid => $wcname) {
+
+/**
+ * Retrieve all related contexts for which the user has permissions.
+ */
+if (isset($modulecontext)) {
+    $thiscontext = $modulecontext;
+} else {
+    $thiscontext = $coursecontext;
+}
+$qec = new question_edit_contexts($thiscontext);
+$contexts = $qec->having_one_edit_tab_cap(EDIT_CAPABILITY);
+
+$context_cats = array();
+foreach ($contexts as $context) {
+    $cats = array();
+
+    $results = get_categories_for_contexts($context->instanceid);
+    foreach ($results as $row) {
         $o = new stdClass();
-        $o->id = $wcid;
-        $o->name = $wcname;
-        $ret_wildcards[] = $o;
+        $o->id = $row->id;
+        $o->name = $row->name;
+        $o->numquestions = $row->questioncount;
+
+        $o->wildcards = get_wildcards($row->id, NUM_VALUESETS);
+
+        $cats[] = $o;
     }
 
-    $cat = new stdClass();
-    $cat->id = $id;
-    $cat->name = $name;
-    $cat->numquestions = $numquestions;
-    $cat->wildcards = $ret_wildcards;
-    $cat->values = $values;
+    $o = new stdClass();
+    $o->context = $context;
+    $o->categories = $cats;
 
-    return $cat;
+    $context_cats[] = $o;
 }
 
-$fake_entry1 = new stdClass;
-$fake_entry1->context = $coursecontext;
-$fake_entry1->categories = array(
-    fake_cat(4, 'Cat4', 1,
-    array(
-        3 => 'A',
-        6 => 'ans_AB',
-        4 => 'B',
-    ),
-    array(array(3 => 2, 6 => 2, 4 => 6)))
-);
-
-$fake_context2cats = array(
-    $fake_entry1,
-);
-
 echo $renderer->render_category_tables(
-    $fake_context2cats, $wildcard_url, $dataset_url
+    $context_cats, NUM_VALUESETS, $wildcard_url, $dataset_url
 );
 
 echo $OUTPUT->footer();

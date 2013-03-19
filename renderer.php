@@ -448,30 +448,16 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
      * Renders category list page with links to edit wildcards and datasets
      *
      * @param array $context2cats[] = array(stdClass(->context ->categories=
-     *      array(stdClass(->id ->name ->numquestions ->wildcards ->values))
+     *      array(stdClass(->id ->name ->numquestions ->wildcards))
      * )
+     * @param int $num_valuesets Number of value sets to show per category
      * @param url $wildcard_url URL for editing wildcards
      * @param url $value_url URL for editing values
      * @return string html code
      */
-    public function render_category_tables($context_cats,
+    public function render_category_tables($context_cats, $num_valuesets,
         $wildcard_url, $value_url
     ) {
-
-        function vals2str($valset, $wildcards) {
-            $parts = array();
-            foreach ($wildcards as $wc) {
-                if (isset($valset[$wc->id])) {
-                    $v = $valset[$wc->id];
-                } else {
-                    $v = '';
-                }
-
-                $parts[] = $v;
-            }
-
-            return '(' . implode(',', $parts) . ')';
-        }
 
         $contents = '';
 
@@ -494,18 +480,50 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 $d_url = new moodle_url($value_url);
                 $d_url->param('categoryid', $cat->id);
 
+
                 $wildcard_names = array();
                 foreach ($cat->wildcards as $wc) {
                     $wildcard_names[] = '{' . $wc->name . '}';
                 }
                 $wildcardstr = implode(', ', $wildcard_names);
 
+
                 $valuesets = array();
-                foreach ($cat->values as $vals) {
-                    $valuesets[] = vals2str($vals, $cat->wildcards);
+                for ($i = 0; $i < $num_valuesets; $i++) {
+                    $valueset = array();
+                    $any_values = false;
+                    foreach ($cat->wildcards as $wc) {
+                        if (isset($wc->values[$i])) {
+                            $v = $wc->values[$i]
+                            $any_values = true;
+                        } else {
+                            $v = '';
+                        }
+                        $valueset[] = $v;
+                    }
+
+                    if ($any_values) {
+                        $valuesets[] = '(' . implode(',', $valueset) . ')';
+                    }
+                }
+
+                $more_values = false;
+                foreach ($cat->wildcards as $wc) {
+                    if (
+                        isset($wc->values[$i]) ||
+                        ($wc->num_more_values > 0)
+                    ) {
+                        $more_values = true;
+                        break;
+                    }
+                }
+
+                if ($more_values) {
+                    $valuesets[] = '...';
                 }
 
                 $valuestr = implode(', ', $valuesets);
+
 
                 $row = array();
                 $row[] = $cat->name;
