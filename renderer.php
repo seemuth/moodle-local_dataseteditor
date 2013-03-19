@@ -501,7 +501,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 $wildcardstr = implode(', ', $wildcard_names);
 
                 $valuestr = implode(', ',
-                    array_map('vals2str', $values, $wildcards)
+                    array_map('vals2str', $cat->values, $cat->wildcards)
                 );
 
                 $row = array();
