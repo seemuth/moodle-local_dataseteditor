@@ -500,19 +500,22 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 }
                 $wildcardstr = implode(', ', $wildcard_names);
 
-                $valuestr = implode(', ',
-                    array_map('vals2str', $cat->values, $cat->wildcards)
-                );
+                $valuesets = array();
+                foreach ($cat->values as $vals) {
+                    $valuesets[] = vals2str($vals, $cat->wildcards);
+                }
+
+                $valuestr = implode(', ', $valuesets);
 
                 $row = array();
                 $row[] = $cat->name;
                 $row[] = $cat->numquestions;
-                $row[] = html_writer::tag('a', $wildcardstr, array(
-                    'href' => $w_url->out(),
-                ));
-                $row[] = html_writer::tag('a', $valuestr, array(
-                    'href' => $d_url->out(),
-                ));
+                $row[] = $this->output->link(
+                    new action_link($w_url, $wildcardstr)
+                );
+                $row[] = $this->output->link(
+                    new action_link($d_url, $valuestr)
+                );
 
                 $table->data[] = $row;
             }
