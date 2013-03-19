@@ -67,11 +67,11 @@ $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 
 
 $wildcard_url = new moodle_url(
-    PLUGINPREFIX.'wildcards.php',
+    PLUGINPREFIX.'/wildcards.php',
     $urlargs
 );
 $dataset_url = new moodle_url(
-    PLUGINPREFIX.'dataset.php',
+    PLUGINPREFIX.'/dataset.php',
     $urlargs
 );
 

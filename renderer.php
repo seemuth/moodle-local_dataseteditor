@@ -491,7 +491,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             foreach ($cats as $cat) {
                 $w_url = new moodle_url($wildcard_url);
                 $w_url->param('categoryid', $cat->id);
-                $d_url = new moodle_url($wildcard_url);
+                $d_url = new moodle_url($value_url);
                 $d_url->param('categoryid', $cat->id);
 
                 $wildcard_names = array();
