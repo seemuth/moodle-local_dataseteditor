@@ -510,10 +510,10 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 $row = array();
                 $row[] = $cat->name;
                 $row[] = $cat->numquestions;
-                $row[] = $this->output->link(
+                $row[] = html_writer::link(
                     new action_link($w_url, $wildcardstr)
                 );
-                $row[] = $this->output->link(
+                $row[] = html_writer::link(
                     new action_link($d_url, $valuestr)
                 );
 
