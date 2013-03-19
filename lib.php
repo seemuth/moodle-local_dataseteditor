@@ -96,7 +96,7 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
 
         if ($cmid && $modulecontext) {
             $modulenode = $coursenode->add(
-                $modulecontext->get_context_name(false, false),
+                $modulecontext->get_context_name(true),
                 new moodle_url(
                     PLUGINPREFIX.'/categories.php',
                     array(
