@@ -457,6 +457,22 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
     public function render_category_tables($context2cats,
         $wildcard_url, $value_url
     ) {
+
+        function vals2str($valset, $wildcards) {
+            $parts = array();
+            foreach ($wildcards as $wc) {
+                if (isset($valset[$wc->id])) {
+                    $v = $valset[$wc->id];
+                } else {
+                    $v = '';
+                }
+
+                $parts[] = $v;
+            }
+
+            return '(' . implode(',', $parts) . ')';
+        }
+
         $contents = '';
 
         foreach ($context2cats as $context => $cats) {
@@ -475,21 +491,23 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 $d_url = new moodle_url($wildcard_url);
                 $d_url->param('categoryid', $cat->id);
 
-                $wildcards = array();
+                $wildcard_names = array();
                 foreach ($cat->wildcards as $wc) {
-                    $wildcards[] = '{' . $wc . '}';
+                    $wildcard_names[] = '{' . $wc->name . '}';
                 }
-                $wildcards = implode(', ', $wildcards);
+                $wildcardstr = implode(', ', $wildcard_names);
 
-                $values = implode(', ', $values);
+                $valuestr = implode(', ',
+                    array_map('vals2str', $values, $wildcards)
+                );
 
                 $row = array();
                 $row[] = $cat->name;
                 $row[] = $cat->numquestions;
-                $row[] = html_writer::tag('a', $wildcards, array(
+                $row[] = html_writer::tag('a', $wildcardstr, array(
                     'href' => $w_url->out(),
                 ));
-                $row[] = html_writer::tag('a', $values, array(
+                $row[] = html_writer::tag('a', $valuestr, array(
                     'href' => $d_url->out(),
                 ));
 
