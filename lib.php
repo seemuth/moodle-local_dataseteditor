@@ -87,7 +87,7 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
         $coursenode = $settingnode->add($course->shortname);
 
         $viewnode = $coursenode->add(
-            get_string('view', 'local_dataseteditor'),
+            get_string('viewcategories', 'local_dataseteditor'),
             new moodle_url(
                 PLUGINPREFIX.'/categories.php',
                 array('courseid' => $courseid)

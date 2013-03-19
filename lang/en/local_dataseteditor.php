@@ -32,6 +32,7 @@ $string['curvals'] = 'Current Values';
 $string['delete_p'] = 'Del?';
 $string['id'] = 'ID';
 $string['itemnum'] = 'Item Number';
+$string['viewcategories'] = 'View Categories';
 
 // Pages
 $string['index'] = 'Index';
