@@ -29,7 +29,7 @@ require_once(dirname(__FILE__) . '/locallib.php');
 
 
 $courseid = required_param('courseid', PARAM_INT);
-$cmid = optional_param('cmid', PARAM_INT);
+$cmid = optional_param('cmid', 0, PARAM_INT);
 
 $urlargs = array();
 
