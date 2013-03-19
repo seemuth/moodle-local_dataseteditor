@@ -35,7 +35,6 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
     $courseid = optional_param('courseid', 0, PARAM_INT);
     $cmid = optional_param('cmid', 0, PARAM_INT);
 
-    $urlargs = array();
     if ($cmid > 0) {
         $modulecontext = context_module::instance($cmid);
 
@@ -55,7 +54,6 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
     }
 
     if ($cmid > 0) {
-        $urlargs['cmid'] = $cmid;
         $coursecontext = $modulecontext->get_course_context(false);
 
         if ($coursecontext) {
@@ -63,16 +61,12 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
         }
     }
 
-    if ($courseid > 0) {
-        $urlargs['courseid'] = $courseid;
-    }
-
     $settingnode = $settings->add(
         get_string('setting', 'local_dataseteditor')
     );
     $indexnode = $settingnode->add(
         get_string('index', 'local_dataseteditor'),
-        new moodle_url(PLUGINPREFIX.'/index.php', $urlargs)
+        new moodle_url(PLUGINPREFIX.'/index.php')
     );
 
     if ($courseid) {
@@ -99,6 +93,19 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
                 array('courseid' => $courseid)
             )
         );
+
+        if ($cmid && $modulecontext) {
+            $modulenode = $coursenode->add(
+                $modulecontext->get_context_name(false, false),
+                new moodle_url(
+                    PLUGINPREFIX.'/categories.php',
+                    array(
+                        'courseid' => $courseid,
+                        'cmid' => $cmid,
+                    )
+                )
+            );
+        }
     }
 }
 
