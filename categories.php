@@ -28,7 +28,7 @@ require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/locallib.php');
 
 
-$courseid = require_param('courseid', PARAM_INT);
+$courseid = required_param('courseid', PARAM_INT);
 $cmid = optional_param('cmid', PARAM_INT);
 
 $urlargs = array();
