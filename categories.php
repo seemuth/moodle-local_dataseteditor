@@ -86,8 +86,19 @@ if (isset($modulecontext)) {
 } else {
     $thiscontext = $coursecontext;
 }
-$qec = new question_edit_contexts($thiscontext);
-$contexts = $qec->having_one_edit_tab_cap(EDIT_CAPABILITY);
+
+$all_contexts = array_merge(
+    array($thiscontext),
+    $thiscontext->get_parent_contexts(true)
+);
+
+$contexts = array();
+foreach ($all_contexts as $c) {
+    if (has_capability(EDIT_CAPABILITY, $c)) {
+        $contexts[] = $c;
+    }
+}
+
 
 $context_cats = array();
 foreach ($contexts as $context) {
