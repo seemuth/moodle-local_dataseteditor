@@ -465,6 +465,10 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             $context = $context_cat->context;
             $cats = $context_cat->categories;
 
+            if (empty($cats)) {
+                continue;
+            }
+
             $table = new html_table();
             $table->head = array(
                 get_string('name', 'local_dataseteditor'),
