@@ -36,7 +36,6 @@ $cmid = optional_param('cmid', 0, PARAM_INT);
 $urlargs = array();
 
 if ($cmid > 0) {
-    require_login($cmid);
     $modulecontext = context_module::instance($cmid);
 
     $urlargs['cmid'] = $cmid;
@@ -45,9 +44,10 @@ if ($cmid > 0) {
     $courseid = $coursecontext->instanceid;
 
 } else {
-    require_login($courseid);
     $coursecontext = context_course::instance($courseid);
 }
+
+require_login($courseid);
 
 $urlargs['courseid'] = $courseid;
 
