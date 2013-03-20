@@ -529,6 +529,16 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 $valuestr = implode(', ', $valuesets);
 
 
+                if (empty($wildcardstr)) {
+                    $wildcardstr = get_string('no_wildcards',
+                        'local_dataseteditor');
+                }
+                if (empty($valuestr)) {
+                    $valuestr = get_string('no_data',
+                        'local_dataseteditor');
+                }
+
+
                 $row = array();
                 $row[] = $cat->name;
                 $row[] = $cat->numquestions;

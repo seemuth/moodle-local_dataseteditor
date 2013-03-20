@@ -49,6 +49,8 @@ $string['paren_newdata'] = '(new data)';
 $string['saved_wildcards'] = 'Saved wildcards';
 $string['saved_dataset_items'] = 'Saved dataset items';
 $string['num_questions'] = '# Questions';
+$string['no_wildcards'] = 'No wildcards';
+$string['no_data'] = 'No data';
 
 // Permissions
 $string['dataseteditor:view'] = 'View Datasets';
