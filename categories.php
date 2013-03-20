@@ -87,10 +87,7 @@ if (isset($modulecontext)) {
     $thiscontext = $coursecontext;
 }
 
-$all_contexts = array_merge(
-    array($thiscontext),
-    $thiscontext->get_parent_contexts(true)
-);
+$all_contexts = $thiscontext->get_parent_context_ids(true);
 
 $contexts = array();
 foreach ($all_contexts as $c) {
