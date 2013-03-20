@@ -90,7 +90,8 @@ if (isset($modulecontext)) {
 $all_contexts = $thiscontext->get_parent_context_ids(true);
 
 $contexts = array();
-foreach ($all_contexts as $c) {
+foreach ($all_contexts as $cid) {
+    $c = context::instance_by_id($cid);
     if (has_capability(EDIT_CAPABILITY, $c)) {
         $contexts[] = $c;
     }
