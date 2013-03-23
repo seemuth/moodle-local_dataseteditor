@@ -102,7 +102,7 @@ foreach ($all_contexts as $cid) {
 
 $context_cats = array();
 $results = $DB->get_records_sql(
-    'SELECT cat.*, ctx.instanceid FROM {prefix_question_categories) AS cat
+    'SELECT cat.*, ctx.instanceid FROM {prefix_question_categories} AS cat
     INNER JOIN {prefix_context} AS ctx
     ON cat.contextid = ctx.id
     WHERE ctx.instanceid IN (?)
