@@ -124,8 +124,6 @@ foreach ($contexts as $context) {
     $o = new stdClass();
     $o->context = $context;
     $o->categories = $context_cats[$context->instanceid];
-
-    $context_cats[] = $o;
 }
 
 echo $renderer->render_category_tables(
