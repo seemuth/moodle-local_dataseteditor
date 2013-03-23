@@ -130,6 +130,10 @@ foreach ($results as $row) {
     $contextid2cats[$row->contextid][] = $o;
 }
 
+if (LOCAL_DATASETEDITOR_DEBUG) {
+    print_object($contextid2cats);
+}
+
 $context_cats = array();
 foreach ($contexts as $context) {
     if (! isset($context_cat[$context->id])) {
