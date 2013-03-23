@@ -472,7 +472,6 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             $table = new html_table();
             $table->head = array(
                 get_string('name', 'local_dataseteditor'),
-                get_string('num_questions', 'local_dataseteditor'),
                 get_string('editwildcards', 'local_dataseteditor'),
                 get_string('editdataset', 'local_dataseteditor'),
             );
@@ -541,7 +540,6 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
                 $row = array();
                 $row[] = $cat->name;
-                $row[] = $cat->numquestions;
                 $row[] = html_writer::link($w_url, $wildcardstr);
                 $row[] = html_writer::link($d_url, $valuestr);
 

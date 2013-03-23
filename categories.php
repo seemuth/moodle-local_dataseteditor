@@ -90,33 +90,40 @@ if (isset($modulecontext)) {
 $all_contexts = $thiscontext->get_parent_context_ids(true);
 
 $contexts = array();
+$contextids = array();
 foreach ($all_contexts as $cid) {
     $c = context::instance_by_id($cid);
     if (has_capability(EDIT_CAPABILITY, $c)) {
         $contexts[] = $c;
+        $contextids[] = $cid;
     }
 }
 
 
 $context_cats = array();
+$results = $DB->get_records_sql(
+    'SELECT cat.*, ctx.instanceid FROM {prefix_question_categories) AS cat
+    INNER JOIN {prefix_context} AS ctx
+    ON cat.contextid = ctx.id
+    WHERE ctx.instanceid IN ?
+    ORDER BY cat.sortorder, cat.name, cat.id',
+    array(implode(',', $contextids))
+);
+
+foreach ($results as $row) {
+    $o = new stdClass();
+    $o->id = $row->id;
+    $o->name = $row->name;
+
+    $o->wildcards = get_wildcards($row->id, NUM_VALUESETS);
+
+    $context_cats[$row->instanceid][] = $o;
+}
+
 foreach ($contexts as $context) {
-    $cats = array();
-
-    $results = get_categories_for_contexts($context->instanceid);
-    foreach ($results as $row) {
-        $o = new stdClass();
-        $o->id = $row->id;
-        $o->name = $row->name;
-        $o->numquestions = $row->questioncount;
-
-        $o->wildcards = get_wildcards($row->id, NUM_VALUESETS);
-
-        $cats[] = $o;
-    }
-
     $o = new stdClass();
     $o->context = $context;
-    $o->categories = $cats;
+    $o->categories = $context_cats[$context->instanceid];
 
     $context_cats[] = $o;
 }
