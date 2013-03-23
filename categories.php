@@ -100,7 +100,7 @@ foreach ($all_contexts as $cid) {
 }
 
 
-$context_cats = array();
+$contextid2cats = array();
 $results = $DB->get_records_sql(
     'SELECT cat.* FROM {question_categories} AS cat
     WHERE cat.contextid IN (?)
@@ -115,9 +115,10 @@ foreach ($results as $row) {
 
     $o->wildcards = get_wildcards($row->id, NUM_VALUESETS);
 
-    $context_cats[$row->contextid][] = $o;
+    $contextid2cats[$row->contextid][] = $o;
 }
 
+$context_cats = array();
 foreach ($contexts as $context) {
     if (! isset($context_cat[$context->id])) {
         continue;
@@ -126,6 +127,8 @@ foreach ($contexts as $context) {
     $o = new stdClass();
     $o->context = $context;
     $o->categories = $context_cats[$context->id];
+
+    $context_cats[] = $o;
 }
 
 echo $renderer->render_category_tables(
