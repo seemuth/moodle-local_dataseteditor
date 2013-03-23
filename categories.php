@@ -147,6 +147,10 @@ foreach ($contexts as $cid => $context) {
     $context_cats[] = $o;
 }
 
+if (LOCAL_DATASETEDITOR_DEBUG) {
+    print_object($context_cats);
+}
+
 echo $renderer->render_category_tables(
     $context_cats, NUM_VALUESETS, $wildcard_url, $dataset_url
 );
