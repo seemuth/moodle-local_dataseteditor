@@ -111,7 +111,16 @@ $results = $DB->get_records_sql(
     $params
 );
 
+if (LOCAL_DATASETEDITOR_DEBUG) {
+    print_object($where_ids);
+    print_object($params);
+}
+
 foreach ($results as $row) {
+    if (LOCAL_DATASETEDITOR_DEBUG) {
+        print_object($row);
+    }
+
     $o = new stdClass();
     $o->id = $row->id;
     $o->name = $row->name;
