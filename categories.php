@@ -101,11 +101,14 @@ foreach ($all_contexts as $cid) {
 
 
 $contextid2cats = array();
+
+list($where_ids, $params) = $DB->get_in_or_equal($contextids);
 $results = $DB->get_records_sql(
     'SELECT cat.* FROM {question_categories} AS cat
-    WHERE cat.contextid IN (?)
+    WHERE cat.contextid ' . $where_ids .
+    '
     ORDER BY cat.sortorder, cat.name, cat.id',
-    array(implode(',', $contextids))
+    $params
 );
 
 foreach ($results as $row) {
