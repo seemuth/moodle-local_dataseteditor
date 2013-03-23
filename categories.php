@@ -115,17 +115,17 @@ foreach ($results as $row) {
 
     $o->wildcards = get_wildcards($row->id, NUM_VALUESETS);
 
-    $context_cats[$row->instanceid][] = $o;
+    $context_cats[$row->contextid][] = $o;
 }
 
 foreach ($contexts as $context) {
-    if (! isset($context_cat[$context->instanceid])) {
+    if (! isset($context_cat[$context->id])) {
         continue;
     }
 
     $o = new stdClass();
     $o->context = $context;
-    $o->categories = $context_cats[$context->instanceid];
+    $o->categories = $context_cats[$context->id];
 }
 
 echo $renderer->render_category_tables(
