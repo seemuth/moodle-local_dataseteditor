@@ -121,6 +121,10 @@ foreach ($results as $row) {
 }
 
 foreach ($contexts as $context) {
+    if (! isset($context_cat[$context->instanceid])) {
+        continue;
+    }
+
     $o = new stdClass();
     $o->context = $context;
     $o->categories = $context_cats[$context->instanceid];
