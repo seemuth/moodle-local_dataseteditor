@@ -111,16 +111,7 @@ $results = $DB->get_records_sql(
     $params
 );
 
-if (LOCAL_DATASETEDITOR_DEBUG) {
-    print_object($where_ids);
-    print_object($params);
-}
-
 foreach ($results as $row) {
-    if (LOCAL_DATASETEDITOR_DEBUG) {
-        print_object($row);
-    }
-
     $o = new stdClass();
     $o->id = $row->id;
     $o->name = $row->name;
@@ -128,10 +119,6 @@ foreach ($results as $row) {
     $o->wildcards = get_wildcards($row->id, NUM_VALUESETS);
 
     $contextid2cats[$row->contextid][] = $o;
-}
-
-if (LOCAL_DATASETEDITOR_DEBUG) {
-    print_object($contextid2cats);
 }
 
 $context_cats = array();
@@ -145,10 +132,6 @@ foreach ($contexts as $cid => $context) {
     $o->categories = $contextid2cats[$cid];
 
     $context_cats[] = $o;
-}
-
-if (LOCAL_DATASETEDITOR_DEBUG) {
-    print_object($context_cats);
 }
 
 echo $renderer->render_category_tables(
