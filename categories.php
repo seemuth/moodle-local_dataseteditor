@@ -94,7 +94,7 @@ $contextids = array();
 foreach ($all_contexts as $cid) {
     $c = context::instance_by_id($cid);
     if (has_capability(EDIT_CAPABILITY, $c)) {
-        $contexts[] = $c;
+        $contexts[$cid] = $c;
         $contextids[] = $cid;
     }
 }
@@ -135,14 +135,14 @@ if (LOCAL_DATASETEDITOR_DEBUG) {
 }
 
 $context_cats = array();
-foreach ($contexts as $context) {
-    if (! isset($context_cat[$context->id])) {
+foreach ($contexts as $cid => $context) {
+    if (! isset($context_cat[$cid])) {
         continue;
     }
 
     $o = new stdClass();
     $o->context = $context;
-    $o->categories = $context_cats[$context->id];
+    $o->categories = $context_cats[$cid];
 
     $context_cats[] = $o;
 }
