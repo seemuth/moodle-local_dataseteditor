@@ -136,13 +136,13 @@ if (LOCAL_DATASETEDITOR_DEBUG) {
 
 $context_cats = array();
 foreach ($contexts as $cid => $context) {
-    if (! isset($context2cats[$cid])) {
+    if (! isset($contextid2cats[$cid])) {
         continue;
     }
 
     $o = new stdClass();
     $o->context = $context;
-    $o->categories = $context2cats[$cid];
+    $o->categories = $contextid2cats[$cid];
 
     $context_cats[] = $o;
 }
