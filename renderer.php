@@ -30,6 +30,24 @@ require_once(dirname(__FILE__) . '/config.php');
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once("$CFG->libdir/outputcomponents.php");
 
+
+/**
+ * Sort wildcards by name, then id.
+ */
+function wildcard_cmp($a, $b) {
+    $aname = strtolower($a->name);
+    $bname = strtolower($b->name);
+
+    if ($aname != $bname) {
+        return ($aname < $bname) ? -1 : 1;
+    } elseif ($a->id != $b->id) {
+        return ($a->id < $b->id) ? -1 : 1;
+    } else {
+        return 0;
+    }
+}
+
+
 /**
  * Dataset editor renderer class
  *
@@ -82,22 +100,6 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             array_unshift($table->head,
                 get_string('id', 'local_dataseteditor')
             );
-        }
-
-        /**
-         * Sort wildcards by name, then id.
-         */
-        function wildcard_cmp($a, $b) {
-            $aname = strtolower($a->name);
-            $bname = strtolower($b->name);
-
-            if ($aname != $bname) {
-                return ($aname < $bname) ? -1 : 1;
-            } elseif ($a->id != $b->id) {
-                return ($a->id < $b->id) ? -1 : 1;
-            } else {
-                return 0;
-            }
         }
 
         uasort($wildcards, 'wildcard_cmp');
