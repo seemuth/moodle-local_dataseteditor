@@ -280,22 +280,6 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         );
         $table->data = array();
 
-        /**
-         * Sort wildcards by name, then id.
-         */
-        function wildcard_cmp($a, $b) {
-            $aname = strtolower($a->name);
-            $bname = strtolower($b->name);
-
-            if ($aname != $bname) {
-                return ($aname < $bname) ? -1 : 1;
-            } elseif ($a->id != $b->id) {
-                return ($a->id < $b->id) ? -1 : 1;
-            } else {
-                return 0;
-            }
-        }
-
         uasort($wildcards, 'wildcard_cmp');
 
         foreach ($wildcards as $wc) {
