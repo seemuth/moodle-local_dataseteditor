@@ -46,10 +46,12 @@ $PAGE->set_title(
 );
 $PAGE->set_pagelayout('incourse');
 
+$renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
+
+
 $wildcards = get_wildcards($categoryid, 0); // Don't need any data values
 $items = get_dataset_items(array_keys($wildcards));
 
 header('Content-Type: text/plain');
 
-print_r($wildcards);
-print_r($items);
+echo $renderer->render_dataset_text($wildcards, $items);

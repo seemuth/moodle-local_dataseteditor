@@ -542,4 +542,44 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         return $contents;
     }
 
+
+    /**
+     * Renders dataset as tab-delimited text
+     *
+     * @param array $wildcards[id] = stdClass(->id ->name ->values)
+     * @param array $items[itemnum] = array(defnum => stdClass(->id ->val))
+     * @return string html code
+     */
+    public function render_dataset_text($wildcards, $items) {
+        $contents = '';
+
+        /* Include row of wildcard names. */
+        $wildcard_names = array();
+        foreach ($wildcards as $wc) {
+            $wildcard_names[] = str_replace("\t", '', $wc->name);
+        }
+        $contents .= implode("\t", $wildcard_names) . "\n";
+
+
+        /* Include each dataset item. */
+        ksort($items);
+        foreach ($items as $itemkey => $item) {
+            $data_row = array();
+
+            foreach ($wildcards as $wc) {
+                if (isset($item[$wc->id])) {
+                    $val = $item[$wc->id]->val;
+                } else {
+                    $val = '';
+                }
+
+                $data_row[] = $val;
+            }
+
+            $contents .= implode("\t", $data_row) . "\n";
+        }
+
+        return $contents;
+    }
+
 }
