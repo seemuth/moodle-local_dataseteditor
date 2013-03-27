@@ -52,6 +52,12 @@ $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 $wildcards = get_wildcards($categoryid, 0); // Don't need any data values
 $items = get_dataset_items(array_keys($wildcards));
 
-header('Content-Type: text/plain');
+header(
+    'Content-Disposition: attachment; filename=dataset-' .
+    $categoryid
+    . '.csv'
+);
+header('Content-Type: application/octet-stream');
+header('Content-Description: Dataset Export');
 
 echo $renderer->render_dataset_text($wildcards, $items);
