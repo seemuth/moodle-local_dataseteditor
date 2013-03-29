@@ -597,6 +597,9 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         );
         $form_contents = '';
 
+        $form_contents .= get_string('import_from_spreadsheet',
+            'local_dataseteditor');
+
         $form_contents .= html_writer::tag('label',
             get_string('lbl_filename', 'local_dataseteditor'),
             array('for' => 'file')
@@ -619,7 +622,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             'name' => 'import',
             'value' => get_string('import', 'local_dataseteditor'),
         ));
-        $form_contents .= html_writer::tag('p', $form_contents);
+        $form_contents = html_writer::tag('p', $form_contents);
 
         return html_writer::tag('form', $form_contents, $form_attributes);
     }

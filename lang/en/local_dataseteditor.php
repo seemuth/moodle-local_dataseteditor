@@ -52,6 +52,8 @@ $string['saved_dataset_items'] = 'Saved dataset items';
 $string['no_wildcards'] = 'No wildcards';
 $string['no_data'] = 'No data';
 $string['lbl_filename'] = 'Filename:';
+$string['import'] = 'Import';
+$string['import_from_spreadsheet'] = 'Import from tab-delimited spreadsheet.';
 
 // Permissions
 $string['dataseteditor:view'] = 'View Datasets';
