@@ -64,6 +64,9 @@ if (!empty($_POST)) {
                 ':' . $file['error'];
 
         } else {
+            $new_wildcards = array();
+            $new_data = array();
+
             $filename = $file['tmp_name'];
             $fin = fopen($filename, 'r');
             if (!$fin) {
@@ -71,11 +74,39 @@ if (!empty($_POST)) {
             } else {
                 $linenum = 0;
                 while (!feof($fin)) {
-                    $line = fgets($fin);
+                    $line = rtrim(fgets($fin));
                     $linenum++;
 
-                    print_object($line);
+                    /* Skip blank lines */
+                    if (!$line) {
+                        continue;
+                    }
+
+                    $words = explode("\t", $line);
+
+                    if (!$new_wildcards) {
+                        foreach ($words as $w) {
+                            $w = clean_param($w, PARAM_ALPHANUMEXT);
+                            $new_wildcards[] = $w;
+                        }
+
+                    } else {
+                        $data_row = array();
+                        $i = 0;
+                        foreach ($words as $w) {
+                            $w = clean_param($w, PARAM_RAW);
+                            if (strlen($w) > 0) {
+                                $data_row[$i] = unformat_float($w);
+                            }
+                            $i++;
+                        }
+
+                        $new_data[] = $data_row;
+                    }
                 }
+
+                print_object($new_wildcards);
+                print_object($new_data);
 
                 fclose($fin);
             }
