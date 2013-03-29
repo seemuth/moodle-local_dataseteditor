@@ -582,4 +582,46 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         return $contents;
     }
 
+
+    /**
+     * Renders dataset import file upload form
+     *
+     * @param url $form_dest URL to which this form submits
+     * @return string html code
+     */
+    public function render_dataset_upload_form($form_dest) {
+        $form_attributes = array(
+            'action' => $form_dest->out(),
+            'method' => 'POST',
+            'enctype' => 'multipart/form-data',
+        );
+        $form_contents = '';
+
+        $form_contents .= html_writer::tag('label',
+            get_string('lbl_filename', 'local_dataseteditor'),
+            array('for' => 'file')
+        );
+        $form_contents .= html_writer::empty_tag('input', array(
+            'type' => 'file',
+            'name' => 'file',
+            'id' => 'file',
+        ));
+
+        $form_contents .= html_writer::empty_tag('input', array(
+            'type' => 'hidden',
+            'name' => 'sesskey',
+            'value' => sesskey(),
+        ));
+
+        $form_contents .= html_writer::empty_tag('br');
+        $form_contents .= html_writer::empty_tag('input', array(
+            'type' => 'submit',
+            'name' => 'import',
+            'value' => get_string('import', 'local_dataseteditor'),
+        ));
+        $form_contents .= html_writer::tag('p', $form_contents);
+
+        return html_writer::tag('form', $form_contents, $form_attributes);
+    }
+
 }

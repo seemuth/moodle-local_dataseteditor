@@ -38,6 +38,7 @@ $string['viewcategories'] = 'View Categories';
 $string['index'] = 'Index';
 $string['editwildcards'] = 'Edit Wildcards';
 $string['editdataset'] = 'Edit Dataset';
+$string['importdataset'] = 'Import Dataset';
 
 // Form strings
 $string['wildcardX'] = 'Wildcard {$a}';
@@ -50,6 +51,7 @@ $string['saved_wildcards'] = 'Saved wildcards';
 $string['saved_dataset_items'] = 'Saved dataset items';
 $string['no_wildcards'] = 'No wildcards';
 $string['no_data'] = 'No data';
+$string['lbl_filename'] = 'Filename:';
 
 // Permissions
 $string['dataseteditor:view'] = 'View Datasets';
