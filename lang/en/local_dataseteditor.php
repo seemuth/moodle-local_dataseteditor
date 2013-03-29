@@ -54,6 +54,7 @@ $string['no_data'] = 'No data';
 $string['lbl_filename'] = 'Filename:';
 $string['import'] = 'Import';
 $string['import_from_spreadsheet'] = 'Import from tab-delimited spreadsheet.';
+$string['error_upload'] = 'Error uploading file';
 
 // Permissions
 $string['dataseteditor:view'] = 'View Datasets';

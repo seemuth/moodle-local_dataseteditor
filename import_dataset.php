@@ -54,9 +54,33 @@ $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 
 $wildcards = get_wildcards($categoryid, 0); // Don't need any data values
 
-if (! empty($_POST)) {
-    print_object($_POST);
-    print_object($_FILES);
+if (!empty($_POST)) {
+    require_sesskey();
+
+    if (isset($_FILES['file'])) {
+        $file = $_FILES['file'];
+        if ($file['error']) {
+            echo get_string('error_upload', 'local_dataset_editor') .
+                ':' . $file['error'];
+
+        } else {
+            $filename = $file['tmp_name'];
+            $fin = fopen($filename, 'r');
+            if (!$fin) {
+                echo get_string('error_upload', 'local_dataset_editor');
+            } else {
+                $linenum = 0;
+                while (!feof($fin)) {
+                    $line = fgets($fin);
+                    $linenum++;
+
+                    print_object($line);
+                }
+
+                fclose($fin);
+            }
+        }
+    }
 }
 
 
