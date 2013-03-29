@@ -61,4 +61,4 @@ if (! empty($_POST)) {
 
 
 $form_dest = $PAGE->url;
-echo $render_dataset_upload_form($form_dest);
+echo $renderer->render_dataset_upload_form($form_dest);
