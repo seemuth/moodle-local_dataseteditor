@@ -599,6 +599,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
         $form_contents .= get_string('import_from_spreadsheet',
             'local_dataseteditor');
+        $form_contents .= html_writer::empty_tag('br');
 
         $form_contents .= html_writer::tag('label',
             get_string('lbl_filename', 'local_dataseteditor'),
