@@ -113,7 +113,7 @@ if (!empty($_POST)) {
 
                 fclose($fin);
 
-                $renderer->render_dataset_import_confirm(
+                echo $renderer->render_dataset_import_confirm(
                     $new_wildcards, $new_data, $form_dest
                 );
             }
