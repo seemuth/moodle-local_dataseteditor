@@ -653,7 +653,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         );
         $table->data = array();
 
-        uasort($wildcards, 'wildcard_cmp');
+        asort($wildcards);
 
         foreach ($wildcards as $wc_id => $wc_name) {
             $table->head[] = '{' . $wc_name . '}';
@@ -718,7 +718,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         ));
 
         $button_contents = '';
-        $button_contents .= get_string('overwrite_p',
+        $button_contents .= get_string('save_overwrite_p',
             'local_dataseteditor');
         $button_contents .= html_writer::empty_tag('br');
         $button_contents .= html_writer::empty_tag('input', array(
