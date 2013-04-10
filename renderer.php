@@ -628,4 +628,113 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         return html_writer::tag('form', $form_contents, $form_attributes);
     }
 
+
+    /**
+     * Renders imported dataset for user confirmation
+     *
+     * @param array $wildcards[id] = name
+     * @param array $items[itemnum] = array(defnum => val)
+     * @param url $form_dest URL to which this form submits
+     * @return string html code
+     */
+    public function render_dataset_import_confirm($wildcards, $items,
+        $form_dest
+    ) {
+
+        $form_attributes = array(
+            'action' => $form_dest->out(),
+            'method' => 'POST'
+        );
+        $form_contents = '';
+
+        $table = new html_table();
+        $table->head = array(
+            get_string('itemnum', 'local_dataseteditor'),
+        );
+        $table->data = array();
+
+        uasort($wildcards, 'wildcard_cmp');
+
+        foreach ($wildcards as $wc_id => $wc_name) {
+            $table->head[] = '{' . $wc_name . '}';
+        }
+
+
+        /* Add fields for each dataset item. */
+        ksort($items);
+        foreach ($items as $itemkey => $item) {
+
+            $data_row = array();
+
+            foreach ($wildcards as $wc_id => $wc_name) {
+                $suffix = '_i' . $itemkey . '_w' . $wc_id;
+
+                if (isset($item[$wc_id])) {
+                    $val = $item[$wc_id];
+
+                    $data_val = $val;
+
+                } else {
+                    $data_val = get_string('no_data', 'local_dataseteditor');
+                    $val = 'NULL';
+                }
+
+                $data_val .= html_writer::empty_tag('input', array(
+                    'type' => 'hidden',
+                    'name' => 'val' . $suffix,
+                    'value' => $val,
+                ));
+
+                $data_row[] = $data_val;
+            }
+
+            /**
+             * Add row label, including annotation for new data.
+             */
+            $rowlabel = $itemkey;
+            array_unshift($data_row, $rowlabel);
+
+            $table->data[] = $data_row;
+        }
+
+        $form_contents .= html_writer::table($table);
+
+        $form_contents .= html_writer::empty_tag('input', array(
+            'type' => 'hidden',
+            'name' => 'itemkeys',
+            'value' => implode(',', array_keys($items)),
+        ));
+
+        $form_contents .= html_writer::empty_tag('input', array(
+            'type' => 'hidden',
+            'name' => 'wc_keys',
+            'value' => implode(',', array_keys($wildcards)),
+        ));
+
+        $form_contents .= html_writer::empty_tag('input', array(
+            'type' => 'hidden',
+            'name' => 'sesskey',
+            'value' => sesskey(),
+        ));
+
+        $button_contents = '';
+        $button_contents .= get_string('overwrite_p',
+            'local_dataseteditor');
+        $button_contents .= html_writer::empty_tag('br');
+        $button_contents .= html_writer::empty_tag('input', array(
+            'type' => 'submit',
+            'name' => 'submit_overwrite',
+            'value' => get_string('save',
+                'local_dataseteditor'),
+        ));
+        $button_contents .= html_writer::empty_tag('input', array(
+            'type' => 'submit',
+            'name' => 'submit_cancel',
+            'value' => get_string('cancel', 'local_dataseteditor'),
+        ));
+        $form_contents .= html_writer::tag('p', $button_contents);
+
+        return html_writer::tag('form', $form_contents, $form_attributes);
+    }
+
 }

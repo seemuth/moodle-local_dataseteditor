@@ -50,6 +50,7 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('importdataset', 'local_dataseteditor'));
 
 $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
+$form_dest = $PAGE->url;
 
 
 $wildcards = get_wildcards($categoryid, 0); // Don't need any data values
@@ -73,6 +74,7 @@ if (!empty($_POST)) {
                 echo get_string('error_upload', 'local_dataset_editor');
             } else {
                 $linenum = 0;
+                $itemkey = 1;
                 while (!feof($fin)) {
                     $line = rtrim(fgets($fin));
                     $linenum++;
@@ -101,7 +103,8 @@ if (!empty($_POST)) {
                             $i++;
                         }
 
-                        $new_data[] = $data_row;
+                        $new_data[$itemkey] = $data_row;
+                        $itemkey++;
                     }
                 }
 
@@ -109,11 +112,18 @@ if (!empty($_POST)) {
                 print_object($new_data);
 
                 fclose($fin);
+
+                $renderer->render_dataset_import_confirm(
+                    $new_wildcards, $new_data, $form_dest
+                );
             }
         }
+
+    } else {
+        /* No uploaded file: must be save or cancel! */
+        print_object(data_submitted());
     }
 }
 
 
-$form_dest = $PAGE->url;
 echo $renderer->render_dataset_upload_form($form_dest);
