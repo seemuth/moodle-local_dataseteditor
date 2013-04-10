@@ -707,8 +707,8 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
         $form_contents .= html_writer::empty_tag('input', array(
             'type' => 'hidden',
-            'name' => 'wc_keys',
-            'value' => implode(',', array_keys($wildcards)),
+            'name' => 'wc_names',
+            'value' => implode(',', $wildcards),
         ));
 
         $form_contents .= html_writer::empty_tag('input', array(
