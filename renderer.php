@@ -701,8 +701,8 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
         $form_contents .= html_writer::empty_tag('input', array(
             'type' => 'hidden',
-            'name' => 'itemkeys',
-            'value' => implode(',', array_keys($items)),
+            'name' => 'itemcount',
+            'value' => count($items),
         ));
 
         $form_contents .= html_writer::empty_tag('input', array(
