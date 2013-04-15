@@ -44,7 +44,7 @@ $urlargs = array(
 if ($cmid > 0) {
     $modulecontext = context_module::instance($cmid);
 
-    $urlargs['cmid' = $cmid;
+    $urlargs['cmid'] = $cmid;
 
     $coursecontext = $module_context->get_course_context();
     $courseid = $coursecontext->instanceid;
