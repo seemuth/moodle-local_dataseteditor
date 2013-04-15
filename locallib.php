@@ -322,8 +322,6 @@ function overwrite_wildcard_dataset(
         }
     }
 
-    $delete_names = array_diff($cur_name2id, $new_name2id);
-
 
     /**
      * If required, make sure each dataset item has all values.
@@ -345,10 +343,13 @@ function overwrite_wildcard_dataset(
      * Delete old, unused wildcards.
      */
     $delete_ids = array();
-    foreach ($delete_names as $n) {
-        $i = $cur_name2id[$n];
-        $delete_ids[] = $i;
+    foreach ($cur_name2id as $name => $id) {
+	if (! array_key_exists($new_name2id, $name)) {
+	    $delete_ids[] = $id;
+	}
     }
+
+    echo '<p>DELETE IDS: ' . implode(', ', $delete_ids) . '</p>';
 
     list($where_ids, $params) = $DB->get_in_or_equal($delete_ids);
     $DB->delete_records_select($table_definitions, 'id ' . $where_ids,
