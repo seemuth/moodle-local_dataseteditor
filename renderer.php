@@ -705,11 +705,26 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             'value' => count($items),
         ));
 
+
+        $wildcardnum = 0;
+        foreach ($wildcards as $name) {
+            $suffix = '_w' . $wildcardnum;
+
+            $form_contents .= html_writer::empty_tag('input', array(
+                'type' => 'hidden',
+                'name' => 'wc_name' . $suffix,
+                'value' => $name,
+            ));
+
+            $wildcardnum++;
+        }
+
         $form_contents .= html_writer::empty_tag('input', array(
             'type' => 'hidden',
-            'name' => 'wc_names',
-            'value' => implode(',', $wildcards),
+            'name' => 'wildcardcount',
+            'value' => $wildcardnum,
         ));
+
 
         $form_contents .= html_writer::empty_tag('input', array(
             'type' => 'hidden',
