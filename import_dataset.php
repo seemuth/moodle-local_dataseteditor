@@ -108,9 +108,6 @@ if (!empty($_POST)) {
                     }
                 }
 
-                print_object($new_wildcards);
-                print_object($new_data);
-
                 fclose($fin);
 
                 echo $renderer->render_dataset_import_confirm(
@@ -139,8 +136,6 @@ if (!empty($_POST)) {
 
             $itemcount = required_param('itemcount', PARAM_INT);
             $wildcardcount = required_param('wildcardcount', PARAM_INT);
-
-            print_object(data_submitted());
 
             $new_wildcards = array();
             for ($wc_num = 0; $wc_num < $wildcardcount; $wc_num++) {
