@@ -315,7 +315,7 @@ function overwrite_wildcard_dataset(
      */
     $new_name2id = array();
     foreach ($wildcards as $name) {
-        if (array_key_exists($cur_name2id, $name)) {
+        if (array_key_exists($name, $cur_name2id)) {
             $new_name2id[$name] = $cur_name2id[$name];
         } else {
             $new_name2id[$name] = null;
@@ -350,11 +350,11 @@ function overwrite_wildcard_dataset(
         }
     }
 
-    echo '<p>DELETE IDS: ' . implode(', ', $delete_ids) . '</p>';
-
-    list($where_ids, $params) = $DB->get_in_or_equal($delete_ids);
-    $DB->delete_records_select($table_definitions, 'id ' . $where_ids,
-        $params);
+    if (! empty($delete_ids)) {
+        list($where_ids, $params) = $DB->get_in_or_equal($delete_ids);
+        $DB->delete_records_select($table_definitions, 'id ' . $where_ids,
+            $params);
+    }
 
 
     /**
