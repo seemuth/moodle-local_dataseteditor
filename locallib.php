@@ -28,6 +28,9 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__).'/lib.php');     // we extend this library here
 
+define('DEFAULT_WILDCARD_OPTIONS', 'uniform:1.0:10.0:1');
+
+
 /**
  * Returns array of id => wildcard
  *
@@ -274,4 +277,135 @@ function save_dataset_items($items, $deleteitems) {
             }
         }
     }
+}
+
+
+/**
+ * Overwrites wildcards and dataset with imported data
+ *
+ * @param int $categoryid Category whose data to overwrite
+ * @param array $wildcards[id] = name
+ * @param array $items[itemnum] = array(defnum => val)
+ * @return null
+ * @throws coding_exception
+ */
+public function overwrite_wildcard_dataset(
+    $categoryid, $wildcards, $items,
+    $requirefulldataset = true
+) {
+
+    $table_definitions = 'question_dataset_definitions';
+    $table_values = 'question_dataset_items';
+
+    global $DB;
+
+    $cur_wildcards = get_wildcards($categoryid, 0);
+    $cur_name2id = array();
+    foreach ($cur_wildcards as $wc) {
+        $cur_name2id[$wc->name] = $wc->id;
+    }
+
+    if (count($cur_wildcards) != count($cur_name2id)) {
+        throw new coding_exception('Duplicate wildcard names');
+    }
+
+
+    /**
+     * Compile list of deleted and new wildcards.
+     */
+    $new_name2id = array();
+    foreach ($wildcards as $name) {
+        if (array_key_exists($cur_name2id, $name)) {
+            $new_name2id[$name] = $cur_name2id[$name];
+        } else {
+            $new_name2id[$name] = null;
+        }
+    }
+
+    $delete_names = array_diff($cur_name2id, $new_name2id);
+
+
+    /**
+     * If required, make sure each dataset item has all values.
+     */
+    if ($requirefulldataset) {
+        foreach ($items as $itemnum => $val) {
+            foreach ($wildcards as $i => $name) {
+                if (! isset($val[$i])) {
+                    throw new coding_exception(
+                        'No value defined for ' . $i . ', ' . $name
+                    );
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Delete old, unused wildcards.
+     */
+    $delete_ids = array();
+    foreach ($delete_names as $n) {
+        $i = $cur_name2id[$n];
+        $delete_ids[] = $i;
+    }
+
+    list($where_ids, $params) = $DB->get_in_or_equal($delete_ids);
+    $DB->delete_records_select($table_definitions, 'id ' . $where_ids,
+        $params);
+
+
+    /**
+     * Add new wildcards.
+     */
+    foreach ($new_name2id as $name => $id) {
+        if ($id === null) {
+            $o = new stdClass();
+            $o->category = $categoryid;
+            $o->name = $name;
+            $o->type = 1;
+            $o->options = DEFAULT_WILDCARD_OPTIONS;
+            $o->itemcount = 0;  /* Will be updated. */
+
+            $id = $DB->insert_record($table_definitions, $o);
+            $new_name2id[$name] = $id;
+        }
+    }
+
+
+    /**
+     * Delete old values.
+     */
+    list($where_ids, $params) = $DB->get_in_or_equal(
+        array_keys($cur_wildcards));
+    $DB->delete_records_select($table_values, 'definition ' . $where_ids,
+        $params);
+
+
+    /**
+     * Insert new values.
+     */
+    $itemnum = 0;
+    foreach ($items as $val) {
+        $itemnum++;
+
+        foreach ($wildcards as $i => $name) {
+            $wc_id = $new_name2id[$name];
+
+            $o = new stdClass();
+            $o->definition = $wc_id;
+            $o->itemnumber = $itemnum;
+            $o->value = $val[$i];
+
+            $DB->insert_record($table_values, $o);
+        }
+    }
+
+
+    /**
+     * Update wildcards' itemcount field.
+     */
+    $DB->set_field($table_definitions, 'itemcount', $itemnum, array(
+        'category' => $categoryid
+    ));
 }
