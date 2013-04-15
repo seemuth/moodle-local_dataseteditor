@@ -689,9 +689,9 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             }
 
             /**
-             * Add row label, including annotation for new data.
+             * Add row label.
              */
-            $rowlabel = $itemkey;
+            $rowlabel = $itemkey + 1;
             array_unshift($data_row, $rowlabel);
 
             $table->data[] = $data_row;
