@@ -131,7 +131,7 @@ if (!empty($_POST)) {
 
         if ($submit_cancel) {
             echo html_writer::tag('p',
-                get_string('cancelled_changes', 'local_dataseteditor'));
+                get_string('cancelled', 'local_dataseteditor'));
 
         } elseif ($submit_overwrite) {
 
