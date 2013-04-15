@@ -182,6 +182,10 @@ if (!empty($_POST)) {
 
                 echo html_writer::tag('p',
                     get_string('saved_all_data', 'local_dataseteditor'));
+            } else {
+                echo $renderer->render_dataset_import_confirm(
+                    $new_wildcards, $new_items, $form_dest
+                );
             }
         }
     }
