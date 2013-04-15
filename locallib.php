@@ -285,7 +285,7 @@ function save_dataset_items($items, $deleteitems) {
  *
  * @param int $categoryid Category whose data to overwrite
  * @param array $wildcards[id] = name
- * @param array $items[itemnum] = array(defnum => val)
+ * @param array $items[] = array(defnum => val)
  * @return null
  * @throws coding_exception
  */
@@ -329,9 +329,9 @@ public function overwrite_wildcard_dataset(
      * If required, make sure each dataset item has all values.
      */
     if ($requirefulldataset) {
-        foreach ($items as $itemnum => $val) {
+        foreach ($items as $values) {
             foreach ($wildcards as $i => $name) {
-                if (! isset($val[$i])) {
+                if (! isset($values[$i])) {
                     throw new coding_exception(
                         'No value defined for ' . $i . ', ' . $name
                     );
@@ -386,7 +386,7 @@ public function overwrite_wildcard_dataset(
      * Insert new values.
      */
     $itemnum = 0;
-    foreach ($items as $val) {
+    foreach ($items as $values) {
         $itemnum++;
 
         foreach ($wildcards as $i => $name) {
@@ -395,7 +395,7 @@ public function overwrite_wildcard_dataset(
             $o = new stdClass();
             $o->definition = $wc_id;
             $o->itemnumber = $itemnum;
-            $o->value = $val[$i];
+            $o->value = $values[$i];
 
             $DB->insert_record($table_values, $o);
         }
