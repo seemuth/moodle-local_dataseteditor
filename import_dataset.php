@@ -68,7 +68,7 @@ if (!empty($_POST)) {
 
         } else {
             $new_wildcards = array();
-            $new_data = array();
+            $new_items = array();
 
             $filename = $file['tmp_name'];
             $fin = fopen($filename, 'r');
@@ -105,7 +105,7 @@ if (!empty($_POST)) {
                             $i++;
                         }
 
-                        $new_data[$itemkey] = $data_row;
+                        $new_items[$itemkey] = $data_row;
                         $itemkey++;
                     }
                 }
@@ -211,7 +211,7 @@ if ($display_confirmation) {
     $changelist[] = get_string('update_all_data', 'local_dataseteditor');
 
     echo $renderer->render_dataset_import_confirm(
-        $new_wildcards, $new_data, $form_dest, $changelist
+        $new_wildcards, $new_items, $form_dest, $changelist
     );
 }
 
