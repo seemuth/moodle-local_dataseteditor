@@ -123,10 +123,10 @@ if (!empty($_POST)) {
         /* No uploaded file: must be save or cancel! */
 
         $submit_overwrite = (
-            optional_param('submit_overwrite', PARAM_RAW) ? true : false
+            optional_param('submit_overwrite', 0, PARAM_RAW) ? true : false
         );
         $submit_cancel = (
-            optional_param('submit_cancel', PARAM_RAW) ? true : false
+            optional_param('submit_cancel', 0, PARAM_RAW) ? true : false
         );
 
         print_object(data_submitted());
