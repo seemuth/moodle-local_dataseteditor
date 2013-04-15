@@ -196,8 +196,8 @@ if ($display_confirmation) {
     }
     $new_name2num = array_flip($new_wildcards);
 
-    $to_delete = array_key_diff($old_name2num, $new_name2num);
-    $to_add = array_key_diff($new_name2num, $old_name2num);
+    $to_delete = array_diff_key($old_name2num, $new_name2num);
+    $to_add = array_diff_key($new_name2num, $old_name2num);
 
     $changelist = array();
     foreach ($to_delete as $name) {
