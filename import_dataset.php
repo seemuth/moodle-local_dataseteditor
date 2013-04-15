@@ -61,7 +61,7 @@ if (!empty($_POST)) {
     if (isset($_FILES['file'])) {
         $file = $_FILES['file'];
         if ($file['error']) {
-            echo get_string('error_upload', 'local_dataset_editor') .
+            echo get_string('error_upload', 'local_dataseteditor') .
                 ':' . $file['error'];
 
         } else {
@@ -71,7 +71,7 @@ if (!empty($_POST)) {
             $filename = $file['tmp_name'];
             $fin = fopen($filename, 'r');
             if (!$fin) {
-                echo get_string('error_upload', 'local_dataset_editor');
+                echo get_string('error_upload', 'local_dataseteditor');
             } else {
                 $linenum = 0;
                 $itemkey = 0;
