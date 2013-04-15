@@ -204,7 +204,7 @@ if ($display_confirmation) {
         $changelist[] = get_string('delete_wildcardX',
             'local_dataseteditor', $name);
     }
-    foreach ($to_add as $name) {
+    foreach ($to_add as $name => $num) {
         $changelist[] = get_string('add_wildcardX',
             'local_dataseteditor', $name);
     }
