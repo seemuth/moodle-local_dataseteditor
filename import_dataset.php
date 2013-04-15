@@ -135,15 +135,54 @@ if (!empty($_POST)) {
 
         } elseif ($submit_overwrite) {
 
+            $success = true;
+
             $itemcount = required_param('itemcount', PARAM_INT);
             $wildcardcount = required_param('wildcardcount', PARAM_INT);
 
             print_object(data_submitted());
 
-            echo "$itemcount, $wildcardcount";
+            $new_wildcards = array();
+            for ($wc_num = 0; $i < $wildcardcount; $i++) {
+                $field = 'wc_name__w' . $i;
+                $name = required_param($field, PARAM_ALPHANUMEXT);
+                $new_wildcards[$wc_num] = $name;
+            }
 
-            echo html_writer::tag('p',
-                get_string('saved_all_data', 'local_dataseteditor'));
+            $new_items = array();
+            for ($item_num = 0; $item_num < $itemcount; $item_num++) {
+                $thisitem = array();
+
+                for ($wc_num = 0; $wc_num < $wildcardcount; $wc_num++) {
+                    $field = 'val_i' . $item_num . '_w' . $wc_num;
+                    $val = required_param($field, PARAM_RAW);
+
+                    if (strtolower($val) == 'null') {
+                        $eo = new stdClass();
+                        $eo->name = $new_wildcards[$wc_num];
+                        $eo->num = $item_num + 1;
+
+                        echo html_writer::tag('p',
+                            get_string('missing_data_X_in_X',
+                                'local_dataseteditor', $eo));
+
+                        $success = false;
+
+                    } else {
+                        $thisitem[$wc_num] = unformat_float($val);
+                    }
+                }
+
+                $new_items[$item_num] = $thisitem;
+            }
+
+            if ($success) {
+                overwrite_wildcard_dataset($categoryid, $new_wildcards,
+                    $new_items);
+
+                echo html_writer::tag('p',
+                    get_string('saved_all_data', 'local_dataseteditor'));
+            }
         }
     }
 }

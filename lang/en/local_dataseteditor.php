@@ -58,6 +58,7 @@ $string['import'] = 'Import';
 $string['import_from_spreadsheet'] = 'Import from tab-delimited spreadsheet.';
 $string['error_upload'] = 'Error uploading file';
 $string['save_overwrite_p'] = 'Save and overwrite existing data?';
+$string['missing_data_X_in_X'] = 'Missing data {$a->name} in #{$a->num}';
 
 // Permissions
 $string['dataseteditor:view'] = 'View Datasets';
