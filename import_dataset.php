@@ -48,7 +48,7 @@ if ($cmid > 0) {
     $thiscontext = $modulecontext;
 
 } else {
-    $coursecontext = context__course::instance($courseid);
+    $coursecontext = context_course::instance($courseid);
 
     $thiscontext = $coursecontext;
 }
