@@ -289,7 +289,7 @@ function save_dataset_items($items, $deleteitems) {
  * @return null
  * @throws coding_exception
  */
-public function overwrite_wildcard_dataset(
+function overwrite_wildcard_dataset(
     $categoryid, $wildcards, $items,
     $requirefulldataset = true
 ) {
