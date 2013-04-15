@@ -344,9 +344,9 @@ function overwrite_wildcard_dataset(
      */
     $delete_ids = array();
     foreach ($cur_name2id as $name => $id) {
-	if (! array_key_exists($new_name2id, $name)) {
-	    $delete_ids[] = $id;
-	}
+        if (! array_key_exists($new_name2id, $name)) {
+            $delete_ids[] = $id;
+        }
     }
 
     echo '<p>DELETE IDS: ' . implode(', ', $delete_ids) . '</p>';
