@@ -143,8 +143,8 @@ if (!empty($_POST)) {
             print_object(data_submitted());
 
             $new_wildcards = array();
-            for ($wc_num = 0; $i < $wildcardcount; $i++) {
-                $field = 'wc_name__w' . $i;
+            for ($wc_num = 0; $wc_num < $wildcardcount; $wc_num++) {
+                $field = 'wc_name_w' . $wc_num;
                 $name = required_param($field, PARAM_ALPHANUMEXT);
                 $new_wildcards[$wc_num] = $name;
             }
