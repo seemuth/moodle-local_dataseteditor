@@ -216,3 +216,7 @@ if ($display_confirmation) {
 }
 
 echo $renderer->render_dataset_upload_form($form_dest);
+
+print_object($new_wildcards);
+print_object($new_items);
+print_object(data_submitted());
