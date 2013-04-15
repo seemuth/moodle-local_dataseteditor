@@ -635,10 +635,11 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
      * @param array $wildcards[id] = name
      * @param array $items[itemnum] = array(defnum => val)
      * @param url $form_dest URL to which this form submits
+     * @param array $changelist List of changes to confirm
      * @return string html code
      */
     public function render_dataset_import_confirm($wildcards, $items,
-        $form_dest
+        $form_dest, $changelist
     ) {
 
         $form_attributes = array(
@@ -731,6 +732,16 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             'name' => 'sesskey',
             'value' => sesskey(),
         ));
+
+        if (! empty($changelist)) {
+            $form_contents .= get_string('changes_to_commit',
+                'local_dataseteditor');
+            $ul_contents = '';
+            foreach ($changelist as $change) {
+                $ul_contents .= html_writer::tag('li', $change);
+            }
+            $form_contents .= html_writer::tag('ul', $ul_contents);
+        }
 
         $button_contents = '';
         $button_contents .= get_string('save_overwrite_p',

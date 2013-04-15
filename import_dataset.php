@@ -55,6 +55,8 @@ $form_dest = $PAGE->url;
 
 $wildcards = get_wildcards($categoryid, 0); // Don't need any data values
 
+$display_confirmation = false;
+
 if (!empty($_POST)) {
     require_sesskey();
 
@@ -110,9 +112,8 @@ if (!empty($_POST)) {
 
                 fclose($fin);
 
-                echo $renderer->render_dataset_import_confirm(
-                    $new_wildcards, $new_data, $form_dest
-                );
+
+                $display_confirmation = true;
             }
         }
 
@@ -178,13 +179,40 @@ if (!empty($_POST)) {
                 echo html_writer::tag('p',
                     get_string('saved_all_data', 'local_dataseteditor'));
             } else {
-                echo $renderer->render_dataset_import_confirm(
-                    $new_wildcards, $new_items, $form_dest
-                );
+                $display_confirmation = true;
             }
         }
     }
 }
 
+if ($display_confirmation) {
+
+    /**
+     * Compile list of changes to commit.
+     */
+    $old_name2num = array();
+    foreach ($wildcards as $wc) {
+        $old_name2num[$wc->name] = $wc->id;
+    }
+    $new_name2num = array_flip($new_wildcards);
+
+    $to_delete = array_key_diff($old_name2num, $new_name2num);
+    $to_add = array_key_diff($new_name2num, $old_name2num);
+
+    $changelist = array();
+    foreach ($to_delete as $name) {
+        $changelist[] = get_string('deleteX',
+            'local_dataseteditor', $name);
+    }
+    foreach ($to_add as $name) {
+        $changelist[] = get_string('addX',
+            'local_dataseteditor', $name);
+    }
+    $changelist[] = get_string('update_all_data', 'local_dataseteditor');
+
+    echo $renderer->render_dataset_import_confirm(
+        $new_wildcards, $new_data, $form_dest, $changelist
+    );
+}
 
 echo $renderer->render_dataset_upload_form($form_dest);
