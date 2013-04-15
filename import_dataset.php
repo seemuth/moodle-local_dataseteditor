@@ -74,7 +74,7 @@ if (!empty($_POST)) {
                 echo get_string('error_upload', 'local_dataset_editor');
             } else {
                 $linenum = 0;
-                $itemkey = 1;
+                $itemkey = 0;
                 while (!feof($fin)) {
                     $line = rtrim(fgets($fin));
                     $linenum++;
@@ -129,8 +129,22 @@ if (!empty($_POST)) {
             optional_param('submit_cancel', 0, PARAM_RAW) ? true : false
         );
 
-        print_object(data_submitted());
-        echo "<p>Overwrite? $submit_overwrite; cancel? $submit_cancel</p>";
+        if ($submit_cancel) {
+            echo html_writer::tag('p',
+                get_string('cancelled_changes', 'local_dataseteditor'));
+
+        } elseif ($submit_overwrite) {
+
+            $itemcount = required_param('itemcount', PARAM_INT);
+            $wildcardcount = required_param('wildcardcount', PARAM_INT);
+
+            print_object(data_submitted());
+
+            echo "$itemcount, $wildcardcount";
+
+            echo html_writer::tag('p',
+                get_string('saved_all_data', 'local_dataseteditor'));
+        }
     }
 }
 
