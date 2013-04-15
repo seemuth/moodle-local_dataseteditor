@@ -654,6 +654,13 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         );
         $table->data = array();
 
+
+        $unsorted_wildcards = array();
+        foreach ($wildcards as $name) {
+            $unsorted_wildcards[] = $name;
+        }
+
+
         asort($wildcards);
 
         foreach ($wildcards as $wc_id => $wc_name) {
@@ -708,7 +715,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
 
         $wildcardnum = 0;
-        foreach ($wildcards as $name) {
+        foreach ($unsorted_wildcards as $name) {
             $suffix = '_w' . $wildcardnum;
 
             $form_contents .= html_writer::empty_tag('input', array(
