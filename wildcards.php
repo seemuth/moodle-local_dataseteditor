@@ -34,13 +34,35 @@ define('DEFAULT_ITEMCOUNT', 0);
 
 
 $categoryid = required_param('categoryid', PARAM_INT);
+$courseid = required_param('courseid', PARAM_INT);
+$cmid = optional_param('cmid', 0, PARAM_INT);
 
-$syscontext = context_system::instance();
-require_login($syscontext);
+$urlargs = array(
+    'categoryid' => $categoryid
+);
 
-require_capability('local/dataseteditor:view', $syscontext);
+if ($cmid > 0) {
+    $modulecontext = context_module::instance($cmid);
 
-$PAGE->set_url(PLUGINPREFIX.'/wildcards.php', array('categoryid' => $categoryid));
+    $urlargs['cmid' = $cmid;
+
+    $coursecontext = $module_context->get_course_context();
+    $courseid = $coursecontext->instanceid;
+
+    $thiscontext = $modulecontext;
+
+} else {
+    $coursecontext = context__course::instance($courseid);
+
+    $thiscontext = $coursecontext;
+}
+
+$urlargs['courseid'] = $courseid;
+
+require_login($courseid);
+require_capability(EDIT_CAPABILITY, $thiscontext);
+
+$PAGE->set_url(PLUGINPREFIX.'/wildcards.php', $urlargs);
 $PAGE->set_heading($SITE->fullname);
 $PAGE->set_title(
     $SITE->fullname .

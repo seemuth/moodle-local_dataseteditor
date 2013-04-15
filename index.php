@@ -44,13 +44,13 @@ $table->head = array('ID', 'Course Name');
 $table->data = array();
 foreach ($result as $row) {
     $coursecontext = context_course::instance($row->id);
-    if (!has_capability('local/dataseteditor:view', $coursecontext)) {
+    if (!has_capability(EDIT_CAPABILITY, $coursecontext)) {
         continue;
     }
 
     $link = html_writer::link(
         new moodle_url(
-            PLUGINPREFIX.'/course.php',
+            PLUGINPREFIX.'/categories.php',
             array('courseid' => $row->id)
         ),
         $row->fullname

@@ -71,7 +71,7 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
 
     if ($courseid) {
         $coursecontext = context_course::instance($courseid);
-        if (!has_capability('local/dataseteditor:view', $coursecontext)) {
+        if (!has_capability(EDIT_CAPABILITY, $coursecontext)) {
             $courseid = 0;
             $coursecontext = NULL;
         }
