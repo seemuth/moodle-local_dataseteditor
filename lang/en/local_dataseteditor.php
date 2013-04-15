@@ -60,8 +60,8 @@ $string['error_upload'] = 'Error uploading file';
 $string['changes_to_commit'] = 'Changes to commit:';
 $string['save_overwrite_p'] = 'Save and overwrite existing data?';
 $string['missing_data_X_in_X'] = 'Missing data {$a->name} in #{$a->num}';
-$string['addX'] = 'Add {$a}';
-$string['deleteX'] = 'Delete {$a}';
+$string['add_wildcardX'] = 'Add wildcard {$a}';
+$string['delete_wildcardX'] = 'Delete wildcard {$a}';
 $string['update_all_data'] = 'Update all data';
 
 // Permissions

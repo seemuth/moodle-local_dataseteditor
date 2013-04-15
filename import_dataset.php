@@ -200,12 +200,12 @@ if ($display_confirmation) {
     $to_add = array_diff_key($new_name2num, $old_name2num);
 
     $changelist = array();
-    foreach ($to_delete as $name) {
-        $changelist[] = get_string('deleteX',
+    foreach ($to_delete as $name => $num) {
+        $changelist[] = get_string('delete_wildcardX',
             'local_dataseteditor', $name);
     }
     foreach ($to_add as $name) {
-        $changelist[] = get_string('addX',
+        $changelist[] = get_string('add_wildcardX',
             'local_dataseteditor', $name);
     }
     $changelist[] = get_string('update_all_data', 'local_dataseteditor');
