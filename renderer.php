@@ -83,7 +83,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         $min_rows, $form_dest
     ) {
         $form_attributes = array(
-            'action' => $form_dest->out(),
+            'action' => $form_dest->out(false),
             'method' => 'POST'
         );
         $form_contents = '';
@@ -269,7 +269,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         $uservals, $deleteitems, $min_rows, $form_dest
     ) {
         $form_attributes = array(
-            'action' => $form_dest->out(),
+            'action' => $form_dest->out(false),
             'method' => 'POST'
         );
         $form_contents = '';
@@ -591,7 +591,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
      */
     public function render_dataset_upload_form($form_dest) {
         $form_attributes = array(
-            'action' => $form_dest->out(),
+            'action' => $form_dest->out(false),
             'method' => 'POST',
             'enctype' => 'multipart/form-data',
         );
@@ -643,7 +643,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
     ) {
 
         $form_attributes = array(
-            'action' => $form_dest->out(),
+            'action' => $form_dest->out(false),
             'method' => 'POST'
         );
         $form_contents = '';
