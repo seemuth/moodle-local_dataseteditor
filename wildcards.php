@@ -46,7 +46,7 @@ if ($cmid > 0) {
 
     $urlargs['cmid'] = $cmid;
 
-    $coursecontext = $module_context->get_course_context();
+    $coursecontext = $modulecontext->get_course_context();
     $courseid = $coursecontext->instanceid;
 
     $thiscontext = $modulecontext;
