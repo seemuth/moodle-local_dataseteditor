@@ -38,6 +38,7 @@ $string['viewcategories'] = 'View Categories';
 $string['index'] = 'Index';
 $string['editwildcards'] = 'Edit Wildcards';
 $string['editdataset'] = 'Edit Dataset';
+$string['exportdataset'] = 'Export Dataset';
 $string['importdataset'] = 'Import Dataset';
 
 // Form strings

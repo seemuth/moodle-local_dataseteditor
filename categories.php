@@ -76,6 +76,14 @@ $dataset_url = new moodle_url(
     PLUGINPREFIX.'/dataset.php',
     $urlargs
 );
+$export_url = new moodle_url(
+    PLUGINPREFIX.'/export_dataset.php',
+    $urlargs
+);
+$import_url = new moodle_url(
+    PLUGINPREFIX.'/import_dataset.php',
+    $urlargs
+);
 
 
 /**

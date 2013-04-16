@@ -439,10 +439,12 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
      * @param int $num_valuesets Number of value sets to show per category
      * @param url $wildcard_url URL for editing wildcards
      * @param url $value_url URL for editing values
+     * @param url $export_url URL for exporting datasets
+     * @param url $import_url URL for importing datasets
      * @return string html code
      */
     public function render_category_tables($context_cats, $num_valuesets,
-        $wildcard_url, $value_url
+        $wildcard_url, $value_url, $export_url, $import_url
     ) {
 
         $contents = '';
@@ -460,16 +462,12 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 get_string('name', 'local_dataseteditor'),
                 get_string('editwildcards', 'local_dataseteditor'),
                 get_string('editdataset', 'local_dataseteditor'),
+                get_string('exportdataset', 'local_dataseteditor'),
+                get_string('importdataset', 'local_dataseteditor'),
             );
             $table->data = array();
 
             foreach ($cats as $cat) {
-                $w_url = new moodle_url($wildcard_url);
-                $w_url->param('categoryid', $cat->id);
-                $d_url = new moodle_url($value_url);
-                $d_url->param('categoryid', $cat->id);
-
-
                 $wildcard_names = array();
                 foreach ($cat->wildcards as $wc) {
                     $wildcard_names[] = '{' . $wc->name . '}';
@@ -524,10 +522,24 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 }
 
 
+                $w_url = new moodle_url($wildcard_url);
+                $w_url->param('categoryid', $cat->id);
+                $d_url = new moodle_url($value_url);
+                $d_url->param('categoryid', $cat->id);
+                $e_url = new moodle_url($export_url);
+                $e_url->param('categoryid', $cat->id);
+                $i_url = new moodle_url($import_url);
+                $i_url->param('categoryid', $cat->id);
+
+
                 $row = array();
                 $row[] = $cat->name;
                 $row[] = html_writer::link($w_url, $wildcardstr);
                 $row[] = html_writer::link($d_url, $valuestr);
+                $row[] = html_writer::link($e_url,
+                    get_string('exportdataset', 'local_dataseteditor'));
+                $row[] = html_writer::link($i_url,
+                    get_string('importdataset', 'local_dataseteditor'));
 
                 $table->data[] = $row;
             }
