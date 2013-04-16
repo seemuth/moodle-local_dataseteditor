@@ -239,3 +239,5 @@ if ($display_confirmation) {
 }
 
 echo $renderer->render_dataset_upload_form($form_dest);
+
+echo $OUTPUT->footer();
