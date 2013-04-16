@@ -143,7 +143,8 @@ foreach ($contexts as $cid => $context) {
 }
 
 echo $renderer->render_category_tables(
-    $context_cats, NUM_VALUESETS, $wildcard_url, $dataset_url
+    $context_cats, NUM_VALUESETS,
+    $wildcard_url, $dataset_url, $export_url, $import_url
 );
 
 echo $OUTPUT->footer();
