@@ -24,5 +24,5 @@
  */
 
 define('PLUGINPREFIX', '/local/dataseteditor');
-define('LOCAL_DATASETEDITOR_DEBUG', true);
+define('LOCAL_DATASETEDITOR_DEBUG', false);
 define('EDIT_CAPABILITY', 'moodle/question:managecategory');
