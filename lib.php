@@ -27,9 +27,6 @@ defined('MOODLE_INTERNAL') || die;
 
 require_once(dirname(__FILE__) . '/config.php');
 
-//moodleform is defined in formslib.php
-require_once("$CFG->libdir/formslib.php");
-
 
 function local_dataseteditor_extends_settings_navigation($settings, $context) {
     $courseid = optional_param('courseid', 0, PARAM_INT);
