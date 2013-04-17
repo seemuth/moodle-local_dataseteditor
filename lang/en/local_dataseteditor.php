@@ -33,6 +33,7 @@ $string['delete_p'] = 'Del?';
 $string['id'] = 'ID';
 $string['itemnum'] = 'Item Number';
 $string['viewcategories'] = 'View Categories';
+$string['coursecategories'] = 'Course Categories';
 
 // Pages
 $string['index'] = 'Index';
