@@ -435,12 +435,12 @@ function overwrite_wildcard_dataset(
 /**
  * Require the user to have access to the given question category.
  *
- * @param int $categoryid Question category id
  * @param string $capability Require the user to have this capability
+ * @param int $categoryid Question category id
  * @return void terminates with an error if the user does not have the given 
  * capability.
  */
-function require_cat_capability($categoryid, $capability) {
+function require_capability_cat($capability, $categoryid) {
     $contextid = get_cat_context($categoryid);
     $context = context::instance_by_id($contextid);
     require_capability($capability, $context);
