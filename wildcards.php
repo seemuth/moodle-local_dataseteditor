@@ -61,6 +61,7 @@ $urlargs['courseid'] = $courseid;
 
 require_login($courseid);
 require_capability(EDIT_CAPABILITY, $thiscontext);
+require_cat_capability(EDIT_CAPABILITY, $categoryid);
 
 $PAGE->set_url(PLUGINPREFIX.'/wildcards.php', $urlargs);
 $PAGE->set_heading($SITE->fullname);
