@@ -32,6 +32,26 @@ define('DEFAULT_WILDCARD_OPTIONS', 'uniform:1.0:10.0:1');
 
 
 /**
+ * Returns context ID for the given question category
+ *
+ * @param int $categoryid Question category ID
+ * @return int $contextid
+ */
+function get_cat_context($categoryid) {
+    global $DB;
+
+    $table_categories = 'question_categories';
+
+    return $DB->get_field(
+        $table_categories,
+        'contextid',
+        array('id' => $categoryid),
+        MUST_EXIST
+    );
+}
+
+
+/**
  * Returns array of id => wildcard
  *
  * @param int $categoryid Category from which to retrieve wildcards
