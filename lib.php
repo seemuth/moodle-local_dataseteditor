@@ -58,28 +58,29 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
         }
     }
 
-    $settingnode = $settings->add(
-        get_string('setting', 'local_dataseteditor')
-    );
-    $indexnode = $settingnode->add(
-        get_string('index', 'local_dataseteditor'),
-        new moodle_url(PLUGINPREFIX.'/index.php')
-    );
-
-    if ($courseid) {
-        $coursecontext = context_course::instance($courseid);
-        if (!has_capability(EDIT_CAPABILITY, $coursecontext)) {
-            $courseid = 0;
-            $coursecontext = NULL;
-        }
-    }
-
     if ($courseid) {
         global $DB;
 
         $course = $DB->get_record(
             'course', array('id' => $courseid), 'id,shortname', MUST_EXIST
         );
+
+
+        $settingnode = $settings->add(
+            get_string('setting', 'local_dataseteditor')
+        );
+        $indexnode = $settingnode->add(
+            get_string('index', 'local_dataseteditor'),
+            new moodle_url(PLUGINPREFIX.'/index.php')
+        );
+
+        if ($courseid) {
+            $coursecontext = context_course::instance($courseid);
+            if (!has_capability(EDIT_CAPABILITY, $coursecontext)) {
+                $courseid = 0;
+                $coursecontext = NULL;
+            }
+        }
 
         $coursenode = $settingnode->add($course->shortname);
 
