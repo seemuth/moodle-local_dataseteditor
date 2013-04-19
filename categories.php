@@ -110,14 +110,18 @@ foreach ($all_contexts as $cid) {
 
 $contextid2cats = array();
 
-list($where_ids, $params) = $DB->get_in_or_equal($contextids);
-$results = $DB->get_records_sql(
-    'SELECT cat.* FROM {question_categories} AS cat
-    WHERE cat.contextid ' . $where_ids .
-    '
-    ORDER BY cat.sortorder, cat.name, cat.id',
-    $params
-);
+if (empty($contextids)) {
+    $results = array();
+} else {
+    list($where_ids, $params) = $DB->get_in_or_equal($contextids);
+    $results = $DB->get_records_sql(
+        'SELECT cat.* FROM {question_categories} AS cat
+        WHERE cat.contextid ' . $where_ids .
+        '
+        ORDER BY cat.sortorder, cat.name, cat.id',
+        $params
+    );
+}
 
 foreach ($results as $row) {
     $o = new stdClass();
