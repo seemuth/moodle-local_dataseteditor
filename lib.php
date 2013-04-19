@@ -34,17 +34,21 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
 
     if ($cmid > 0) {
         $modulecontext = context_module::instance($cmid);
+        $thiscontext = $modulecontext;
 
     } elseif ($courseid > 0) {
         $coursecontext = context_course::instance($courseid);
+        $thiscontext = $coursecontext;
 
     } elseif ($context->contextlevel == CONTEXT_COURSE) {
         $courseid = $context->instanceid;
         $coursecontext = $context;
+        $thiscontext = $coursecontext;
 
     } elseif($context->contextlevel == CONTEXT_MODULE) {
         $cmid = $context->instanceid;
         $modulecontext = $context;
+        $thiscontext = $modulecontext;
 
     } else {
         return;
@@ -58,14 +62,7 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
         }
     }
 
-    if ($courseid) {
-        global $DB;
-
-        $course = $DB->get_record(
-            'course', array('id' => $courseid), 'id,shortname', MUST_EXIST
-        );
-
-
+    if (has_capability(EDIT_CAPABILITY, $thiscontext)) {
         $settingnode = $settings->add(
             get_string('setting', 'local_dataseteditor')
         );
@@ -73,14 +70,25 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
             get_string('index', 'local_dataseteditor'),
             new moodle_url(PLUGINPREFIX.'/index.php')
         );
+    } else {
+        $courseid = 0;
+        $coursecontext = NULL;
+    }
 
-        if ($courseid) {
-            $coursecontext = context_course::instance($courseid);
-            if (!has_capability(EDIT_CAPABILITY, $coursecontext)) {
-                $courseid = 0;
-                $coursecontext = NULL;
-            }
+    if ($courseid) {
+        $coursecontext = context_course::instance($courseid);
+        if (!has_capability(EDIT_CAPABILITY, $coursecontext)) {
+            $courseid = 0;
+            $coursecontext = NULL;
         }
+    }
+
+    if ($courseid) {
+        global $DB;
+
+        $course = $DB->get_record(
+            'course', array('id' => $courseid), 'id,shortname', MUST_EXIST
+        );
 
         $coursenode = $settingnode->add($course->shortname);
 
