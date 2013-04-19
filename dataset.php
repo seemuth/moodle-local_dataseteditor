@@ -77,9 +77,7 @@ echo $OUTPUT->heading(get_string('editdataset', 'local_dataseteditor'));
 
 $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 
-/**
- * Set to true to use data from user-submitted form.
- */
+/* Set to true to use data from user-submitted form. */
 $show_user_data = false;
 
 if (!empty($_POST)) {
@@ -139,7 +137,7 @@ if (!empty($_POST)) {
     if (isset($_POST['submit_cancel'])) {
         $show_user_data = false;
 
-    } elseif (isset($_POST['submit_saveandadd'])) {
+    } else if (isset($_POST['submit_saveandadd'])) {
         $min_rows = $num_rows + NUM_EXTRA_ROWS;
         save_dataset_items($new_items, $deleteitems);
         echo $renderer->render_message(
@@ -147,7 +145,7 @@ if (!empty($_POST)) {
         );
         $show_user_data = false;
 
-    } elseif (isset($_POST['submit_save'])) {
+    } else if (isset($_POST['submit_save'])) {
         save_dataset_items($new_items, $deleteitems);
         echo $renderer->render_message(
             get_string('saved_dataset_items', 'local_dataseteditor')
@@ -160,7 +158,7 @@ if (!empty($_POST)) {
 }
 
 
-$wildcards = get_wildcards($categoryid, 0); // Don't need any data values
+$wildcards = get_wildcards($categoryid, 0); // Don't need any data values.
 $items = get_dataset_items(array_keys($wildcards));
 
 $form_dest = $PAGE->url;
@@ -174,9 +172,5 @@ echo $renderer->render_dataset_form(
     $uservals, $deleteitems_form,
     $min_rows, $form_dest
 );
-
-if (LOCAL_DATASETEDITOR_DEBUG) {
-    print_object($_POST);
-}
 
 echo $OUTPUT->footer();

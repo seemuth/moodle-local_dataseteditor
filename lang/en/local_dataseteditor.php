@@ -35,14 +35,14 @@ $string['itemnum'] = 'Item Number';
 $string['viewcategories'] = 'View Categories';
 $string['coursecategories'] = 'Course Categories';
 
-// Pages
+/* Define page titles. */
 $string['index'] = 'Index';
 $string['editwildcards'] = 'Edit Wildcards';
 $string['editdataset'] = 'Edit Dataset';
 $string['exportdataset'] = 'Export Dataset';
 $string['importdataset'] = 'Import Dataset';
 
-// Form strings
+/* Define form strings. */
 $string['wildcardX'] = 'Wildcard {$a}';
 $string['save'] = 'Save changes';
 $string['saveandadd'] = 'Save changes and add rows';
@@ -66,7 +66,7 @@ $string['add_wildcardX'] = 'Add wildcard {$a}';
 $string['delete_wildcardX'] = 'Delete wildcard {$a}';
 $string['update_all_data'] = 'Update all data';
 
-// Permissions
+/* Define permission strings. */
 $string['dataseteditor:view'] = 'View Datasets';
 $string['dataseteditor:edit'] = 'Edit Datasets';
 $string['dataseteditor:export'] = 'Export Datasets';

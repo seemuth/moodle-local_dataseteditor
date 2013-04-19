@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -40,7 +39,7 @@ function wildcard_cmp($a, $b) {
 
     if ($aname != $bname) {
         return ($aname < $bname) ? -1 : 1;
-    } elseif ($a->id != $b->id) {
+    } else if ($a->id != $b->id) {
         return ($a->id < $b->id) ? -1 : 1;
     } else {
         return 0;
@@ -56,9 +55,9 @@ function wildcard_cmp($a, $b) {
  */
 class local_dataseteditor_renderer extends plugin_renderer_base {
 
-    ////////////////////////////////////////////////////////////////////////////
-    // External API - methods to render dataset editor renderable components
-    ////////////////////////////////////////////////////////////////////////////
+    /* This external API defines methods to render dataset editor
+     * renderable components.
+     */
 
     /**
      * Renders message of the desired type.
@@ -104,9 +103,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
         uasort($wildcards, 'wildcard_cmp');
 
-
-        /**
-         * Split $newvals into two arrays:
+        /* Split $newvals into two arrays:
          *      $val_override[id] = stdClass
          *      $new_vals[] = stdClass
          */
@@ -123,9 +120,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
         $override_fields = array('name', 'del', 'orig');
 
-
-        /**
-         * Set defaults for each wildcard, then override fields as needed.
+        /* Set defaults for each wildcard, then override fields as needed.
          */
         foreach ($wildcards as $wc) {
             $wc->orig = $wc->name;
@@ -138,10 +133,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             }
         }
 
-
-        /**
-         * Make sure we have the minimum number of wildcard fields.
-         */
+        /* Make sure we have the minimum number of wildcard fields. */
         $need = $min_rows - count($wildcards);
         for ($i = 0; $i < $need; $i++) {
             $wc = new stdClass();
@@ -288,10 +280,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
         $table->head[] = get_string('delete_p', 'local_dataseteditor');
 
-
-        /**
-         * Make sure we have the minimum number of item fields.
-         */
+        /* Make sure we have the minimum number of item fields. */
         $itemkeys = array_keys($items);
         $need = $min_rows - count($itemkeys);
         $itemkey = max($itemkeys);
@@ -354,9 +343,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 $data_row[] = $data_id . $data_val;
             }
 
-            /**
-             * Add row label, including annotation for new data.
-             */
+            /* Add row label, including annotation for new data. */
             $rowlabel = $itemkey;
             if (! $any_data) {
                 $rowlabel .= ' ' . get_string('paren_newdata',
@@ -474,7 +461,6 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 }
                 $wildcardstr = implode(', ', $wildcard_names);
 
-
                 $valuesets = array();
                 for ($i = 0; $i < $num_valuesets; $i++) {
                     $valueset = array();
@@ -511,7 +497,6 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
                 $valuestr = implode(', ', $valuesets);
 
-
                 if (empty($wildcardstr)) {
                     $wildcardstr = get_string('no_wildcards',
                         'local_dataseteditor');
@@ -521,7 +506,6 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                         'local_dataseteditor');
                 }
 
-
                 $w_url = new moodle_url($wildcard_url);
                 $w_url->param('categoryid', $cat->id);
                 $d_url = new moodle_url($value_url);
@@ -530,7 +514,6 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 $e_url->param('categoryid', $cat->id);
                 $i_url = new moodle_url($import_url);
                 $i_url->param('categoryid', $cat->id);
-
 
                 $row = array();
                 $row[] = $cat->name;
@@ -571,7 +554,6 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             $wildcard_names[] = str_replace("\t", '', $wc->name);
         }
         $contents .= implode("\t", $wildcard_names) . "\n";
-
 
         /* Include each dataset item. */
         ksort($items);
@@ -666,19 +648,16 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         );
         $table->data = array();
 
-
         $unsorted_wildcards = array();
         foreach ($wildcards as $name) {
             $unsorted_wildcards[] = $name;
         }
-
 
         asort($wildcards);
 
         foreach ($wildcards as $wc_id => $wc_name) {
             $table->head[] = '{' . $wc_name . '}';
         }
-
 
         /* Add fields for each dataset item. */
         ksort($items);
@@ -708,9 +687,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 $data_row[] = $data_val;
             }
 
-            /**
-             * Add row label.
-             */
+            /* Add row label. */
             $rowlabel = $itemkey + 1;
             array_unshift($data_row, $rowlabel);
 
@@ -724,7 +701,6 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             'name' => 'itemcount',
             'value' => count($items),
         ));
-
 
         $wildcardnum = 0;
         foreach ($unsorted_wildcards as $name) {
@@ -744,7 +720,6 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             'name' => 'wildcardcount',
             'value' => $wildcardnum,
         ));
-
 
         $form_contents .= html_writer::empty_tag('input', array(
             'type' => 'hidden',

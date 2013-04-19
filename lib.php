@@ -36,16 +36,16 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
         $modulecontext = context_module::instance($cmid);
         $thiscontext = $modulecontext;
 
-    } elseif ($courseid > 0) {
+    } else if ($courseid > 0) {
         $coursecontext = context_course::instance($courseid);
         $thiscontext = $coursecontext;
 
-    } elseif ($context->contextlevel == CONTEXT_COURSE) {
+    } else if ($context->contextlevel == CONTEXT_COURSE) {
         $courseid = $context->instanceid;
         $coursecontext = $context;
         $thiscontext = $coursecontext;
 
-    } elseif($context->contextlevel == CONTEXT_MODULE) {
+    } else if ($context->contextlevel == CONTEXT_MODULE) {
         $cmid = $context->instanceid;
         $modulecontext = $context;
         $thiscontext = $modulecontext;
@@ -72,14 +72,14 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
         );
     } else {
         $courseid = 0;
-        $coursecontext = NULL;
+        $coursecontext = null;
     }
 
     if ($courseid) {
         $coursecontext = context_course::instance($courseid);
         if (!has_capability(EDIT_CAPABILITY, $coursecontext)) {
             $courseid = 0;
-            $coursecontext = NULL;
+            $coursecontext = null;
         }
     }
 

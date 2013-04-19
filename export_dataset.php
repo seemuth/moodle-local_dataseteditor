@@ -73,7 +73,7 @@ $PAGE->set_pagelayout('incourse');
 $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 
 
-$wildcards = get_wildcards($categoryid, 0); // Don't need any data values
+$wildcards = get_wildcards($categoryid, 0); // Don't need any data values.
 $items = get_dataset_items(array_keys($wildcards));
 
 header(
