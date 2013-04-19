@@ -39,7 +39,7 @@ function wildcard_cmp($a, $b) {
 
     if ($aname != $bname) {
         return ($aname < $bname) ? -1 : 1;
-    } elseif ($a->id != $b->id) {
+    } else if ($a->id != $b->id) {
         return ($a->id < $b->id) ? -1 : 1;
     } else {
         return 0;
@@ -461,7 +461,6 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 }
                 $wildcardstr = implode(', ', $wildcard_names);
 
-
                 $valuesets = array();
                 for ($i = 0; $i < $num_valuesets; $i++) {
                     $valueset = array();
@@ -688,9 +687,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 $data_row[] = $data_val;
             }
 
-            /**
-             * Add row label.
-             */
+            /* Add row label. */
             $rowlabel = $itemkey + 1;
             array_unshift($data_row, $rowlabel);
 

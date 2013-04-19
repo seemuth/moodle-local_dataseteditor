@@ -45,7 +45,7 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
         $coursecontext = $context;
         $thiscontext = $coursecontext;
 
-    } else if($context->contextlevel == CONTEXT_MODULE) {
+    } else if ($context->contextlevel == CONTEXT_MODULE) {
         $cmid = $context->instanceid;
         $modulecontext = $context;
         $thiscontext = $modulecontext;

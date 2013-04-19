@@ -155,7 +155,7 @@ if (!empty($_POST)) {
             echo html_writer::tag('p',
                 get_string('cancelled', 'local_dataseteditor'));
 
-        } elseif ($submit_overwrite) {
+        } else if ($submit_overwrite) {
 
             $success = true;
 
@@ -211,9 +211,7 @@ if (!empty($_POST)) {
 
 if ($display_confirmation) {
 
-    /**
-     * Compile list of changes to commit.
-     */
+    /* Compile list of changes to commit. */
     $old_name2num = array();
     foreach ($wildcards as $wc) {
         $old_name2num[$wc->name] = $wc->id;
