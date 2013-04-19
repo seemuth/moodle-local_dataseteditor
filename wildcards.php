@@ -79,9 +79,7 @@ echo $OUTPUT->heading(get_string('editwildcards', 'local_dataseteditor'));
 
 $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 
-/**
- * Set to true to use wildcards from user-submitted form.
- */
+/* Set to true to use wildcards from user-submitted form. */
 $wildcards_from_user = false;
 
 if (!empty($_POST)) {
@@ -113,8 +111,7 @@ if (!empty($_POST)) {
     }
 
 
-    /**
-     * Defaults for new wildcards.
+    /* Defaults for new wildcards.
      */
     $wildcard_defaults = new stdClass();
     $wildcard_defaults->category = $categoryid;
@@ -126,7 +123,7 @@ if (!empty($_POST)) {
     if (isset($_POST['submit_cancel'])) {
         $wildcards_from_user = false;
 
-    } elseif (isset($_POST['submit_saveandadd'])) {
+    } else if (isset($_POST['submit_saveandadd'])) {
         $min_rows = $num_rows + NUM_EXTRA_ROWS;
         save_wildcards($new_wildcards, $wildcard_defaults);
         echo $renderer->render_message(
@@ -134,7 +131,7 @@ if (!empty($_POST)) {
         );
         $wildcards_from_user = false;
 
-    } elseif (isset($_POST['submit_save'])) {
+    } else if (isset($_POST['submit_save'])) {
         save_wildcards($new_wildcards, $wildcard_defaults);
         echo $renderer->render_message(
             get_string('saved_wildcards', 'local_dataseteditor')
@@ -161,9 +158,5 @@ if (! isset($min_rows)) {
 }
 echo $renderer->render_wildcard_form($wildcards, $uservals,
     $min_rows, $form_dest);
-
-if (LOCAL_DATASETEDITOR_DEBUG) {
-    print_object($_POST);
-}
 
 echo $OUTPUT->footer();

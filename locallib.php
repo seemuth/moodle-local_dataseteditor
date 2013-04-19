@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -26,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once(dirname(__FILE__).'/lib.php');     // we extend this library here
+require_once(dirname(__FILE__).'/lib.php');
 
 define('DEFAULT_WILDCARD_OPTIONS', 'uniform:1.0:10.0:1');
 
@@ -79,7 +78,7 @@ function get_wildcards($categoryid, $val_limit=4) {
         $wc->id = $row->id;
         $wc->name = $row->name;
         $wc->values = array();
-        $wc->num_more_values = 0;   // Number of values not returned
+        $wc->num_more_values = 0;   // Pass number of values not returned.
 
         $wildcards[$wc->id] = $wc;
     }
@@ -129,9 +128,7 @@ function save_wildcards($wildcards, $defaults) {
 
         if ($wc->id > 0) {
             if ($wc->del) {
-                /**
-                 * Delete this wildcard and its dataset item values.
-                 */
+                /* Delete this wildcard and its dataset item values. */
                 $DB->delete_records($table_definitions, array(
                     'id' => $wc->id,
                 ));
@@ -140,9 +137,7 @@ function save_wildcards($wildcards, $defaults) {
                 ));
 
             } else {
-                /**
-                 * Existing wildcard! Update only if changed.
-                 */
+                /* Existing wildcard! Update only if changed. */
                 if ($wc->name != $wc->orig) {
                     $DB->set_field($table_definitions, 'name', $wc->name,
                         array('id' => $wc->id));
@@ -151,8 +146,7 @@ function save_wildcards($wildcards, $defaults) {
             }
 
         } else {
-            /**
-             * New wildcard!
+            /* New wildcard!
              * Insert into database if not marked for deletion.
              */
             if ($wc->del) {
@@ -164,7 +158,7 @@ function save_wildcards($wildcards, $defaults) {
             foreach ($fields as $field) {
                 if (isset($wc->$field)) {
                     $new_wc->$field = $wc->$field;
-                } elseif (isset($defaults->$field)) {
+                } else if (isset($defaults->$field)) {
                     $new_wc->$field = $defaults->$field;
                 } else {
                     throw new coding_exception('Undefined field: ' . $field);
@@ -230,8 +224,7 @@ function save_dataset_items($items, $deleteitems) {
 
     ksort($items);
 
-    /**
-     * Keep track of how many item numbers deleted so far.
+    /* Keep track of how many item numbers deleted so far.
      * Modify subsequent item numbers by subtracting this number.
      * This ensures that item numbers always start at 1 and are consecutive.
      */
@@ -239,8 +232,7 @@ function save_dataset_items($items, $deleteitems) {
 
     foreach ($items as $itemnum => $def2val) {
         if (isset($deleteitems[$itemnum])) {
-            /**
-             * Delete dataset items with this item number and matching
+            /* Delete dataset items with this item number and matching
              * the definition IDs.
              */
 
@@ -255,9 +247,7 @@ function save_dataset_items($items, $deleteitems) {
             continue;
         }
 
-        /**
-         * Not marked for deletion! Update $itemnum as needed.
-         */
+        /* Not marked for deletion! Update $itemnum as needed. */
         $itemnum -= $num_deleted;
 
         foreach ($def2val as $defnum => $item) {
@@ -267,26 +257,20 @@ function save_dataset_items($items, $deleteitems) {
             }
 
             if ($item->id > 0) {
-                /**
-                 * Existing value! Update only if changed.
-                 */
+                /* Existing value! Update only if changed. */
                 if ($item->val != $item->orig) {
                     $DB->set_field($table_values, 'value', $item->val,
                         array('id' => $item->id));
                 }
 
-                /**
-                 * Update item number if any items have been deleted.
-                 */
+                /* Update item number if any items have been deleted. */
                 if ($num_deleted) {
                     $DB->set_field($table_values, 'itemnumber', $itemnum,
                         array('id' => $item->id));
                 }
 
             } else {
-                /**
-                 * New value! Insert into database.
-                 */
+                /* New value! Insert into database. */
 
                 $new_item = new stdClass();
                 $new_item->definition = $defnum;
@@ -329,10 +313,7 @@ function overwrite_wildcard_dataset(
         throw new coding_exception('Duplicate wildcard names');
     }
 
-
-    /**
-     * Compile list of deleted and new wildcards.
-     */
+    /* Compile list of deleted and new wildcards.  */
     $new_name2id = array();
     foreach ($wildcards as $name) {
         if (array_key_exists($name, $cur_name2id)) {
@@ -342,10 +323,7 @@ function overwrite_wildcard_dataset(
         }
     }
 
-
-    /**
-     * If required, make sure each dataset item has all values.
-     */
+    /* If required, make sure each dataset item has all values. */
     if ($requirefulldataset) {
         foreach ($items as $values) {
             foreach ($wildcards as $i => $name) {
@@ -358,10 +336,7 @@ function overwrite_wildcard_dataset(
         }
     }
 
-
-    /**
-     * Delete old, unused wildcards.
-     */
+    /* Delete old, unused wildcards. */
     $delete_ids = array();
     foreach ($cur_name2id as $name => $id) {
         if (! array_key_exists($name, $new_name2id)) {
@@ -375,10 +350,7 @@ function overwrite_wildcard_dataset(
             $params);
     }
 
-
-    /**
-     * Add new wildcards.
-     */
+    /* Add new wildcards. */
     foreach ($new_name2id as $name => $id) {
         if ($id === null) {
             $o = new stdClass();
@@ -393,19 +365,13 @@ function overwrite_wildcard_dataset(
         }
     }
 
-
-    /**
-     * Delete old values.
-     */
+    /* Delete old values. */
     list($where_ids, $params) = $DB->get_in_or_equal(
         array_keys($cur_wildcards));
     $DB->delete_records_select($table_values, 'definition ' . $where_ids,
         $params);
 
-
-    /**
-     * Insert new values.
-     */
+    /* Insert new values. */
     foreach ($wildcards as $i => $name) {
         $wc_id = $new_name2id[$name];
 
@@ -422,10 +388,7 @@ function overwrite_wildcard_dataset(
         }
     }
 
-
-    /**
-     * Update wildcards' itemcount field.
-     */
+    /* Update wildcards' itemcount field. */
     $DB->set_field($table_definitions, 'itemcount', $itemnum, array(
         'category' => $categoryid
     ));

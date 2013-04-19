@@ -86,9 +86,7 @@ $import_url = new moodle_url(
 );
 
 
-/**
- * Retrieve all related contexts for which the user has permissions.
- */
+/* Retrieve all related contexts for which the user has permissions. */
 if (isset($modulecontext)) {
     $thiscontext = $modulecontext;
 } else {
