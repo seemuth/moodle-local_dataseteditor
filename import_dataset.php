@@ -77,7 +77,7 @@ $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 $form_dest = $PAGE->url;
 
 
-$wildcards = get_wildcards($categoryid, 0); // Don't need any data values
+$wildcards = get_wildcards($categoryid, 0); // Don't need any data values.
 
 $display_confirmation = false;
 
