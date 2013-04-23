@@ -366,10 +366,12 @@ function overwrite_wildcard_dataset(
     }
 
     /* Delete old values. */
-    list($where_ids, $params) = $DB->get_in_or_equal(
-        array_keys($cur_wildcards));
-    $DB->delete_records_select($table_values, 'definition ' . $where_ids,
-        $params);
+    if (! empty($cur_wildcards)) {
+        list($where_ids, $params) = $DB->get_in_or_equal(
+            array_keys($cur_wildcards));
+        $DB->delete_records_select($table_values, 'definition ' . $where_ids,
+            $params);
+    }
 
     /* Insert new values. */
     foreach ($wildcards as $i => $name) {
