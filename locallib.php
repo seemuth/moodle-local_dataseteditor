@@ -121,6 +121,70 @@ function get_dataset_item_categoryids($itemids) {
 
 
 /**
+ * Check if all the wildcards to be within the question category.
+ *
+ * @param array $wildcardids Wildcard IDs
+ * @param int $categoryid Question category id
+ * @return bool True if all the wildcards are in the question category
+ *      (or true if no wildcards were given)
+ */
+function all_wildcards_in_cat($wildcardids, $categoryid) {
+    if (empty($wildcardids)) {
+        return true;
+    }
+
+    $categories = get_wildcard_categoryids($wildcardids);
+
+    $found_cats = 0;
+    foreach ($categories as $id => $num) {
+        if ($id != $categoryid) {
+            return false;
+        }
+
+        $found_cats += $num;
+    }
+
+    if ($found_cats != count(array_unique($wildcardids))) {
+        return false;
+    }
+
+    return true;
+}
+
+
+/**
+ * Check if all the dataset items are within the question category.
+ *
+ * @param array $itemids Dataset item IDs
+ * @param int $categoryid Question category id
+ * @return bool True if all the dataset items are in the question category
+ *      (or true if no dataset items were given)
+ */
+function all_dataset_items_in_cat($itemids, $categoryid) {
+    if (empty($itemids)) {
+        return true;
+    }
+
+    $categories = get_dataset_item_categoryids($itemids);
+
+    $found_cats = 0;
+    foreach ($categories as $id => $num) {
+        if ($id != $categoryid) {
+            return false;
+        }
+
+        $found_cats += $num;
+    }
+
+    if ($found_cats != count(array_unique($itemids))) {
+        return false;
+    }
+
+    return true;
+}
+
+
+/**
  * Returns array of id => wildcard
  *
  * @param int $categoryid Category from which to retrieve wildcards
@@ -479,68 +543,4 @@ function require_capability_cat($capability, $categoryid) {
     $contextid = get_cat_contextid($categoryid);
     $context = context::instance_by_id($contextid);
     require_capability($capability, $context);
-}
-
-
-/**
- * Check if all the wildcards to be within the question category.
- *
- * @param array $wildcardids Wildcard IDs
- * @param int $categoryid Question category id
- * @return bool True if all the wildcards are in the question category
- *      (or true if no wildcards were given)
- */
-function all_wildcards_in_cat($wildcardids, $categoryid) {
-    if (empty($wildcardids)) {
-        return true;
-    }
-
-    $categories = get_wildcard_categoryids($wildcardids);
-
-    $found_cats = 0;
-    foreach ($categories as $id => $num) {
-        if ($id != $categoryid) {
-            return false;
-        }
-
-        $found_cats += $num;
-    }
-
-    if ($found_cats != count(array_unique($wildcardids))) {
-        return false;
-    }
-
-    return true;
-}
-
-
-/**
- * Check if all the dataset items are within the question category.
- *
- * @param array $itemids Dataset item IDs
- * @param int $categoryid Question category id
- * @return bool True if all the dataset items are in the question category
- *      (or true if no dataset items were given)
- */
-function all_dataset_items_in_cat($itemids, $categoryid) {
-    if (empty($itemids)) {
-        return true;
-    }
-
-    $categories = get_dataset_item_categoryids($itemids);
-
-    $found_cats = 0;
-    foreach ($categories as $id => $num) {
-        if ($id != $categoryid) {
-            return false;
-        }
-
-        $found_cats += $num;
-    }
-
-    if ($found_cats != count(array_unique($itemids))) {
-        return false;
-    }
-
-    return true;
 }
