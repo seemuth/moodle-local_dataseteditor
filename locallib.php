@@ -506,7 +506,7 @@ function all_wildcards_in_cat($wildcardids, $categoryid) {
         $found_cats += $num;
     }
 
-    if ($found_cats != count($wildcardids)) {
+    if ($found_cats != count(array_unique($wildcardids))) {
         return false;
     }
 
@@ -538,7 +538,7 @@ function all_dataset_items_in_cat($itemids, $categoryid) {
         $found_cats += $num;
     }
 
-    if ($found_cats != count($itemids)) {
+    if ($found_cats != count(array_unique($itemids))) {
         return false;
     }
 
