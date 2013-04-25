@@ -36,7 +36,7 @@ define('DEFAULT_WILDCARD_OPTIONS', 'uniform:1.0:10.0:1');
  * @param int $categoryid Question category ID
  * @return int $contextid
  */
-function get_cat_context($categoryid) {
+function get_cat_contextid($categoryid) {
     global $DB;
 
     $table_categories = 'question_categories';
@@ -406,7 +406,7 @@ function overwrite_wildcard_dataset(
  * capability.
  */
 function require_capability_cat($capability, $categoryid) {
-    $contextid = get_cat_context($categoryid);
+    $contextid = get_cat_contextid($categoryid);
     $context = context::instance_by_id($contextid);
     require_capability($capability, $context);
 }
