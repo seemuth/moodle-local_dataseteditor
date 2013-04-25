@@ -25,8 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version = 2013042510;
-$plugin->release = '1.1 (2013042400)';
+$plugin->version = 2013042511;
+$plugin->release = '1.2 (2013042511)';
 $plugin->requires = 2012120301;
 $plugin->maturity = MATURITY_BETA;
 $plugin->component = 'local_dataseteditor';
