@@ -125,14 +125,14 @@ if (!empty($_POST)) {
 
     } else if (isset($_POST['submit_saveandadd'])) {
         $min_rows = $num_rows + NUM_EXTRA_ROWS;
-        save_wildcards($new_wildcards, $wildcard_defaults);
+        save_wildcards($new_wildcards, $wildcard_defaults, $categoryid);
         echo $renderer->render_message(
             get_string('saved_wildcards', 'local_dataseteditor')
         );
         $wildcards_from_user = false;
 
     } else if (isset($_POST['submit_save'])) {
-        save_wildcards($new_wildcards, $wildcard_defaults);
+        save_wildcards($new_wildcards, $wildcard_defaults, $categoryid);
         echo $renderer->render_message(
             get_string('saved_wildcards', 'local_dataseteditor')
         );

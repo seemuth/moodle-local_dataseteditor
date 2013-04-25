@@ -139,14 +139,14 @@ if (!empty($_POST)) {
 
     } else if (isset($_POST['submit_saveandadd'])) {
         $min_rows = $num_rows + NUM_EXTRA_ROWS;
-        save_dataset_items($new_items, $deleteitems);
+        save_dataset_items($new_items, $deleteitems, $categoryid);
         echo $renderer->render_message(
             get_string('saved_dataset_items', 'local_dataseteditor')
         );
         $show_user_data = false;
 
     } else if (isset($_POST['submit_save'])) {
-        save_dataset_items($new_items, $deleteitems);
+        save_dataset_items($new_items, $deleteitems, $categoryid);
         echo $renderer->render_message(
             get_string('saved_dataset_items', 'local_dataseteditor')
         );

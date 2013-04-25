@@ -243,16 +243,32 @@ function get_wildcards($categoryid, $val_limit=4) {
  *
  * @param array $wildcards[] = stdClass(->id ->name ->del ->orig)
  * @param stdClass $defaults Default values for category, type, options,
+ * @param int $categoryid Require all wildcards to be in this category
  * itemcount
  * @return null
+ * @throws coding_exception
  */
-function save_wildcards($wildcards, $defaults) {
+function save_wildcards($wildcards, $defaults, $categoryid) {
     $table_definitions = 'question_dataset_definitions';
     $table_values = 'question_dataset_items';
 
     $fields = array('category', 'name', 'type', 'options', 'itemcount');
 
     global $DB;
+
+    /* Check all wildcard IDs against this category ID! */
+    $ids = array();
+    foreach ($wildcards as $wc) {
+        if ($wc->id > 0) {
+            $ids[] = $wc->id;
+        }
+    }
+
+    if (! all_wildcards_in_cat($ids, $categoryid)) {
+        throw new coding_exception(
+            'Not all wildcards in category ' . $categoryid
+        );
+    }
 
     foreach ($wildcards as $wc) {
         if (empty($wc->name)) {
@@ -349,12 +365,30 @@ function get_dataset_items($wildcardids) {
  *      $items[itemnum] => array(defnum => stdClass{->id ->val ->orig})
  * @param array $deleteitems[itemnum] = i (use keys, ignore values)
  *      Delete items with these itemnums
+ * @param int $categoryid Require all dateset items to be in this category
  * @return null
+ * @throws coding_exception
  */
-function save_dataset_items($items, $deleteitems) {
+function save_dataset_items($items, $deleteitems, $categoryid) {
     $table_values = 'question_dataset_items';
 
     global $DB;
+
+    /* Check all wildcard IDs against this category ID! */
+    $ids = array();
+    foreach ($items as $def2val) {
+        foreach ($def2val as $defnum => $item) {
+            if ($item->id > 0) {
+                $ids[] = $item->id;
+            }
+        }
+    }
+
+    if (! all_dataset_items_in_cat($ids, $categoryid)) {
+        throw new coding_exception(
+            'Not all dataset items in category ' . $categoryid
+        );
+    }
 
     ksort($items);
 
