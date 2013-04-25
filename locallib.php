@@ -51,15 +51,14 @@ function get_cat_contextid($categoryid) {
 
 
 /**
- * Returns context IDs for the given wildcard IDs
+ * Returns category IDs for the given wildcard IDs
  *
  * @param array $wildcardids Wildcard IDs
- * @return array array[] = stdClass(->contextid ->num_wildcards)
+ * @return array array[$categoryid] = num_wildcards
  */
-function get_wildcard_contextids($wildcardids) {
+function get_wildcard_categoryids($wildcardids) {
     global $DB;
 
-    $table_categories = 'question_categories';
     $table_definitions = 'question_dataset_definitions';
 
     if (empty($wildcardids)) {
@@ -70,19 +69,15 @@ function get_wildcard_contextids($wildcardids) {
 
     list($where_ids, $params) = $DB->get_in_or_equal($wildcardids);
 
-    $sql = 'SELECT d.category, c.contextid, COUNT(d.id) AS num_wc ' .
-        'FROM {' . $table_categories . '} c ' .
-        'INNER JOIN {' . $table_definitions . '} d ON d.category = c.id ' .
-        'WHERE d.id ' . $where_ids . ' ' .
-        'GROUP BY d.category, c.contextid';
+    $sql = 'SELECT category, COUNT(id) AS num_wc ' .
+        'FROM {' . $table_categories . '} ' .
+        'WHERE id ' . $where_ids . ' ' .
+        'GROUP BY category';
 
     $results = $DB->get_records_sql($sql, $params);
 
     foreach ($results as $row) {
-        $o = new stdClass();
-        $o->contextid = $row->contextid;
-        $o->num_wildcards = $row->num_wc;
-        $ret[] = $o;
+        $ret[$row->category] = $row->num_wc;
     }
 
     return $ret;
@@ -90,15 +85,14 @@ function get_wildcard_contextids($wildcardids) {
 
 
 /**
- * Returns context IDs for the given dataset item IDs
+ * Returns category IDs for the given dataset item IDs
  *
  * @param array $itemids Dataset item IDs
- * @return array array[] = stdClass(->contextid ->wildcardid ->num_items)
+ * @return array array[$categoryid] = num_items
  */
-function get_dataset_item_contextids($itemids) {
+function get_dataset_item_categoryids($itemids) {
     global $DB;
 
-    $table_categories = 'question_categories';
     $table_definitions = 'question_dataset_definitions';
     $table_values = 'question_dataset_items';
 
@@ -110,12 +104,11 @@ function get_dataset_item_contextids($itemids) {
 
     list($where_ids, $params) = $DB->get_in_or_equal($itemids);
 
-    $sql = 'SELECT v.definition, c.contextid, COUNT(v.id) AS num_v ' .
-        'FROM {' . $table_categories . '} c ' .
-        'INNER JOIN {' . $table_definitions . '} d ON d.category = c.id ' .
+    $sql = 'SELECT d.category, COUNT(v.id) AS num_v ' .
+        'FROM {' . $table_definitions . '} d ' .
         'INNER JOIN {' . $table_values . '} v ON v.definition = d.id ' .
         'WHERE v.id ' . $where_ids . ' ' .
-        'GROUP BY v.definition, c.contextid';
+        'GROUP BY d.category';
 
     $results = $DB->get_records_sql($sql, $params);
 
