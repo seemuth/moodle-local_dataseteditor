@@ -113,11 +113,7 @@ function get_dataset_item_categoryids($itemids) {
     $results = $DB->get_records_sql($sql, $params);
 
     foreach ($results as $row) {
-        $o = new stdClass();
-        $o->wildcardid = $row->definition;
-        $o->contextid = $row->contextid;
-        $o->num_items = $row->num_v;
-        $ret[] = $o;
+        $ret[$row->category] = $row->num_v;
     }
 
     return $ret;
