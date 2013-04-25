@@ -542,6 +542,7 @@ function overwrite_wildcard_dataset(
     }
 
     /* Insert new values. */
+    $itemnum = 0;
     foreach ($wildcards as $i => $name) {
         $wc_id = $new_name2id[$name];
 

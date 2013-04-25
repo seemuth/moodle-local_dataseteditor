@@ -283,7 +283,13 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         /* Make sure we have the minimum number of item fields. */
         $itemkeys = array_keys($items);
         $need = $min_rows - count($itemkeys);
-        $itemkey = max($itemkeys);
+
+        if (empty($itemkeys)) {
+            $itemkey = 0;
+        } else {
+            $itemkey = max($itemkeys);
+        }
+
         for ($i = 0; $i < $need; $i++) {
             $item = array();
 
