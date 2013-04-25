@@ -72,7 +72,7 @@ function get_wildcard_contextids($wildcardids) {
 
     $sql = 'SELECT c.id, c.contextid, COUNT(d.id) AS num_wc ' .
         'FROM {' . $table_categories . '} c ' .
-        'INNER JOIN {' . $table_definitions '} d ON d.category = c.id ' .
+        'INNER JOIN {' . $table_definitions . '} d ON d.category = c.id ' .
         'WHERE d.id ' . $where_ids . ' ' .
         'GROUP BY c.id, c.contextid';
 
@@ -112,8 +112,8 @@ function get_dataset_item_contextids($itemids) {
 
     $sql = 'SELECT c.id, c.contextid, v.definition, COUNT(v.id) AS num_v ' .
         'FROM {' . $table_categories . '} c ' .
-        'INNER JOIN {' . $table_definitions '} d ON d.category = c.id ' .
-        'INNER JOIN {' . $table_values '} v ON v.definition = d.id ' .
+        'INNER JOIN {' . $table_definitions . '} d ON d.category = c.id ' .
+        'INNER JOIN {' . $table_values . '} v ON v.definition = d.id ' .
         'WHERE v.id ' . $where_ids . ' ' .
         'GROUP BY c.id, c.contextid, v.definition';
 
