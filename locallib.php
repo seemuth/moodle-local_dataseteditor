@@ -70,11 +70,11 @@ function get_wildcard_contextids($wildcardids) {
 
     list($where_ids, $params) = $DB->get_in_or_equal($wildcardids);
 
-    $sql = 'SELECT c.id, c.contextid, COUNT(d.id) AS num_wc ' .
+    $sql = 'SELECT d.category, c.contextid, COUNT(d.id) AS num_wc ' .
         'FROM {' . $table_categories . '} c ' .
         'INNER JOIN {' . $table_definitions . '} d ON d.category = c.id ' .
         'WHERE d.id ' . $where_ids . ' ' .
-        'GROUP BY c.id, c.contextid';
+        'GROUP BY d.category, c.contextid';
 
     $results = $DB->get_records_sql($sql, $params);
 
@@ -93,7 +93,7 @@ function get_wildcard_contextids($wildcardids) {
  * Returns context IDs for the given dataset item IDs
  *
  * @param array $itemids Dataset item IDs
- * @return array array[] = stdClass(->contextid ->definition ->num_items)
+ * @return array array[] = stdClass(->contextid ->wildcardid ->num_items)
  */
 function get_dataset_item_contextids($itemids) {
     global $DB;
@@ -110,19 +110,19 @@ function get_dataset_item_contextids($itemids) {
 
     list($where_ids, $params) = $DB->get_in_or_equal($itemids);
 
-    $sql = 'SELECT c.id, c.contextid, v.definition, COUNT(v.id) AS num_v ' .
+    $sql = 'SELECT v.definition, c.contextid, COUNT(v.id) AS num_v ' .
         'FROM {' . $table_categories . '} c ' .
         'INNER JOIN {' . $table_definitions . '} d ON d.category = c.id ' .
         'INNER JOIN {' . $table_values . '} v ON v.definition = d.id ' .
         'WHERE v.id ' . $where_ids . ' ' .
-        'GROUP BY c.id, c.contextid, v.definition';
+        'GROUP BY v.definition, c.contextid';
 
     $results = $DB->get_records_sql($sql, $params);
 
     foreach ($results as $row) {
         $o = new stdClass();
+        $o->wildcardid = $row->definition;
         $o->contextid = $row->contextid;
-        $o->definition = $row->definition;
         $o->num_items = $row->num_v;
         $ret[] = $o;
     }
