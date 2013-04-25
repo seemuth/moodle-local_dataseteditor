@@ -70,7 +70,7 @@ function get_wildcard_categoryids($wildcardids) {
     list($where_ids, $params) = $DB->get_in_or_equal($wildcardids);
 
     $sql = 'SELECT category, COUNT(id) AS num_wc ' .
-        'FROM {' . $table_categories . '} ' .
+        'FROM {' . $table_definitions . '} ' .
         'WHERE id ' . $where_ids . ' ' .
         'GROUP BY category';
 
