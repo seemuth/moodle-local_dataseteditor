@@ -199,7 +199,7 @@ $deleteitems_form = ($show_user_data) ? $deleteitems : array();
 /* Do not check delete boxes for rows to be automatically deleted. */
 foreach ($deleteitems_form as $k => $v) {
     if ($v == DELETE_ASSUME) {
-        unset($deleteitems_form[$k];
+        unset($deleteitems_form[$k]);
     }
 }
 
