@@ -147,6 +147,11 @@ if (!empty($_POST)) {
 
             $success = false;
         }
+
+        if (! $any_data) {
+            /* Assume that we should delete this item. */
+            $deleteitems[$i] = 1;
+        }
     }
 
 
