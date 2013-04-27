@@ -102,6 +102,7 @@ if (!empty($_POST)) {
     $new_items = array();
     $deleteitems = array();
     $show_user_data = true;
+    $success = true;
 
     foreach ($itemkeys as $i) {
         $suffix = '_i' . $i;
@@ -111,6 +112,9 @@ if (!empty($_POST)) {
         if ($val) {
             $deleteitems[$i] = 1;
         }
+
+        $any_data = false;
+        $any_empty = false;
 
         foreach ($wc_keys as $wc) {
             $suffix = '_i' . $i . '_w' . $wc;
@@ -128,7 +132,20 @@ if (!empty($_POST)) {
                 $item->$n = $val;
             }
 
+            if (empty($item->val)) {
+                $any_empty = true;
+            } else {
+                $any_data = true;
+            }
+
             $new_items[$i][$wc] = $item;
+        }
+
+        if ((! isset($_POST['submit_cancel'])) && $any_data && $any_empty) {
+            echo html_writer::tag('p',
+                get_string('missing_data_in_X', 'local_dataseteditor', $i));
+
+            $success = false;
         }
     }
 
@@ -139,18 +156,24 @@ if (!empty($_POST)) {
 
     } else if (isset($_POST['submit_saveandadd'])) {
         $min_rows = $num_rows + NUM_EXTRA_ROWS;
-        save_dataset_items($new_items, $deleteitems, $categoryid);
-        echo $renderer->render_message(
-            get_string('saved_dataset_items', 'local_dataseteditor')
-        );
-        $show_user_data = false;
+
+        if ($success) {
+            save_dataset_items($new_items, $deleteitems, $categoryid);
+            echo $renderer->render_message(
+                get_string('saved_dataset_items', 'local_dataseteditor')
+            );
+            $show_user_data = false;
+        }
 
     } else if (isset($_POST['submit_save'])) {
-        save_dataset_items($new_items, $deleteitems, $categoryid);
-        echo $renderer->render_message(
-            get_string('saved_dataset_items', 'local_dataseteditor')
-        );
-        $show_user_data = false;
+
+        if ($success) {
+            save_dataset_items($new_items, $deleteitems, $categoryid);
+            echo $renderer->render_message(
+                get_string('saved_dataset_items', 'local_dataseteditor')
+            );
+            $show_user_data = false;
+        }
 
     } else {
         throw new coding_exception('Invalid submit button');
