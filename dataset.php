@@ -29,6 +29,9 @@ require_once(dirname(__FILE__) . '/locallib.php');
 
 define('NUM_EXTRA_ROWS', 5);
 
+define('DELETE_GIVEN', 1);
+define('DELETE_ASSUME', 2);
+
 
 
 $categoryid = required_param('categoryid', PARAM_INT);
@@ -110,7 +113,7 @@ if (!empty($_POST)) {
         $varname = 'data_del' . $suffix;
         $val = required_param($varname, PARAM_BOOL);
         if ($val) {
-            $deleteitems[$i] = 1;
+            $deleteitems[$i] = DELETE_GIVEN;
         }
 
         $any_data = false;
@@ -132,7 +135,7 @@ if (!empty($_POST)) {
                 $item->$n = $val;
             }
 
-            if (empty($item->val)) {
+            if (trim($item->val) === '') {
                 $any_empty = true;
             } else {
                 $any_data = true;
@@ -150,7 +153,7 @@ if (!empty($_POST)) {
 
         if (! $any_data) {
             /* Assume that we should delete this item. */
-            $deleteitems[$i] = 1;
+            $deleteitems[$i] = DELETE_ASSUME;
         }
     }
 
@@ -192,6 +195,14 @@ $items = get_dataset_items(array_keys($wildcards));
 $form_dest = $PAGE->url;
 $uservals = ($show_user_data) ? $new_items : array();
 $deleteitems_form = ($show_user_data) ? $deleteitems : array();
+
+/* Do not check delete boxes for rows to be automatically deleted. */
+foreach ($deleteitems_form as $k => $v) {
+    if ($v == DELETE_ASSUME) {
+        unset($deleteitems_form[$k];
+    }
+}
+
 if (! isset($min_rows)) {
     $min_rows = count($items) + NUM_EXTRA_ROWS;
 }
