@@ -32,12 +32,7 @@ function local_dataseteditor_extends_navigation($nav) {
     global $PAGE;
 
     $courseid = (isset($PAGE->course->id)) ? $PAGE->course->id : 0;
-
-    $cmid = optional_param('cmid', 0, PARAM_INT);
-
-    if (isset($PAGE->cm->id)) {
-        $cmid = $PAGE->cm->id;
-    }
+    $cmid = (isset($PAGE->cm->id)) ? $PAGE->cm->id : 0;
 
     if ($cmid > 0) {
         $modulecontext = context_module::instance($cmid);
