@@ -28,9 +28,11 @@ defined('MOODLE_INTERNAL') || die;
 require_once(dirname(__FILE__) . '/config.php');
 
 
-function local_dataseteditor_extends_settings_navigation($settings, $context) {
-    $courseid = optional_param('courseid', 0, PARAM_INT);
-    $cmid = optional_param('cmid', 0, PARAM_INT);
+function local_dataseteditor_extends_navigation($nav) {
+    global $PAGE;
+
+    $courseid = (isset($PAGE->course->id)) ? $PAGE->course->id : 0;
+    $cmid = (isset($PAGE->cm->id)) ? $PAGE->cm->id : 0;
 
     if ($cmid > 0) {
         $modulecontext = context_module::instance($cmid);
@@ -62,15 +64,7 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
         }
     }
 
-    if (has_capability(EDIT_CAPABILITY, $thiscontext)) {
-        $settingnode = $settings->add(
-            get_string('setting', 'local_dataseteditor')
-        );
-        $indexnode = $settingnode->add(
-            get_string('index', 'local_dataseteditor'),
-            new moodle_url(PLUGINPREFIX.'/index.php')
-        );
-    } else {
+    if (! has_capability(EDIT_CAPABILITY, $thiscontext)) {
         $courseid = 0;
         $coursecontext = null;
     }
@@ -84,31 +78,66 @@ function local_dataseteditor_extends_settings_navigation($settings, $context) {
     }
 
     if ($courseid) {
-        global $DB;
+        $urlparams = array('courseid' => $courseid);
 
-        $course = $DB->get_record(
-            'course', array('id' => $courseid), 'id,shortname', MUST_EXIST
-        );
+        $mainnode = $PAGE->navigation->find($courseid,
+            navigation_node::TYPE_COURSE);
 
-        $coursenode = $settingnode->add($course->shortname);
+        if ($cmid) {
+            $mainnode = $PAGE->navigation->find($cmid,
+                navigation_node::TYPE_ACTIVITY);
+            $urlparams['cmid'] = $cmid;
+        }
 
-        $courseindexnode = $coursenode->add(
-            get_string('coursecategories', 'local_dataseteditor'),
+        $categoryid = optional_param('categoryid', 0, PARAM_INT);
+
+        if ($categoryid > 0) {
+            $index_type = navigation_node::TYPE_CONTAINER;
+        } else {
+            $index_type = navigation_node::TYPE_CUSTOM;
+        }
+
+        $indexnode = $mainnode->add(
+            get_string('pluginname', 'local_dataseteditor'),
             new moodle_url(
                 PLUGINPREFIX.'/categories.php',
-                array('courseid' => $courseid)
-            )
+                $urlparams
+            ),
+            $index_type
         );
 
-        if ($cmid && $modulecontext) {
-            $modulenode = $coursenode->add(
-                $modulecontext->get_context_name(true),
+        if ($categoryid > 0) {
+            $urlparams['categoryid'] = $categoryid;
+
+            $indexnode->add(
+                get_string('editwildcards', 'local_dataseteditor'),
                 new moodle_url(
-                    PLUGINPREFIX.'/categories.php',
-                    array(
-                        'courseid' => $courseid,
-                        'cmid' => $cmid,
-                    )
+                    PLUGINPREFIX.'/wildcards.php',
+                    $urlparams
+                )
+            );
+
+            $indexnode->add(
+                get_string('editdataset', 'local_dataseteditor'),
+                new moodle_url(
+                    PLUGINPREFIX.'/dataset.php',
+                    $urlparams
+                )
+            );
+
+            $indexnode->add(
+                get_string('exportdataset', 'local_dataseteditor'),
+                new moodle_url(
+                    PLUGINPREFIX.'/export_dataset.php',
+                    $urlparams
+                )
+            );
+
+            $indexnode->add(
+                get_string('importdataset', 'local_dataseteditor'),
+                new moodle_url(
+                    PLUGINPREFIX.'/import_dataset.php',
+                    $urlparams
                 )
             );
         }
