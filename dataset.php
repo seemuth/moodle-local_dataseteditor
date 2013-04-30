@@ -60,7 +60,12 @@ if ($cmid > 0) {
 
 $urlargs['courseid'] = $courseid;
 
-require_login($courseid);
+if ($cmid > 0) {
+    require_login($courseid, true, get_cm($courseid, $cmid));
+} else {
+    require_login($courseid);
+}
+
 require_capability(EDIT_CAPABILITY, $thiscontext);
 require_capability_cat(EDIT_CAPABILITY, $categoryid);
 

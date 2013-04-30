@@ -579,3 +579,27 @@ function require_capability_cat($capability, $categoryid) {
     $context = context::instance_by_id($contextid);
     require_capability($capability, $context);
 }
+
+
+/**
+ * Return course module from within course $courseid.
+ *
+ * @param int $courseid ID of course containing module
+ * @param int $cmid Course-module ID
+ * @return cm_info Information about that course-module
+ * @throws moodle_exception If the course-module does not exist
+ */
+function get_cm($courseid, $cmid) {
+    global $DB;
+
+    $course = $DB->get_record('course',
+        array('id' => $courseorid),
+        '*',
+        MUST_EXIST
+    );
+
+    $modinfo = get_fast_modinfo($course);
+    $cm = $modinfo->get_cm($cmid);
+
+    return $cm;
+}

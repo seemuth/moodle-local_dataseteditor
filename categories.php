@@ -47,7 +47,11 @@ if ($cmid > 0) {
     $coursecontext = context_course::instance($courseid);
 }
 
-require_login($courseid);
+if ($cmid > 0) {
+    require_login($courseid, true, get_cm($courseid, $cmid));
+} else {
+    require_login($courseid);
+}
 
 $urlargs['courseid'] = $courseid;
 
