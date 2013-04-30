@@ -593,7 +593,7 @@ function get_cm($courseid, $cmid) {
     global $DB;
 
     $course = $DB->get_record('course',
-        array('id' => $courseorid),
+        array('id' => $courseid),
         '*',
         MUST_EXIST
     );
