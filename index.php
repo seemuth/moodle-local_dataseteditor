@@ -44,7 +44,7 @@ $table->head = array('ID', 'Course Name');
 $table->data = array();
 foreach ($result as $row) {
     $coursecontext = context_course::instance($row->id);
-    if (!has_capability(EDIT_CAPABILITY, $coursecontext)) {
+    if (!has_capability(VIEW_CAPABILITY, $coursecontext)) {
         continue;
     }
 

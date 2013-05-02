@@ -30,38 +30,38 @@ $capabilities = array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
-            'teacher' => CAP_PREVENT,
             'editingteacher' => CAP_ALLOW,
             'admin' => CAP_ALLOW,
         ),
+        'clonepermissionsfrom' =>  'moodle/question:managecategory',
     ),
     'local/dataseteditor:edit' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'riskbitmask' => RISK_DATALOSS,
         'archetypes' => array(
-            'teacher' => CAP_PREVENT,
             'editingteacher' => CAP_ALLOW,
             'admin' => CAP_ALLOW,
         ),
+        'clonepermissionsfrom' =>  'moodle/question:managecategory',
     ),
     'local/dataseteditor:export' => array(
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes' => array(
-            'teacher' => CAP_PREVENT,
             'editingteacher' => CAP_ALLOW,
             'admin' => CAP_ALLOW,
         ),
+        'clonepermissionsfrom' =>  'moodle/question:managecategory',
     ),
     'local/dataseteditor:import' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'riskbitmask' => RISK_DATALOSS,
         'archetypes' => array(
-            'teacher' => CAP_PREVENT,
             'editingteacher' => CAP_ALLOW,
             'admin' => CAP_ALLOW,
         ),
+        'clonepermissionsfrom' =>  'moodle/question:managecategory',
     ),
 );

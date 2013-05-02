@@ -61,8 +61,8 @@ if ($cmid > 0) {
     require_login($courseid);
 }
 
-require_capability(EDIT_CAPABILITY, $thiscontext);
-require_capability_cat(EDIT_CAPABILITY, $categoryid);
+require_capability(EXPORT_CAPABILITY, $thiscontext);
+require_capability_cat(EXPORT_CAPABILITY, $categoryid);
 
 $PAGE->set_url(PLUGINPREFIX.'/export_dataset.php', $urlargs);
 $PAGE->set_heading($SITE->fullname);

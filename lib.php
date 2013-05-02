@@ -64,14 +64,14 @@ function local_dataseteditor_extends_navigation($nav) {
         }
     }
 
-    if (! has_capability(EDIT_CAPABILITY, $thiscontext)) {
+    if (! has_capability(VIEW_CAPABILITY, $thiscontext)) {
         $courseid = 0;
         $coursecontext = null;
     }
 
     if ($courseid) {
         $coursecontext = context_course::instance($courseid);
-        if (!has_capability(EDIT_CAPABILITY, $coursecontext)) {
+        if (!has_capability(VIEW_CAPABILITY, $coursecontext)) {
             $courseid = 0;
             $coursecontext = null;
         }

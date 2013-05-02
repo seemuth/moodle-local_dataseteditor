@@ -103,7 +103,7 @@ $contexts = array();
 $contextids = array();
 foreach ($all_contexts as $cid) {
     $c = context::instance_by_id($cid);
-    if (has_capability(EDIT_CAPABILITY, $c)) {
+    if (has_capability(VIEW_CAPABILITY, $c)) {
         $contexts[$cid] = $c;
         $contextids[] = $cid;
     }
