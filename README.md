@@ -15,4 +15,4 @@ After you install this plugin, navigate to /admin/index.php of your Moodle site.
 This will prompt you to finish installing the dataset editor plugin.
 
 To use this plugin, navigate to any course or quiz within a course.
-At the bottom of the Settings navigation box, expand the Dataset Editor section and click on Course Categories or the name of the current quiz.
+Click on Dataset Editor within the navigation tree for that course or quiz.
