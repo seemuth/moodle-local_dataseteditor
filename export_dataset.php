@@ -90,7 +90,7 @@ $items = local_dataseteditor_get_dataset_items(array_keys($wildcards));
 header(
     'Content-Disposition: attachment; filename=dataset-' .
     $categoryid
-    . '.csv'
+    . '.tsv'
 );
 header('Content-Type: application/octet-stream');
 header('Content-Description: Dataset Export');
