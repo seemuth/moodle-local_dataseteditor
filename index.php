@@ -31,13 +31,15 @@ require_login();
 $PAGE->set_url(PLUGINPREFIX.'/index.php');
 $PAGE->set_context(context_system::instance());
 $PAGE->set_heading($SITE->fullname);
-$PAGE->set_title($SITE->fullname . ': ' . get_string('pluginname', 'local_dataseteditor'));
+$PAGE->set_title($SITE->fullname . ': ' .
+    get_string('pluginname', 'local_dataseteditor'));
 $PAGE->set_pagelayout('incourse');
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('pluginname', 'local_dataseteditor'));
 
-$result = $DB->get_records('course', array(), 'sortorder', 'id,fullname,shortname');
+$result = $DB->get_records('course', array(), 'sortorder',
+    'id,fullname,shortname');
 
 $table = new html_table();
 $table->head = array('ID', 'Course Name');
