@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once(dirname(__FILE__) . '/config.php');
+require_once(dirname(__FILE__) . '/defines.php');
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once("$CFG->libdir/outputcomponents.php");
 

@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-require_once(dirname(__FILE__) . '/config.php');
+require_once(dirname(__FILE__) . '/defines.php');
 
 
 function local_dataseteditor_extends_navigation($nav) {
