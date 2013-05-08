@@ -95,7 +95,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         );
         $table->data = array();
 
-        if (LOCAL_DATASETEDITOR_LOCAL_DATASETEDITOR_DEBUG) {
+        if ($CFG->localdataseteditordebug) {
             array_unshift($table->head,
                 get_string('id', 'local_dataseteditor')
             );
@@ -195,7 +195,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             $data_del .= html_writer::empty_tag('input', $del_checkbox_attr);
 
             $data_row = array($data_name, $data_values, $data_del);
-            if (LOCAL_DATASETEDITOR_LOCAL_DATASETEDITOR_DEBUG) {
+            if ($CFG->localdataseteditordebug) {
                 array_unshift($data_row, $wc->id);
             }
             $table->data[] = $data_row;
@@ -331,7 +331,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                     'value' => $id,
                 ));
 
-                if (LOCAL_DATASETEDITOR_LOCAL_DATASETEDITOR_DEBUG) {
+                if ($CFG->localdataseteditordebug) {
                     $data_id .= $id . ' ';
                 }
 
