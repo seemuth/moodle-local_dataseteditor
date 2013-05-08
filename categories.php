@@ -27,7 +27,7 @@ require_once(dirname(__FILE__) . '/config.php');
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/locallib.php');
 
-define('NUM_VALUESETS', 1);
+define('LOCAL_DATASETEDITOR_NUM_VALUESETS', 1);
 
 
 $courseid = required_param('courseid', PARAM_INT);
@@ -55,7 +55,7 @@ if ($cmid > 0) {
 
 $urlargs['courseid'] = $courseid;
 
-$PAGE->set_url(PLUGINPREFIX.'/categories.php', $urlargs);
+$PAGE->set_url(LOCAL_DATASETEDITOR_PLUGINPREFIX.'/categories.php', $urlargs);
 $PAGE->set_heading($SITE->fullname);
 $PAGE->set_title(
     $SITE->fullname .
@@ -73,19 +73,19 @@ $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 
 
 $wildcard_url = new moodle_url(
-    PLUGINPREFIX.'/wildcards.php',
+    LOCAL_DATASETEDITOR_PLUGINPREFIX.'/wildcards.php',
     $urlargs
 );
 $dataset_url = new moodle_url(
-    PLUGINPREFIX.'/dataset.php',
+    LOCAL_DATASETEDITOR_PLUGINPREFIX.'/dataset.php',
     $urlargs
 );
 $export_url = new moodle_url(
-    PLUGINPREFIX.'/export_dataset.php',
+    LOCAL_DATASETEDITOR_PLUGINPREFIX.'/export_dataset.php',
     $urlargs
 );
 $import_url = new moodle_url(
-    PLUGINPREFIX.'/import_dataset.php',
+    LOCAL_DATASETEDITOR_PLUGINPREFIX.'/import_dataset.php',
     $urlargs
 );
 
@@ -103,7 +103,7 @@ $contexts = array();
 $contextids = array();
 foreach ($all_contexts as $cid) {
     $c = context::instance_by_id($cid);
-    if (has_capability(VIEW_CAPABILITY, $c)) {
+    if (has_capability(LOCAL_DATASETEDITOR_VIEW_CAPABILITY, $c)) {
         $contexts[$cid] = $c;
         $contextids[] = $cid;
     }
@@ -130,7 +130,8 @@ foreach ($results as $row) {
     $o->id = $row->id;
     $o->name = $row->name;
 
-    $o->wildcards = get_wildcards($row->id, NUM_VALUESETS);
+    $o->wildcards = get_wildcards($row->id,
+        LOCAL_DATASETEDITOR_NUM_VALUESETS);
 
     $contextid2cats[$row->contextid][] = $o;
 }
@@ -149,7 +150,7 @@ foreach ($contexts as $cid => $context) {
 }
 
 echo $renderer->render_category_tables(
-    $context_cats, NUM_VALUESETS,
+    $context_cats, LOCAL_DATASETEDITOR_NUM_VALUESETS,
     $wildcard_url, $dataset_url, $export_url, $import_url
 );
 

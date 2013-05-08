@@ -64,14 +64,17 @@ function local_dataseteditor_extends_navigation($nav) {
         }
     }
 
-    if (! has_capability(VIEW_CAPABILITY, $thiscontext)) {
+    if (! has_capability(LOCAL_DATASETEDITOR_VIEW_CAPABILITY, $thiscontext)) {
         $courseid = 0;
         $coursecontext = null;
     }
 
     if ($courseid) {
         $coursecontext = context_course::instance($courseid);
-        if (!has_capability(VIEW_CAPABILITY, $coursecontext)) {
+        if (! has_capability(
+            LOCAL_DATASETEDITOR_VIEW_CAPABILITY,
+            $coursecontext)
+        ) {
             $courseid = 0;
             $coursecontext = null;
         }
@@ -100,7 +103,7 @@ function local_dataseteditor_extends_navigation($nav) {
         $indexnode = $mainnode->add(
             get_string('pluginname', 'local_dataseteditor'),
             new moodle_url(
-                PLUGINPREFIX.'/categories.php',
+                LOCAL_DATASETEDITOR_PLUGINPREFIX.'/categories.php',
                 $urlparams
             ),
             $index_type
@@ -112,7 +115,7 @@ function local_dataseteditor_extends_navigation($nav) {
             $indexnode->add(
                 get_string('editwildcards', 'local_dataseteditor'),
                 new moodle_url(
-                    PLUGINPREFIX.'/wildcards.php',
+                    LOCAL_DATASETEDITOR_PLUGINPREFIX.'/wildcards.php',
                     $urlparams
                 )
             );
@@ -120,7 +123,7 @@ function local_dataseteditor_extends_navigation($nav) {
             $indexnode->add(
                 get_string('editdataset', 'local_dataseteditor'),
                 new moodle_url(
-                    PLUGINPREFIX.'/dataset.php',
+                    LOCAL_DATASETEDITOR_PLUGINPREFIX.'/dataset.php',
                     $urlparams
                 )
             );
@@ -128,7 +131,7 @@ function local_dataseteditor_extends_navigation($nav) {
             $indexnode->add(
                 get_string('exportdataset', 'local_dataseteditor'),
                 new moodle_url(
-                    PLUGINPREFIX.'/export_dataset.php',
+                    LOCAL_DATASETEDITOR_PLUGINPREFIX.'/export_dataset.php',
                     $urlparams
                 )
             );
@@ -136,7 +139,7 @@ function local_dataseteditor_extends_navigation($nav) {
             $indexnode->add(
                 get_string('importdataset', 'local_dataseteditor'),
                 new moodle_url(
-                    PLUGINPREFIX.'/import_dataset.php',
+                    LOCAL_DATASETEDITOR_PLUGINPREFIX.'/import_dataset.php',
                     $urlparams
                 )
             );

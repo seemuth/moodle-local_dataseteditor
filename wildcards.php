@@ -27,10 +27,10 @@ require_once(dirname(__FILE__) . '/config.php');
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/locallib.php');
 
-define('NUM_EXTRA_ROWS', 3);
-define('DEFAULT_TYPE', 1);
-define('DEFAULT_OPTIONS', 'uniform:1.0:10.0:1');
-define('DEFAULT_ITEMCOUNT', 0);
+define('LOCAL_DATASETEDITOR_NUM_EXTRA_ROWS', 3);
+define('LOCAL_DATASETEDITOR_DEFAULT_TYPE', 1);
+define('LOCAL_DATASETEDITOR_DEFAULT_OPTIONS', 'uniform:1.0:10.0:1');
+define('LOCAL_DATASETEDITOR_DEFAULT_ITEMCOUNT', 0);
 
 
 $categoryid = required_param('categoryid', PARAM_INT);
@@ -65,10 +65,10 @@ if ($cmid > 0) {
     require_login($courseid);
 }
 
-require_capability(EDIT_CAPABILITY, $thiscontext);
-require_capability_cat(EDIT_CAPABILITY, $categoryid);
+require_capability(LOCAL_DATASETEDITOR_EDIT_CAPABILITY, $thiscontext);
+require_capability_cat(LOCAL_DATASETEDITOR_EDIT_CAPABILITY, $categoryid);
 
-$PAGE->set_url(PLUGINPREFIX.'/wildcards.php', $urlargs);
+$PAGE->set_url(LOCAL_DATASETEDITOR_PLUGINPREFIX.'/wildcards.php', $urlargs);
 $PAGE->set_heading($SITE->fullname);
 $PAGE->set_title(
     $SITE->fullname .
@@ -120,16 +120,16 @@ if (!empty($_POST)) {
      */
     $wildcard_defaults = new stdClass();
     $wildcard_defaults->category = $categoryid;
-    $wildcard_defaults->type = DEFAULT_TYPE;
-    $wildcard_defaults->options = DEFAULT_OPTIONS;
-    $wildcard_defaults->itemcount = DEFAULT_ITEMCOUNT;
+    $wildcard_defaults->type = LOCAL_DATASETEDITOR_DEFAULT_TYPE;
+    $wildcard_defaults->options = LOCAL_DATASETEDITOR_DEFAULT_OPTIONS;
+    $wildcard_defaults->itemcount = LOCAL_DATASETEDITOR_DEFAULT_ITEMCOUNT;
 
 
     if (isset($_POST['submit_cancel'])) {
         $wildcards_from_user = false;
 
     } else if (isset($_POST['submit_saveandadd'])) {
-        $min_rows = $num_rows + NUM_EXTRA_ROWS;
+        $min_rows = $num_rows + LOCAL_DATASETEDITOR_NUM_EXTRA_ROWS;
         save_wildcards($new_wildcards, $wildcard_defaults, $categoryid);
         echo $renderer->render_message(
             get_string('saved_wildcards', 'local_dataseteditor')
@@ -159,7 +159,7 @@ foreach ($wildcards as $k => $wc) {
 $form_dest = $PAGE->url;
 $uservals = ($wildcards_from_user) ? $new_wildcards : array();
 if (! isset($min_rows)) {
-    $min_rows = count($wildcards) + NUM_EXTRA_ROWS;
+    $min_rows = count($wildcards) + LOCAL_DATASETEDITOR_NUM_EXTRA_ROWS;
 }
 echo $renderer->render_wildcard_form($wildcards, $uservals,
     $min_rows, $form_dest);

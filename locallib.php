@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once(dirname(__FILE__).'/lib.php');
 
-define('DEFAULT_WILDCARD_OPTIONS', 'uniform:1.0:10.0:1');
+define('LOCAL_DATASETEDITOR_DEFAULT_WILDCARD_OPTIONS', 'uniform:1.0:10.0:1');
 
 
 /**
@@ -525,7 +525,7 @@ function overwrite_wildcard_dataset(
             $o->category = $categoryid;
             $o->name = $name;
             $o->type = 1;
-            $o->options = DEFAULT_WILDCARD_OPTIONS;
+            $o->options = LOCAL_DATASETEDITOR_DEFAULT_WILDCARD_OPTIONS;
             $o->itemcount = 0;  /* Will be updated. */
 
             $id = $DB->insert_record($table_definitions, $o);

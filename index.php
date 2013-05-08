@@ -28,7 +28,7 @@ require_once(dirname(__FILE__) . '/../../config.php');
 
 require_login();
 
-$PAGE->set_url(PLUGINPREFIX.'/index.php');
+$PAGE->set_url(LOCAL_DATASETEDITOR_PLUGINPREFIX.'/index.php');
 $PAGE->set_context(context_system::instance());
 $PAGE->set_heading($SITE->fullname);
 $PAGE->set_title($SITE->fullname . ': ' .
@@ -46,13 +46,16 @@ $table->head = array('ID', 'Course Name');
 $table->data = array();
 foreach ($result as $row) {
     $coursecontext = context_course::instance($row->id);
-    if (!has_capability(VIEW_CAPABILITY, $coursecontext)) {
+    if (! has_capability(
+        LOCAL_DATASETEDITOR_VIEW_CAPABILITY,
+        $coursecontext)
+    ) {
         continue;
     }
 
     $link = html_writer::link(
         new moodle_url(
-            PLUGINPREFIX.'/categories.php',
+            LOCAL_DATASETEDITOR_PLUGINPREFIX.'/categories.php',
             array('courseid' => $row->id)
         ),
         $row->fullname

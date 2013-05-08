@@ -27,10 +27,10 @@ require_once(dirname(__FILE__) . '/config.php');
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once(dirname(__FILE__) . '/locallib.php');
 
-define('NUM_EXTRA_ROWS', 5);
+define('LOCAL_DATASETEDITOR_NUM_EXTRA_ROWS', 5);
 
-define('DELETE_GIVEN', 1);
-define('DELETE_ASSUME', 2);
+define('LOCAL_DATASETEDITOR_DELETE_GIVEN', 1);
+define('LOCAL_DATASETEDITOR_DELETE_ASSUME', 2);
 
 
 
@@ -66,10 +66,10 @@ if ($cmid > 0) {
     require_login($courseid);
 }
 
-require_capability(EDIT_CAPABILITY, $thiscontext);
-require_capability_cat(EDIT_CAPABILITY, $categoryid);
+require_capability(LOCAL_DATASETEDITOR_EDIT_CAPABILITY, $thiscontext);
+require_capability_cat(LOCAL_DATASETEDITOR_EDIT_CAPABILITY, $categoryid);
 
-$PAGE->set_url(PLUGINPREFIX.'/dataset.php', $urlargs);
+$PAGE->set_url(LOCAL_DATASETEDITOR_PLUGINPREFIX.'/dataset.php', $urlargs);
 $PAGE->set_heading($SITE->fullname);
 $PAGE->set_title(
     $SITE->fullname .
@@ -118,7 +118,7 @@ if (!empty($_POST)) {
         $varname = 'data_del' . $suffix;
         $val = required_param($varname, PARAM_BOOL);
         if ($val) {
-            $deleteitems[$i] = DELETE_GIVEN;
+            $deleteitems[$i] = LOCAL_DATASETEDITOR_DELETE_GIVEN;
         }
 
         $any_data = false;
@@ -158,7 +158,7 @@ if (!empty($_POST)) {
 
         if (! $any_data) {
             /* Assume that we should delete this item. */
-            $deleteitems[$i] = DELETE_ASSUME;
+            $deleteitems[$i] = LOCAL_DATASETEDITOR_DELETE_ASSUME;
         }
     }
 
@@ -168,7 +168,7 @@ if (!empty($_POST)) {
         $show_user_data = false;
 
     } else if (isset($_POST['submit_saveandadd'])) {
-        $min_rows = $num_rows + NUM_EXTRA_ROWS;
+        $min_rows = $num_rows + LOCAL_DATASETEDITOR_NUM_EXTRA_ROWS;
 
         if ($success) {
             save_dataset_items($new_items, $deleteitems, $categoryid);
@@ -203,13 +203,13 @@ $deleteitems_form = ($show_user_data) ? $deleteitems : array();
 
 /* Do not check delete boxes for rows to be automatically deleted. */
 foreach ($deleteitems_form as $k => $v) {
-    if ($v == DELETE_ASSUME) {
+    if ($v == LOCAL_DATASETEDITOR_DELETE_ASSUME) {
         unset($deleteitems_form[$k]);
     }
 }
 
 if (! isset($min_rows)) {
-    $min_rows = count($items) + NUM_EXTRA_ROWS;
+    $min_rows = count($items) + LOCAL_DATASETEDITOR_NUM_EXTRA_ROWS;
 }
 echo $renderer->render_dataset_form(
     $wildcards, $items,

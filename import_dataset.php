@@ -61,10 +61,11 @@ if ($cmid > 0) {
     require_login($courseid);
 }
 
-require_capability(IMPORT_CAPABILITY, $thiscontext);
-require_capability_cat(IMPORT_CAPABILITY, $categoryid);
+require_capability(LOCAL_DATASETEDITOR_IMPORT_CAPABILITY, $thiscontext);
+require_capability_cat(LOCAL_DATASETEDITOR_IMPORT_CAPABILITY, $categoryid);
 
-$PAGE->set_url(PLUGINPREFIX.'/import_dataset.php', $urlargs);
+$PAGE->set_url(LOCAL_DATASETEDITOR_PLUGINPREFIX.'/import_dataset.php',
+    $urlargs);
 $PAGE->set_heading($SITE->fullname);
 $PAGE->set_title(
     $SITE->fullname .
