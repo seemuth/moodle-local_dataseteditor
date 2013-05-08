@@ -36,7 +36,7 @@ define('LOCAL_DATASETEDITOR_DEFAULT_WILDCARD_OPTIONS', 'uniform:1.0:10.0:1');
  * @param int $categoryid Question category ID
  * @return int $contextid
  */
-function get_cat_contextid($categoryid) {
+function local_dataseteditor_get_cat_contextid($categoryid) {
     global $DB;
 
     $table_categories = 'question_categories';
@@ -56,7 +56,7 @@ function get_cat_contextid($categoryid) {
  * @param array $wildcardids Wildcard IDs
  * @return array array[$categoryid] = num_wildcards
  */
-function get_wildcard_categoryids($wildcardids) {
+function local_dataseteditor_get_wildcard_categoryids($wildcardids) {
     global $DB;
 
     $table_definitions = 'question_dataset_definitions';
@@ -90,7 +90,7 @@ function get_wildcard_categoryids($wildcardids) {
  * @param array $itemids Dataset item IDs
  * @return array array[$categoryid] = num_items
  */
-function get_dataset_item_categoryids($itemids) {
+function local_dataseteditor_get_dataset_item_categoryids($itemids) {
     global $DB;
 
     $table_definitions = 'question_dataset_definitions';
@@ -128,12 +128,12 @@ function get_dataset_item_categoryids($itemids) {
  * @return bool True if all the wildcards are in the question category
  *      (or true if no wildcards were given)
  */
-function all_wildcards_in_cat($wildcardids, $categoryid) {
+function local_dataseteditor_all_wildcards_in_cat($wildcardids, $categoryid) {
     if (empty($wildcardids)) {
         return true;
     }
 
-    $categories = get_wildcard_categoryids($wildcardids);
+    $categories = local_dataseteditor_get_wildcard_categoryids($wildcardids);
 
     $found_cats = 0;
     foreach ($categories as $id => $num) {
@@ -160,12 +160,12 @@ function all_wildcards_in_cat($wildcardids, $categoryid) {
  * @return bool True if all the dataset items are in the question category
  *      (or true if no dataset items were given)
  */
-function all_dataset_items_in_cat($itemids, $categoryid) {
+function local_dataseteditor_all_dataset_items_in_cat($itemids, $categoryid) {
     if (empty($itemids)) {
         return true;
     }
 
-    $categories = get_dataset_item_categoryids($itemids);
+    $categories = local_dataseteditor_get_dataset_item_categoryids($itemids);
 
     $found_cats = 0;
     foreach ($categories as $id => $num) {
@@ -191,7 +191,7 @@ function all_dataset_items_in_cat($itemids, $categoryid) {
  * @param int $val_limit Limit values to this many results
  * @return array array[id] => stdClass{->id ->name ->values}
  */
-function get_wildcards($categoryid, $val_limit=4) {
+function local_dataseteditor_get_wildcards($categoryid, $val_limit=4) {
     global $DB;
 
     $table_definitions = 'question_dataset_definitions';
@@ -248,7 +248,9 @@ function get_wildcards($categoryid, $val_limit=4) {
  * @return null
  * @throws coding_exception
  */
-function save_wildcards($wildcards, $defaults, $categoryid) {
+function local_dataseteditor_save_wildcards(
+    $wildcards, $defaults, $categoryid
+) {
     $table_definitions = 'question_dataset_definitions';
     $table_values = 'question_dataset_items';
 
@@ -264,7 +266,7 @@ function save_wildcards($wildcards, $defaults, $categoryid) {
         }
     }
 
-    if (! all_wildcards_in_cat($ids, $categoryid)) {
+    if (! local_dataseteditor_all_wildcards_in_cat($ids, $categoryid)) {
         throw new coding_exception(
             'Not all wildcards in category ' . $categoryid
         );
@@ -327,7 +329,7 @@ function save_wildcards($wildcards, $defaults, $categoryid) {
  * @param array $wildcardids Retrieve values matching these wildcard IDs
  * @return array array[itemnum] => array(defnum => stdClass{->id ->val})
  */
-function get_dataset_items($wildcardids) {
+function local_dataseteditor_get_dataset_items($wildcardids) {
     global $DB;
 
     $table_values = 'question_dataset_items';
@@ -369,7 +371,9 @@ function get_dataset_items($wildcardids) {
  * @return null
  * @throws coding_exception
  */
-function save_dataset_items($items, $deleteitems, $categoryid) {
+function local_dataseteditor_save_dataset_items(
+    $items, $deleteitems, $categoryid
+) {
     $table_values = 'question_dataset_items';
 
     global $DB;
@@ -384,7 +388,7 @@ function save_dataset_items($items, $deleteitems, $categoryid) {
         }
     }
 
-    if (! all_dataset_items_in_cat($ids, $categoryid)) {
+    if (! local_dataseteditor_all_dataset_items_in_cat($ids, $categoryid)) {
         throw new coding_exception(
             'Not all dataset items in category ' . $categoryid
         );
@@ -461,7 +465,7 @@ function save_dataset_items($items, $deleteitems, $categoryid) {
  * @return null
  * @throws coding_exception
  */
-function overwrite_wildcard_dataset(
+function local_dataseteditor_overwrite_wildcard_dataset(
     $categoryid, $wildcards, $items,
     $requirefulldataset = true
 ) {
@@ -471,7 +475,7 @@ function overwrite_wildcard_dataset(
 
     global $DB;
 
-    $cur_wildcards = get_wildcards($categoryid, 0);
+    $cur_wildcards = local_dataseteditor_get_wildcards($categoryid, 0);
     $cur_name2id = array();
     foreach ($cur_wildcards as $wc) {
         $cur_name2id[$wc->name] = $wc->id;
@@ -574,8 +578,10 @@ function overwrite_wildcard_dataset(
  * @return void terminates with an error if the user does not have the given 
  * capability.
  */
-function require_capability_cat($capability, $categoryid) {
-    $contextid = get_cat_contextid($categoryid);
+function local_dataseteditor_require_capability_cat(
+    $capability, $categoryid
+) {
+    $contextid = local_dataseteditor_get_cat_contextid($categoryid);
     $context = context::instance_by_id($contextid);
     require_capability($capability, $context);
 }
@@ -589,7 +595,7 @@ function require_capability_cat($capability, $categoryid) {
  * @return cm_info Information about that course-module
  * @throws moodle_exception If the course-module does not exist
  */
-function get_cm($courseid, $cmid) {
+function local_dataseteditor_get_cm($courseid, $cmid) {
     global $DB;
 
     $course = $DB->get_record('course',

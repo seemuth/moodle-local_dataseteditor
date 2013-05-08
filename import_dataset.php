@@ -56,13 +56,17 @@ if ($cmid > 0) {
 $urlargs['courseid'] = $courseid;
 
 if ($cmid > 0) {
-    require_login($courseid, true, get_cm($courseid, $cmid));
+    require_login($courseid, true,
+        local_dataseteditor_get_cm($courseid, $cmid));
 } else {
     require_login($courseid);
 }
 
 require_capability(LOCAL_DATASETEDITOR_IMPORT_CAPABILITY, $thiscontext);
-require_capability_cat(LOCAL_DATASETEDITOR_IMPORT_CAPABILITY, $categoryid);
+local_dataseteditor_require_capability_cat(
+    LOCAL_DATASETEDITOR_IMPORT_CAPABILITY,
+    $categoryid
+);
 
 $PAGE->set_url(LOCAL_DATASETEDITOR_PLUGINPREFIX.'/import_dataset.php',
     $urlargs);
@@ -83,7 +87,8 @@ $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 $form_dest = $PAGE->url;
 
 
-$wildcards = get_wildcards($categoryid, 0); // Don't need any data values.
+// Don't need any data values.
+$wildcards = local_dataseteditor_get_wildcards($categoryid, 0);
 
 $display_confirmation = false;
 
@@ -203,8 +208,11 @@ if (!empty($_POST)) {
             }
 
             if ($success) {
-                overwrite_wildcard_dataset($categoryid, $new_wildcards,
-                    $new_items);
+                local_dataseteditor_overwrite_wildcard_dataset(
+                    $categoryid,
+                    $new_wildcards,
+                    $new_items
+                );
 
                 echo html_writer::tag('p',
                     get_string('saved_all_data', 'local_dataseteditor'));

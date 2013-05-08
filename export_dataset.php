@@ -56,13 +56,17 @@ if ($cmid > 0) {
 $urlargs['courseid'] = $courseid;
 
 if ($cmid > 0) {
-    require_login($courseid, true, get_cm($courseid, $cmid));
+    require_login($courseid, true,
+        local_dataseteditor_get_cm($courseid, $cmid));
 } else {
     require_login($courseid);
 }
 
 require_capability(LOCAL_DATASETEDITOR_EXPORT_CAPABILITY, $thiscontext);
-require_capability_cat(LOCAL_DATASETEDITOR_EXPORT_CAPABILITY, $categoryid);
+local_dataseteditor_require_capability_cat(
+    LOCAL_DATASETEDITOR_EXPORT_CAPABILITY,
+    $categoryid
+);
 
 $PAGE->set_url(LOCAL_DATASETEDITOR_PLUGINPREFIX.'/export_dataset.php',
     $urlargs);
@@ -79,8 +83,9 @@ $PAGE->set_pagelayout('incourse');
 $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 
 
-$wildcards = get_wildcards($categoryid, 0); // Don't need any data values.
-$items = get_dataset_items(array_keys($wildcards));
+// Don't need any data values.
+$wildcards = local_dataseteditor_get_wildcards($categoryid, 0);
+$items = local_dataseteditor_get_dataset_items(array_keys($wildcards));
 
 header(
     'Content-Disposition: attachment; filename=dataset-' .

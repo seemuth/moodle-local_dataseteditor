@@ -33,7 +33,7 @@ require_once("$CFG->libdir/outputcomponents.php");
 /**
  * Sort wildcards by name, then id.
  */
-function wildcard_cmp($a, $b) {
+function local_dataseteditor_wildcard_cmp($a, $b) {
     $aname = strtolower($a->name);
     $bname = strtolower($b->name);
 
@@ -101,7 +101,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             );
         }
 
-        uasort($wildcards, 'wildcard_cmp');
+        uasort($wildcards, 'local_dataseteditor_wildcard_cmp');
 
         /* Split $newvals into two arrays:
          *      $val_override[id] = stdClass
@@ -272,7 +272,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         );
         $table->data = array();
 
-        uasort($wildcards, 'wildcard_cmp');
+        uasort($wildcards, 'local_dataseteditor_wildcard_cmp');
 
         foreach ($wildcards as $wc) {
             $table->head[] = '{' . $wc->name . '}';

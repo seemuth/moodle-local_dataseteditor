@@ -60,13 +60,17 @@ if ($cmid > 0) {
 $urlargs['courseid'] = $courseid;
 
 if ($cmid > 0) {
-    require_login($courseid, true, get_cm($courseid, $cmid));
+    require_login($courseid, true,
+        local_dataseteditor_get_cm($courseid, $cmid));
 } else {
     require_login($courseid);
 }
 
 require_capability(LOCAL_DATASETEDITOR_EDIT_CAPABILITY, $thiscontext);
-require_capability_cat(LOCAL_DATASETEDITOR_EDIT_CAPABILITY, $categoryid);
+local_dataseteditor_require_capability_cat(
+    LOCAL_DATASETEDITOR_EDIT_CAPABILITY,
+    $categoryid
+);
 
 $PAGE->set_url(LOCAL_DATASETEDITOR_PLUGINPREFIX.'/wildcards.php', $urlargs);
 $PAGE->set_heading($SITE->fullname);
@@ -130,14 +134,22 @@ if (!empty($_POST)) {
 
     } else if (isset($_POST['submit_saveandadd'])) {
         $min_rows = $num_rows + LOCAL_DATASETEDITOR_NUM_EXTRA_ROWS;
-        save_wildcards($new_wildcards, $wildcard_defaults, $categoryid);
+        local_dataseteditor_save_wildcards(
+            $new_wildcards,
+            $wildcard_defaults,
+            $categoryid
+        );
         echo $renderer->render_message(
             get_string('saved_wildcards', 'local_dataseteditor')
         );
         $wildcards_from_user = false;
 
     } else if (isset($_POST['submit_save'])) {
-        save_wildcards($new_wildcards, $wildcard_defaults, $categoryid);
+        local_dataseteditor_save_wildcards(
+            $new_wildcards,
+            $wildcard_defaults,
+            $categoryid
+        );
         echo $renderer->render_message(
             get_string('saved_wildcards', 'local_dataseteditor')
         );
@@ -149,7 +161,7 @@ if (!empty($_POST)) {
 }
 
 
-$wildcards = get_wildcards($categoryid);
+$wildcards = local_dataseteditor_get_wildcards($categoryid);
 foreach ($wildcards as $k => $wc) {
     if ($wc->num_more_values > 0) {
         $wc->values[count($wc->values)-1] = '...';

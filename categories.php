@@ -48,7 +48,8 @@ if ($cmid > 0) {
 }
 
 if ($cmid > 0) {
-    require_login($courseid, true, get_cm($courseid, $cmid));
+    require_login($courseid, true,
+        local_dataseteditor_get_cm($courseid, $cmid));
 } else {
     require_login($courseid);
 }
@@ -130,7 +131,7 @@ foreach ($results as $row) {
     $o->id = $row->id;
     $o->name = $row->name;
 
-    $o->wildcards = get_wildcards($row->id,
+    $o->wildcards = local_dataseteditor_get_wildcards($row->id,
         LOCAL_DATASETEDITOR_NUM_VALUESETS);
 
     $contextid2cats[$row->contextid][] = $o;
