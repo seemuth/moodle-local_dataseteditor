@@ -28,7 +28,3 @@ define('LOCAL_DATASETEDITOR_VIEW_CAPABILITY', 'local/dataseteditor:view');
 define('LOCAL_DATASETEDITOR_EDIT_CAPABILITY', 'local/dataseteditor:edit');
 define('LOCAL_DATASETEDITOR_EXPORT_CAPABILITY', 'local/dataseteditor:export');
 define('LOCAL_DATASETEDITOR_IMPORT_CAPABILITY', 'local/dataseteditor:import');
-
-if (! isset($CFG->localdataseteditordebug)) {
-    $CFG->localdataseteditordebug = false;
-}

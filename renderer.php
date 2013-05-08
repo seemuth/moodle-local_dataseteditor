@@ -29,6 +29,10 @@ require_once(dirname(__FILE__) . '/defines.php');
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once("$CFG->libdir/outputcomponents.php");
 
+if (! isset($CFG->localdataseteditordebug)) {
+    $CFG->localdataseteditordebug = false;
+}
+
 
 /**
  * Sort wildcards by name, then id.
@@ -81,6 +85,8 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
     public function render_wildcard_form($wildcards, $uservals,
         $min_rows, $form_dest
     ) {
+        global $CFG;
+
         $form_attributes = array(
             'action' => $form_dest->out(false),
             'method' => 'POST'
@@ -260,6 +266,8 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
     public function render_dataset_form($wildcards, $items,
         $uservals, $deleteitems, $min_rows, $form_dest
     ) {
+        global $CFG;
+
         $form_attributes = array(
             'action' => $form_dest->out(false),
             'method' => 'POST'
