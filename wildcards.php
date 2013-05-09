@@ -139,8 +139,9 @@ if (!empty($_POST)) {
             $wildcard_defaults,
             $categoryid
         );
-        echo $renderer->render_message(
-            get_string('saved_wildcards', 'local_dataseteditor')
+        echo $renderer->notification(
+            get_string('saved_wildcards', 'local_dataseteditor'),
+            'notifysuccess'
         );
         $wildcards_from_user = false;
 
@@ -150,8 +151,9 @@ if (!empty($_POST)) {
             $wildcard_defaults,
             $categoryid
         );
-        echo $renderer->render_message(
-            get_string('saved_wildcards', 'local_dataseteditor')
+        echo $renderer->notification(
+            get_string('saved_wildcards', 'local_dataseteditor'),
+            'notifysuccess'
         );
         $wildcards_from_user = false;
 

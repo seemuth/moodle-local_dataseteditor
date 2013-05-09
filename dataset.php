@@ -154,8 +154,10 @@ if (!empty($_POST)) {
         }
 
         if ((! isset($_POST['submit_cancel'])) && $any_data && $any_empty) {
-            echo html_writer::tag('p',
-                get_string('missing_data_in_X', 'local_dataseteditor', $i));
+            echo $renderer->notification(
+                get_string('missing_data_in_X', 'local_dataseteditor', $i),
+                'notifyproblem'
+            );
 
             $success = false;
         }
@@ -180,8 +182,9 @@ if (!empty($_POST)) {
                 $deleteitems,
                 $categoryid
             );
-            echo $renderer->render_message(
-                get_string('saved_dataset_items', 'local_dataseteditor')
+            echo $renderer->notification(
+                get_string('saved_dataset_items', 'local_dataseteditor'),
+                'notifysuccess'
             );
             $show_user_data = false;
         }
@@ -194,8 +197,9 @@ if (!empty($_POST)) {
                 $deleteitems,
                 $categoryid
             );
-            echo $renderer->render_message(
-                get_string('saved_dataset_items', 'local_dataseteditor')
+            echo $renderer->notification(
+                get_string('saved_dataset_items', 'local_dataseteditor'),
+                'notifysuccess'
             );
             $show_user_data = false;
         }

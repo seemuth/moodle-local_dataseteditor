@@ -98,8 +98,11 @@ if (!empty($_POST)) {
     if (isset($_FILES['file'])) {
         $file = $_FILES['file'];
         if ($file['error']) {
-            echo get_string('error_upload', 'local_dataseteditor') .
-                ':' . $file['error'];
+            echo $renderer->notification(
+                get_string('error_upload', 'local_dataseteditor') .
+                ':' . $file['error'],
+                'notifyproblem'
+            );
 
         } else {
             $new_wildcards = array();
@@ -108,7 +111,11 @@ if (!empty($_POST)) {
             $filename = $file['tmp_name'];
             $fin = fopen($filename, 'r');
             if (!$fin) {
-                echo get_string('error_upload', 'local_dataseteditor');
+                echo $renderer->notification(
+                    get_string('error_upload', 'local_dataseteditor'),
+                    'notifyproblem'
+                );
+
             } else {
                 $linenum = 0;
                 $itemkey = 0;
@@ -163,8 +170,10 @@ if (!empty($_POST)) {
         );
 
         if ($submit_cancel) {
-            echo html_writer::tag('p',
-                get_string('cancelled', 'local_dataseteditor'));
+            echo $renderer->notification(
+                get_string('cancelled', 'local_dataseteditor'),
+                'notifyproblem'
+            );
 
         } else if ($submit_overwrite) {
 
@@ -193,9 +202,12 @@ if (!empty($_POST)) {
                         $eo->name = $new_wildcards[$wc_num];
                         $eo->num = $item_num + 1;
 
-                        echo html_writer::tag('p',
-                            get_string('missing_data_X_in_X',
-                                'local_dataseteditor', $eo));
+                        echo $renderer->notification(
+                            get_string(
+                                'missing_data_X_in_X',
+                                'local_dataseteditor', $eo),
+                            'notifyproblem'
+                        );
 
                         $success = false;
 
@@ -214,8 +226,11 @@ if (!empty($_POST)) {
                     $new_items
                 );
 
-                echo html_writer::tag('p',
-                    get_string('saved_all_data', 'local_dataseteditor'));
+                echo $renderer->notification(
+                    get_string('saved_all_data', 'local_dataseteditor'),
+                    'notifysuccess'
+                );
+
             } else {
                 $display_confirmation = true;
             }
