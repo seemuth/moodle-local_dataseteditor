@@ -24,23 +24,23 @@
  */
 
 
-$string['pluginname'] = 'Dataset Editor';
-$string['setting'] = 'Dataset Editor';
+$string['pluginname'] = 'Dataset editor';
+$string['setting'] = 'Dataset editor';
 $string['view'] = 'View';
 $string['name'] = 'Name';
-$string['curvals'] = 'Current Values';
-$string['delete_p'] = 'Del?';
+$string['curvals'] = 'Current values';
+$string['delete_p'] = 'Delete';
 $string['id'] = 'ID';
-$string['itemnum'] = 'Item Number';
-$string['viewcategories'] = 'View Categories';
-$string['coursecategories'] = 'Course Categories';
+$string['itemnum'] = 'Item number';
+$string['viewcategories'] = 'View categories';
+$string['coursecategories'] = 'Course categories';
 
 /* Define page titles. */
 $string['index'] = 'Index';
-$string['editwildcards'] = 'Edit Wildcards';
-$string['editdataset'] = 'Edit Dataset';
-$string['exportdataset'] = 'Export Dataset';
-$string['importdataset'] = 'Import Dataset';
+$string['editwildcards'] = 'Edit wildcards';
+$string['editdataset'] = 'Edit dataset';
+$string['exportdataset'] = 'Export dataset';
+$string['importdataset'] = 'Import dataset';
 
 /* Define form strings. */
 $string['wildcardX'] = 'Wildcard {$a}';
@@ -68,7 +68,7 @@ $string['delete_wildcardX'] = 'Delete wildcard {$a}';
 $string['update_all_data'] = 'Update all data';
 
 /* Define permission strings. */
-$string['dataseteditor:view'] = 'View Datasets';
-$string['dataseteditor:edit'] = 'Edit Datasets';
-$string['dataseteditor:export'] = 'Export Datasets';
-$string['dataseteditor:import'] = 'Import Datasets';
+$string['dataseteditor:view'] = 'View datasets';
+$string['dataseteditor:edit'] = 'Edit datasets';
+$string['dataseteditor:export'] = 'Export datasets';
+$string['dataseteditor:import'] = 'Import datasets';
