@@ -249,8 +249,9 @@ if ($display_confirmation) {
     echo $renderer->render_dataset_import_confirm(
         $new_wildcards, $new_items, $form_dest, $changelist
     );
-}
 
-echo $renderer->render_dataset_upload_form($form_dest);
+} else {
+    echo $renderer->render_dataset_upload_form($form_dest);
+}
 
 echo $OUTPUT->footer();
