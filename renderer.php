@@ -758,17 +758,17 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             'value' => sesskey(),
         ));
 
-        if (! empty($changelist)) {
-            $form_contents .= get_string('changes_to_commit',
-                'local_dataseteditor');
-            $ul_contents = '';
-            foreach ($changelist as $change) {
-                $ul_contents .= html_writer::tag('li', $change);
-            }
-            $form_contents .= html_writer::tag('ul', $ul_contents);
-        }
-
         if ($have_all_data) {
+            if (! empty($changelist)) {
+                $form_contents .= get_string('changes_to_commit',
+                    'local_dataseteditor');
+                $ul_contents = '';
+                foreach ($changelist as $change) {
+                    $ul_contents .= html_writer::tag('li', $change);
+                }
+                $form_contents .= html_writer::tag('ul', $ul_contents);
+            }
+
             $button_contents = '';
             $button_contents .= get_string('save_overwrite_p',
                 'local_dataseteditor');
