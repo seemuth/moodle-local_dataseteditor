@@ -785,12 +785,6 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 'value' => get_string('cancel', 'local_dataseteditor'),
             ));
             $form_contents .= html_writer::tag('p', $button_contents);
-
-        } else {
-            $form_contents .= $self->notification(
-                get_string('cannot_save_dataset_asis', 'local_dataseteditor'),
-                'notifyproblem'
-            );
         }
 
         return html_writer::tag('form', $form_contents, $form_attributes);

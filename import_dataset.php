@@ -159,6 +159,40 @@ if (!empty($_POST)) {
             }
         }
 
+        /* Ensure all data is defined. */
+        $have_all_data = true;
+        foreach ($new_items as $itemkey => $item) {
+            foreach ($new_wildcards as $wc_id => $wc_name) {
+                if (! isset($item[$wc_id])) {
+                    $have_all_data = false;
+
+                    $eo = new stdClass();
+                    $eo->name = $wc_name;
+                    $eo->num = $itemkey + 1;
+
+                    $renderer->notification(
+                        get_string(
+                            'missing_data_X_in_X',
+                            'local_dataseteditor',
+                            $eo),
+                        'notifyproblem'
+                    );
+                }
+            }
+        }
+
+        if (! $have_all_data) {
+            $display_confirmation = false;
+
+            $renderer->notification(
+                get_string(
+                    'cannot_save_dataset_asis',
+                    'local_dataseteditor'
+                ),
+                'notifyproblem'
+            );
+        }
+
     } else {
         /* No uploaded file: must be save or cancel! */
 
