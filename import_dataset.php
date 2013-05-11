@@ -91,6 +91,7 @@ $form_dest = $PAGE->url;
 $wildcards = local_dataseteditor_get_wildcards($categoryid, 0);
 
 $display_confirmation = false;
+$have_all_data = false;
 
 if (!empty($_POST)) {
     require_sesskey();
@@ -182,8 +183,6 @@ if (!empty($_POST)) {
         }
 
         if (! $have_all_data) {
-            $display_confirmation = false;
-
             echo $renderer->notification(
                 get_string(
                     'cannot_save_dataset_asis',
@@ -299,7 +298,9 @@ if ($display_confirmation) {
         $new_wildcards, $new_items, $form_dest, $changelist
     );
 
-} else {
+}
+
+if (! $have_all_data) {
     echo $renderer->render_dataset_upload_form($form_dest);
 }
 
