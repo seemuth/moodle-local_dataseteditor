@@ -384,7 +384,11 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             $table->data[] = $data_row;
         }
 
-        $form_contents .= html_writer::table($table);
+        $form_contents .= html_writer::tag(
+            'div',
+            html_writer::table($table),
+            array('class' => 'no-overflow')
+        );
 
         $form_contents .= html_writer::empty_tag('input', array(
             'type' => 'hidden',
