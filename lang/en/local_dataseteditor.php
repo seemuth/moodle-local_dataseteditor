@@ -66,6 +66,7 @@ $string['missing_data_in_X'] = 'Missing data in #{$a}';
 $string['add_wildcardX'] = 'Add wildcard {$a}';
 $string['delete_wildcardX'] = 'Delete wildcard {$a}';
 $string['update_all_data'] = 'Update all data';
+$string['cannot_save_dataset_asis'] = 'Cannot save dataset as-is. No changes were saved.';
 
 /* Define permission strings. */
 $string['dataseteditor:view'] = 'View datasets';

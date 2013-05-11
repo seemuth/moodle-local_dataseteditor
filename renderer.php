@@ -686,6 +686,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
         /* Add fields for each dataset item. */
         ksort($items);
+        $have_all_data = true;
         foreach ($items as $itemkey => $item) {
 
             $data_row = array();
@@ -701,6 +702,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 } else {
                     $data_val = get_string('no_data', 'local_dataseteditor');
                     $val = 'NULL';
+                    $have_all_data = false;
                 }
 
                 $data_val .= html_writer::empty_tag('input', array(
@@ -766,22 +768,30 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             $form_contents .= html_writer::tag('ul', $ul_contents);
         }
 
-        $button_contents = '';
-        $button_contents .= get_string('save_overwrite_p',
-            'local_dataseteditor');
-        $button_contents .= html_writer::empty_tag('br');
-        $button_contents .= html_writer::empty_tag('input', array(
-            'type' => 'submit',
-            'name' => 'submit_overwrite',
-            'value' => get_string('save',
+        if ($have_all_data) {
+            $button_contents = '';
+            $button_contents .= get_string('save_overwrite_p',
+                'local_dataseteditor');
+            $button_contents .= html_writer::empty_tag('br');
+            $button_contents .= html_writer::empty_tag('input', array(
+                'type' => 'submit',
+                'name' => 'submit_overwrite',
+                'value' => get_string('save',
                 'local_dataseteditor'),
-        ));
-        $button_contents .= html_writer::empty_tag('input', array(
-            'type' => 'submit',
-            'name' => 'submit_cancel',
-            'value' => get_string('cancel', 'local_dataseteditor'),
-        ));
-        $form_contents .= html_writer::tag('p', $button_contents);
+            ));
+            $button_contents .= html_writer::empty_tag('input', array(
+                'type' => 'submit',
+                'name' => 'submit_cancel',
+                'value' => get_string('cancel', 'local_dataseteditor'),
+            ));
+            $form_contents .= html_writer::tag('p', $button_contents);
+
+        } else {
+            $form_contents .= $self->notification(
+                get_string('cannot_save_dataset_asis', 'local_dataseteditor'),
+                'notifyproblem'
+            );
+        }
 
         return html_writer::tag('form', $form_contents, $form_attributes);
     }
