@@ -170,7 +170,7 @@ if (!empty($_POST)) {
                     $eo->name = $wc_name;
                     $eo->num = $itemkey + 1;
 
-                    $renderer->notification(
+                    echo $renderer->notification(
                         get_string(
                             'missing_data_X_in_X',
                             'local_dataseteditor',
@@ -184,7 +184,7 @@ if (!empty($_POST)) {
         if (! $have_all_data) {
             $display_confirmation = false;
 
-            $renderer->notification(
+            echo $renderer->notification(
                 get_string(
                     'cannot_save_dataset_asis',
                     'local_dataseteditor'
