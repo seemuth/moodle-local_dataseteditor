@@ -94,6 +94,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         $form_contents = '';
 
         $table = new html_table();
+        $table->attributes['class'] = 'flexible generaltable';
         $table->head = array(
             get_string('name', 'local_dataseteditor'),
             get_string('curvals', 'local_dataseteditor'),
@@ -211,7 +212,11 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
         $num_wildcard_rows = $i;
 
-        $form_contents .= html_writer::table($table);
+        $form_contents .= html_writer::tag(
+            'div',
+            html_writer::table($table),
+            array('class' => 'no-overflow')
+        );
 
         $form_contents .= html_writer::empty_tag('input', array(
             'type' => 'hidden',
@@ -662,6 +667,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         $form_contents = '';
 
         $table = new html_table();
+        $table->attributes['class'] = 'flexible generaltable';
         $table->head = array(
             get_string('itemnum', 'local_dataseteditor'),
         );
@@ -713,7 +719,11 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             $table->data[] = $data_row;
         }
 
-        $form_contents .= html_writer::table($table);
+        $form_contents .= html_writer::tag(
+            'div',
+            html_writer::table($table),
+            array('class' => 'no-overflow')
+        );
 
         $form_contents .= html_writer::empty_tag('input', array(
             'type' => 'hidden',
