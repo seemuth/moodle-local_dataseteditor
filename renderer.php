@@ -275,6 +275,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         $form_contents = '';
 
         $table = new html_table();
+        $table->attributes['class'] = 'flexible generaltable';
         $table->head = array(
             get_string('itemnum', 'local_dataseteditor'),
         );
