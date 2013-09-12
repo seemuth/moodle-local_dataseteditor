@@ -464,6 +464,7 @@ function local_dataseteditor_save_dataset_items(
     /* Update wildcards' itemcount field. */
     $DB->set_field($table_definitions, 'itemcount', $num_data, array(
         'category' => $categoryid
+    ));
 }
 
 
