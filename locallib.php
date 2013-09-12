@@ -427,13 +427,14 @@ function local_dataseteditor_save_dataset_items(
         /* Not marked for deletion! Update $itemnum as needed. */
         $itemnum -= $num_deleted;
 
+        $item_has_data = false;
         foreach ($def2val as $defnum => $item) {
             if (empty($item->val)) {
                 /* Empty value. Ignore. */
                 continue;
             }
 
-            $num_data++;
+            $item_has_data = true;
 
             if ($item->id > 0) {
                 /* Existing value! Update only if changed. */
@@ -458,6 +459,10 @@ function local_dataseteditor_save_dataset_items(
 
                 $DB->insert_record($table_values, $new_item);
             }
+        }
+
+        if ($item_has_data) {
+            $num_data++;
         }
     }
 
