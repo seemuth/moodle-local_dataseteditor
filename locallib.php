@@ -374,6 +374,8 @@ function local_dataseteditor_get_dataset_items($wildcardids) {
 function local_dataseteditor_save_dataset_items(
     $items, $deleteitems, $categoryid
 ) {
+
+    $table_definitions = 'question_dataset_definitions';
     $table_values = 'question_dataset_items';
 
     global $DB;
@@ -402,6 +404,9 @@ function local_dataseteditor_save_dataset_items(
      */
     $num_deleted = 0;
 
+    /* Keep track of how many items remain. */
+    $num_data = 0;
+
     foreach ($items as $itemnum => $def2val) {
         if (isset($deleteitems[$itemnum])) {
             /* Delete dataset items with this item number and matching
@@ -428,6 +433,8 @@ function local_dataseteditor_save_dataset_items(
                 continue;
             }
 
+            $num_data++;
+
             if ($item->id > 0) {
                 /* Existing value! Update only if changed. */
                 if ($item->val != $item->orig) {
@@ -453,6 +460,10 @@ function local_dataseteditor_save_dataset_items(
             }
         }
     }
+
+    /* Update wildcards' itemcount field. */
+    $DB->set_field($table_definitions, 'itemcount', $num_data, array(
+        'category' => $categoryid
 }
 
 
