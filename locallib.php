@@ -429,7 +429,7 @@ function local_dataseteditor_save_dataset_items(
 
         $item_has_data = false;
         foreach ($def2val as $defnum => $item) {
-            if ($item->val === null) {
+            if ((! isset($item->val)) || ($item->val === null)) {
                 throw new coding_exception(
                     'No value defined for ' . $itemnum . ', ' . $defnum
                 );
