@@ -54,9 +54,12 @@ function local_dataseteditor_extends_navigation($nav) {
         $courseid = $coursecontext->instanceid;
     }
 
+    if ($courseid < 1) {
+        return;
+    }
+
     if (! has_capability(LOCAL_DATASETEDITOR_VIEW_CAPABILITY, $thiscontext)) {
-        $courseid = 0;
-        $coursecontext = null;
+        return;
     }
 
     $coursecontext = context_course::instance($courseid);
@@ -64,11 +67,6 @@ function local_dataseteditor_extends_navigation($nav) {
         LOCAL_DATASETEDITOR_VIEW_CAPABILITY,
         $coursecontext)
     ) {
-        $courseid = 0;
-        $coursecontext = null;
-    }
-
-    if ($courseid <= 0) {
         return;
     }
 
