@@ -32,23 +32,12 @@ define('LOCAL_DATASETEDITOR_DEFAULT_WILDCARD_OPTIONS', 'uniform:1.0:10.0:1');
 
 /**
  * Returns true if the dataset editor navigation should appear for
- * the given course module ID.
+ * the given course module name.
  *
- * @param int $cmid Course module ID
+ * @param string $modulename Course module name
  * @return boolean if dataset editor navigation should appear
  */
-function local_dataseteditor_applicable_module($cmid) {
-    global $DB;
-
-    $modulename = $DB->get_field_sql(
-        "SELECT md.name as modname
-        FROM {course_modules} cm
-        JOIN {modules} md ON md.id = cm.module
-        WHERE cm.id = ?",
-        array('id' => $cmid),
-        MUST_EXIST
-    );
-
+function local_dataseteditor_applicable_module($modulename) {
     $modulename = strtolower($modulename);
 
     if ($modulename == 'quiz') {

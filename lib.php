@@ -52,7 +52,7 @@ function local_dataseteditor_extends_navigation($nav) {
     }
 
     /* Show dataset editor link only for applicable module types. */
-    if (! local_dataseteditor_applicable_module($cmid)) {
+    if (! local_dataseteditor_applicable_module($PAGE->cm->modname)) {
         return;
     }
 
