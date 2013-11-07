@@ -32,8 +32,16 @@ require_once(dirname(__FILE__) . '/locallib.php');
 function local_dataseteditor_extends_navigation($nav) {
     global $PAGE;
 
-    $courseid = (isset($PAGE->course->id)) ? $PAGE->course->id : 0;
-    $cmid = (isset($PAGE->cm->id)) ? $PAGE->cm->id : 0;
+    if (
+        ($PAGE->context->contextlevel != CONTEXT_MODULE) ||
+        ($PAGE->course === null) ||
+        ($PAGE->cm === null)
+    ) {
+           return;
+    }
+
+    $courseid = $PAGE->course->id;
+    $cmid = $PAGE->cm->id;
 
     if ($cmid > 0) {
         $modulecontext = context_module::instance($cmid);
