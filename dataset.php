@@ -120,8 +120,8 @@ if (!empty($_POST)) {
         $suffix = '_i' . $i;
 
         $varname = 'data_del' . $suffix;
-        $val = required_param($varname, PARAM_BOOL);
-        if ($val) {
+        $delete_row = required_param($varname, PARAM_BOOL);
+        if ($delete_row) {
             $deleteitems[$i] = LOCAL_DATASETEDITOR_DELETE_GIVEN;
         }
 
@@ -153,7 +153,12 @@ if (!empty($_POST)) {
             $new_items[$i][$wc] = $item;
         }
 
-        if ((! isset($_POST['submit_cancel'])) && $any_data && $any_empty) {
+        if (
+            (! isset($_POST['submit_cancel'])) &&
+            $any_data &&
+            $any_empty &&
+            (! $delete_row)
+        ) {
             echo $renderer->notification(
                 get_string('missing_data_in_X', 'local_dataseteditor', $i),
                 'notifyproblem'
