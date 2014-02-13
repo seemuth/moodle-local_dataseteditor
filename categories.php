@@ -32,11 +32,52 @@ define('LOCAL_DATASETEDITOR_NUM_VALUESETS', 1);
 
 $courseid = required_param('courseid', PARAM_INT);
 $cmid = optional_param('cmid', 0, PARAM_INT);
+$category = optional_param('category', '', PARAM_SEQUENCE);
 
 $urlargs = array();
 
+
+$tocontext = null;
+if ($category) {
+    list($categoryid, $contextid) = explode(',', $category);
+    $tocategoryid = intval($categoryid);
+    $tocontextid = intval($contextid);
+
+    $tocontext = context::instance_by_id($tocontextid);
+
+    if ($tocontext->contextlevel == CONTEXT_COURSE) {
+        $courseid = $tocontext->instanceid;
+        $cmid = 0;
+
+    } else if ($tocontext->contextlevel == CONTEXT_MODULE) {
+        $courseid = 0;
+        $cmid = $tocontext->instanceid;
+    }
+}
+
 if ($cmid > 0) {
     $modulecontext = context_module::instance($cmid);
+
+    if ($tocontext !== null) {
+        if ($modulecontext !== $tocontext) {
+            print_error(
+                'unexpectedcontext',
+                'local_dataseteditor',
+                '',
+                null,
+                (
+                    'tocontext: ' .
+                    $tocontext->id .
+                    ',' .
+                    $tocontext->instanceid .
+                    '; modulecontext: ' .
+                    $modulecontext->id .
+                    ',' .
+                    $modulecontext->instanceid
+                )
+            );
+        }
+    }
 
     $urlargs['cmid'] = $cmid;
 
@@ -45,6 +86,27 @@ if ($cmid > 0) {
 
 } else {
     $coursecontext = context_course::instance($courseid);
+
+    if ($tocontext !== null) {
+        if ($coursecontext !== $tocontext) {
+            print_error(
+                'unexpectedcontext',
+                'local_dataseteditor',
+                '',
+                null,
+                (
+                    'tocontext: ' .
+                    $tocontext->id .
+                    ',' .
+                    $tocontext->instanceid .
+                    '; coursecontext: ' .
+                    $coursecontext->id .
+                    ',' .
+                    $coursecontext->instanceid
+                )
+            );
+        }
+    }
 }
 
 if ($cmid > 0) {

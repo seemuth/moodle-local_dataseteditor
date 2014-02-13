@@ -73,3 +73,6 @@ $string['dataseteditor:view'] = 'View datasets';
 $string['dataseteditor:edit'] = 'Edit datasets';
 $string['dataseteditor:export'] = 'Export datasets';
 $string['dataseteditor:import'] = 'Import datasets';
+
+/* Define thrown error strings. */
+$string['unexpectedcontext'] = 'Unexpected context';
