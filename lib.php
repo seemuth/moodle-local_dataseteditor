@@ -152,9 +152,6 @@ function local_dataseteditor_extends_navigation($nav) {
 }
 
 
-function local_dataseteditor_extend_settings_navigation($settings, $denode) {
+function local_dataseteditor_extends_settings_navigation($settings, $denode) {
     global $PAGE;
-
-    $node = navigation_node::create('TEST DATASET EDITOR');
-    $denode->add_node($node);
 }
