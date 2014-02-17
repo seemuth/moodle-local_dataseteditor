@@ -157,7 +157,7 @@ function local_dataseteditor_extends_settings_navigation($settings, $denode) {
 
     /* Place navigation nodes within Question bank in settings. */
 
-    $courseadmin = $PAGE->settingsnav->find(
+    $courseadmin = $settings->find(
         'courseadmin',
         navigation_node::TYPE_COURSE
     );
