@@ -154,4 +154,82 @@ function local_dataseteditor_extends_navigation($nav) {
 
 function local_dataseteditor_extends_settings_navigation($settings, $denode) {
     global $PAGE;
+
+    /* Place navigation nodes within Question bank in settings. */
+
+    $courseadmin = $PAGE->settingsnav->find(
+        'courseadmin',
+        navigation_node::TYPE_COURSE
+    );
+    if ($courseadmin === null) {
+        return;
+    }
+
+    /* Find question bank node. */
+    $questionbank = null;
+    foreach ($courseadmin->children as $node) {
+        if ($node->text == get_string('questionbank', 'question')) {
+            $questionbank = $node;
+            break;
+        }
+    }
+    if ($questionbank === null) {
+        return;
+    }
+
+
+    /* Found question bank settings node! Add dataset editor node(s). */
+
+    $categoryid = optional_param('categoryid', 0, PARAM_INT);
+
+    if ($categoryid > 0) {
+        $index_type = navigation_node::TYPE_CONTAINER;
+    } else {
+        $index_type = navigation_node::TYPE_CUSTOM;
+    }
+
+    $indexnode = $questionbank->add(
+        get_string('pluginname', 'local_dataseteditor'),
+        new moodle_url(
+            LOCAL_DATASETEDITOR_PLUGINPREFIX.'/categories.php',
+            $urlparams
+        ),
+        $index_type
+    );
+
+    if ($categoryid > 0) {
+        $urlparams['categoryid'] = $categoryid;
+
+        $indexnode->add(
+            get_string('editwildcards', 'local_dataseteditor'),
+            new moodle_url(
+                LOCAL_DATASETEDITOR_PLUGINPREFIX.'/wildcards.php',
+                $urlparams
+            )
+        );
+
+        $indexnode->add(
+            get_string('editdataset', 'local_dataseteditor'),
+            new moodle_url(
+                LOCAL_DATASETEDITOR_PLUGINPREFIX.'/dataset.php',
+                $urlparams
+            )
+        );
+
+        $indexnode->add(
+            get_string('exportdataset', 'local_dataseteditor'),
+            new moodle_url(
+                LOCAL_DATASETEDITOR_PLUGINPREFIX.'/export_dataset.php',
+                $urlparams
+            )
+        );
+
+        $indexnode->add(
+            get_string('importdataset', 'local_dataseteditor'),
+            new moodle_url(
+                LOCAL_DATASETEDITOR_PLUGINPREFIX.'/import_dataset.php',
+                $urlparams
+            )
+        );
+    }
 }
