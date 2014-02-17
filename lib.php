@@ -32,34 +32,42 @@ require_once(dirname(__FILE__) . '/locallib.php');
 function local_dataseteditor_extends_navigation($nav) {
     global $PAGE;
 
-    if (
-        ($PAGE->context->contextlevel != CONTEXT_MODULE) ||
-        ($PAGE->course === null) ||
-        ($PAGE->cm === null)
-    ) {
-           return;
+    if ($PAGE->course === null) {
+        return;
     }
 
     $courseid = $PAGE->course->id;
-    $cmid = $PAGE->cm->id;
 
-    if ($cmid > 0) {
+    if ($PAGE->context->contextlevel == CONTEXT_COURSE) {
+        $cmid = 0;
+        $coursecontext = context_course::instance($courseid);
+        $thiscontext = $coursecontext;
+
+    } else if ($PAGE->context->contextlevel == CONTEXT_MODULE) {
+        if ($PAGE->cm === null) {
+            return;
+        }
+        $cmid = $PAGE->cm->id;
+        if ($cmid <= 0) {
+            return;
+        }
+
         $modulecontext = context_module::instance($cmid);
         $thiscontext = $modulecontext;
 
+        /* Show dataset editor link only for applicable module types. */
+        if (! local_dataseteditor_applicable_module($PAGE->cm->modname)) {
+            return;
+        }
+
+        $coursecontext = $modulecontext->get_course_context(false);
+
+        if ($coursecontext) {
+            $courseid = $coursecontext->instanceid;
+        }
+
     } else {
         return;
-    }
-
-    /* Show dataset editor link only for applicable module types. */
-    if (! local_dataseteditor_applicable_module($PAGE->cm->modname)) {
-        return;
-    }
-
-    $coursecontext = $modulecontext->get_course_context(false);
-
-    if ($coursecontext) {
-        $courseid = $coursecontext->instanceid;
     }
 
     if ($courseid < 1) {
@@ -80,9 +88,14 @@ function local_dataseteditor_extends_navigation($nav) {
 
     $urlparams = array('courseid' => $courseid);
 
-    $mainnode = $PAGE->navigation->find($cmid,
-        navigation_node::TYPE_ACTIVITY);
-    $urlparams['cmid'] = $cmid;
+    if ($PAGE->context->contextlevel == CONTEXT_COURSE) {
+        $mainnode = $PAGE->navigation->find($courseid,
+            navigation_node::TYPE_COURSE);
+    } else {
+        $mainnode = $PAGE->navigation->find($cmid,
+            navigation_node::TYPE_ACTIVITY);
+        $urlparams['cmid'] = $cmid;
+    }
 
     $categoryid = optional_param('categoryid', 0, PARAM_INT);
 
