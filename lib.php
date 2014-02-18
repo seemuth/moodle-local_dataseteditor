@@ -30,6 +30,10 @@ require_once(dirname(__FILE__) . '/locallib.php');
 
 
 function local_dataseteditor_extends_navigation($nav) {
+    /* REPLACED by settings navigation nodes. */
+    return;
+
+
     global $PAGE;
 
     if ($PAGE->course === null) {
