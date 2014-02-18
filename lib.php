@@ -171,6 +171,9 @@ function local_dataseteditor_extends_settings_navigation($settings, $denode) {
         return;
     }
 
+    $urlparams = array('courseid' => $courseid);
+
+
     /* Place navigation nodes within Question bank in settings. */
 
     $courseadmin = $settings->find(
