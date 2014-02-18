@@ -233,6 +233,12 @@ foreach ($contexts as $cid => $context) {
     $context_cats[] = $o;
 }
 
+echo $renderer->render_category_form(
+    $PAGE->url,
+    $contexts,
+    $category
+);
+
 echo $renderer->render_category_tables(
     $context_cats, LOCAL_DATASETEDITOR_NUM_VALUESETS,
     $wildcard_url, $dataset_url, $export_url, $import_url
