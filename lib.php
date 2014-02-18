@@ -184,7 +184,7 @@ function local_dataseteditor_extends_settings_navigation($settings, $denode) {
         'courseadmin',
         navigation_node::TYPE_COURSE
     );
-    if ($courseadmin === null) {
+    if (($courseadmin === null) || ($courseadmin === false)) {
         return;
     }
 
