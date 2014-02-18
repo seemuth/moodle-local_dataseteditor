@@ -442,6 +442,39 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
 
     /**
+     * Renders category choice select form
+     *
+     * @param url $desturl Destination URL
+     * @param array $contexts Contexts containing desired categories
+     * @param string $current Currently-selected category
+     * @return string html code
+     *
+     * @see display_category_form in question/editlib.php
+     */
+    public function render_category_form($desturl, $contexts, $current) {
+        global $OUTPUT;
+
+        $ret = '<div class="choosecategory">';
+        $catmenu = question_category_options($contexts, false, 0, true);
+
+        $select = new single_select(
+            $desturl,
+            'category',
+            $catmenu,
+            $current,
+            null,
+            'catmenu',
+        );
+        $select->set_label(get_string('selectacategory', 'question'));
+
+        $ret .= $OUTPUT->render($select);
+        $ret .= "</div>\n";
+
+        return $ret;
+    }
+
+
+    /**
      * Renders category list page with links to edit wildcards and datasets
      *
      * @param array $context2cats[] = array(stdClass(->context ->categories=
