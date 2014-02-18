@@ -198,6 +198,19 @@ $contextid2cats = array();
 
 if (empty($contextids)) {
     $results = array();
+
+} else if ($tocategoryid > 0) {
+    $catids = question_categorylist($tocategoryid);
+
+    list($where_ids, $params) = $DB->get_in_or_equal($catids);
+    $results = $DB->get_records_sql(
+        'SELECT cat.* FROM {question_categories} AS cat
+        WHERE cat.id ' . $where_ids .
+        '
+        ORDER BY cat.sortorder, cat.name, cat.id',
+        $params
+    );
+
 } else {
     list($where_ids, $params) = $DB->get_in_or_equal($contextids);
     $results = $DB->get_records_sql(
