@@ -233,8 +233,10 @@ foreach ($contexts as $cid => $context) {
     $context_cats[] = $o;
 }
 
+$categorychoiceurl = new moodle_url($PAGE->url);
+$categorychoiceurl->remove_params('category');
 echo $renderer->render_category_form(
-    $PAGE->url,
+    $categorychoiceurl,
     $contexts,
     $category
 );
