@@ -454,8 +454,19 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
     public function render_category_form($desturl, $contexts, $current) {
         global $OUTPUT;
 
+        $goodcontexts = array();
+
+        foreach ($contexts as $c) {
+            if (
+                ($c->contextlevel == CONTEXT_COURSE) ||
+                ($c->contextlevel == CONTEXT_MODULE)
+            ) {
+                $goodcontexts[] = $c;
+            }
+        }
+
         $ret = '<div class="choosecategory">';
-        $catmenu = question_category_options($contexts, false, 0, true);
+        $catmenu = question_category_options($goodcontexts, false, 0, true);
 
         $select = new single_select(
             $desturl,
