@@ -463,7 +463,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             $catmenu,
             $current,
             null,
-            'catmenu',
+            'catmenu'
         );
         $select->set_label(get_string('selectacategory', 'question'));
 
