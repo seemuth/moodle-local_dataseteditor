@@ -155,6 +155,22 @@ function local_dataseteditor_extends_navigation($nav) {
 function local_dataseteditor_extends_settings_navigation($settings, $denode) {
     global $PAGE;
 
+    /* First ensure that we should show navigation nodes. */
+
+    if ($PAGE->course === null) {
+        return;
+    }
+
+    $courseid = $PAGE->course->id;
+
+    $coursecontext = context_course::instance($courseid);
+    if (! has_capability(
+        LOCAL_DATASETEDITOR_VIEW_CAPABILITY,
+        $coursecontext)
+    ) {
+        return;
+    }
+
     /* Place navigation nodes within Question bank in settings. */
 
     $courseadmin = $settings->find(
