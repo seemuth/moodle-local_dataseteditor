@@ -38,6 +38,7 @@ $urlargs = array();
 
 
 $tocontext = null;
+$tocategoryid = 0;
 if ($category) {
     list($categoryid, $contextid) = explode(',', $category);
     $tocategoryid = intval($categoryid);
@@ -52,7 +53,27 @@ if ($category) {
     } else if ($tocontext->contextlevel == CONTEXT_MODULE) {
         $courseid = 0;
         $cmid = $tocontext->instanceid;
+
+    } else {
+        print_error(
+            'unexpextedcontext',
+            'local_dataseteditor',
+            '',
+            null,
+            (
+                'tocontext: ' .
+                $tocontext->id .
+                ',' .
+                $tocontext->instanceid .
+                '; modulecontext: ' .
+                $modulecontext->id .
+                ',' .
+                $modulecontext->instanceid
+            )
+        );
     }
+
+    $urlargs['category'] = $category;
 }
 
 if ($cmid > 0) {
