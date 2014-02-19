@@ -466,7 +466,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         }
 
         $ret = '<div class="choosecategory">';
-        $catmenu = question_category_options($goodcontexts, false, 0, true);
+        $catmenu = question_category_options($goodcontexts, true, 0, true);
 
         $select = new single_select(
             $desturl,
