@@ -112,7 +112,7 @@ function local_dataseteditor_extends_navigation($nav) {
     $category = optional_param('category', '', PARAM_SEQUENCE);
 
     if ($category) {
-        $urlargs['category'] = $category;
+        $urlparams['category'] = $category;
     }
 
     $indexnode = $mainnode->add(
@@ -220,7 +220,7 @@ function local_dataseteditor_extends_settings_navigation($settings, $denode) {
     $category = optional_param('category', '', PARAM_SEQUENCE);
 
     if ($category) {
-        $urlargs['category'] = $category;
+        $urlparams['category'] = $category;
     }
 
     $indexnode = $questionbank->add(
