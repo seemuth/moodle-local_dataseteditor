@@ -44,6 +44,23 @@ if ($category) {
     $tocategoryid = intval($categoryid);
     $tocontextid = intval($contextid);
 
+    $cat_contextid = local_dataseteditor_get_cat_contextid($tocategoryid);
+    if ($tocontextid != $cat_contextid) {
+        print_error(
+            'unexpectedcontext',
+            'local_dataseteditor',
+            '',
+            null,
+            (
+                $tocategoryid .
+                ', ' .
+                $tocontextid .
+                ' != ' .
+                $cat_contextid
+            )
+        );
+    }
+
     $tocontext = context::instance_by_id($tocontextid);
 
     if ($tocontext->contextlevel == CONTEXT_COURSE) {
