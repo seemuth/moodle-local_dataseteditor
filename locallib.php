@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once(dirname(__FILE__).'/lib.php');
 
 define('LOCAL_DATASETEDITOR_DEFAULT_WILDCARD_OPTIONS', 'uniform:1.0:10.0:1');
-define('LOCAL_DATASETEDITOR_PREF_PREFIX', 'local_dataseteditor_pref_');
+define('LOCAL_DATASETEDITOR_PREF_PREFIX', 'local_dataseteditor_');
 
 
 /**
