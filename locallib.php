@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 require_once(dirname(__FILE__).'/lib.php');
 
 define('LOCAL_DATASETEDITOR_DEFAULT_WILDCARD_OPTIONS', 'uniform:1.0:10.0:1');
+define('LOCAL_DATASETEDITOR_PREF_PREFIX', 'local_dataseteditor_pref_');
 
 
 /**
@@ -644,4 +645,41 @@ function local_dataseteditor_get_cm($courseid, $cmid) {
     $cm = $modinfo->get_cm($cmid);
 
     return $cm;
+}
+
+
+/**
+ * Return user's preference for category selection in course $courseid.
+ *
+ * @param int $courseid ID of the course
+ * @return string Preferred category selection
+ */
+function local_dataseteditor_get_category_preference($courseid) {
+    $key = LOCAL_DATASETEDITOR_PREF_PREFIX . 'c_' . strval($courseid);
+    return get_user_preferences($key, '');
+}
+
+
+/**
+ * Set user's preference for category selection in course $courseid.
+ *
+ * @param int $courseid ID of the course
+ * @param string $category Preferred category selection
+ * @return bool Always true or exception
+ */
+function local_dataseteditor_set_category_preference($courseid, $category) {
+    $key = LOCAL_DATASETEDITOR_PREF_PREFIX . 'c_' . strval($courseid);
+    set_user_preference($key, strval($category));
+}
+
+
+/**
+ * Unset user's preference for category selection in course $courseid.
+ *
+ * @param int $courseid ID of the course
+ * @return bool Always true or exception
+ */
+function local_dataseteditor_unset_category_preference($courseid) {
+    $key = LOCAL_DATASETEDITOR_PREF_PREFIX . 'c_' . strval($courseid);
+    unset_user_preference($key, '');
 }
