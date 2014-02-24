@@ -681,5 +681,5 @@ function local_dataseteditor_set_category_preference($courseid, $category) {
  */
 function local_dataseteditor_unset_category_preference($courseid) {
     $key = LOCAL_DATASETEDITOR_PREF_PREFIX . 'c_' . strval($courseid);
-    unset_user_preference($key, '');
+    unset_user_preference($key);
 }
