@@ -466,7 +466,25 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         }
 
         $ret = '<div class="choosecategory">';
-        $catmenu = question_category_options($goodcontexts, true, 0, true);
+        $options = question_category_options($goodcontexts, true, 0, true);
+
+        $catmenu = array();
+        foreach ($options as $op) {
+            $contextgroup = array();
+
+            foreach ($op as $contextstring => $group) {
+                $categories = array();
+
+                foreach ($group as $category => $catname) {
+                    $categoryid = explode(',', $category)[0];
+                    $categories[$categoryid] = $catname;
+                }
+
+                $contextgroup[$contextstring] = $categories;
+            }
+
+            $catmenu[] = $contextgroup;
+        }
 
         $select = new single_select(
             $desturl,
