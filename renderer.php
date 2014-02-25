@@ -476,7 +476,8 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 $categories = array();
 
                 foreach ($group as $category => $catname) {
-                    $categoryid = explode(',', $category)[0];
+                    $parts = explode(',', $category);
+                    $categoryid = $parts[0];
                     $categories[$categoryid] = $catname;
                 }
 
