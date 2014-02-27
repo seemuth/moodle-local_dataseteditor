@@ -52,7 +52,7 @@ function local_dataseteditor_error_cleanup() {
 }
 
 
-if ($param_topcategory > 0) {
+if ($param_topcategory >= 0) {
     $topcategory = $param_topcategory;
 } else {
     $topcategory = $defaultcat;
