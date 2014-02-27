@@ -39,26 +39,9 @@ $urlargs = array();
 
 $tocontext = null;
 if ($topcategory) {
-    $tocontextid = intval($contextid);
-
     $cat_contextid = local_dataseteditor_get_cat_contextid($topcategory);
-    if ($tocontextid != $cat_contextid) {
-        print_error(
-            'unexpectedcontext',
-            'local_dataseteditor',
-            '',
-            null,
-            (
-                $topcategory .
-                ', ' .
-                $tocontextid .
-                ' != ' .
-                $cat_contextid
-            )
-        );
-    }
 
-    $tocontext = context::instance_by_id($tocontextid);
+    $tocontext = context::instance_by_id($cat_contextid);
 
     if ($tocontext->contextlevel == CONTEXT_COURSE) {
         $courseid = $tocontext->instanceid;
