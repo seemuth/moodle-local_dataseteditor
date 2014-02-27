@@ -109,10 +109,10 @@ function local_dataseteditor_extends_navigation($nav) {
         $index_type = navigation_node::TYPE_CUSTOM;
     }
 
-    $category = optional_param('category', '', PARAM_SEQUENCE);
+    $topcategory = optional_param('topcategory', '', PARAM_SEQUENCE);
 
-    if ($category) {
-        $urlparams['category'] = $category;
+    if ($topcategory) {
+        $urlparams['topcategory'] = $topcategory;
     }
 
     $indexnode = $mainnode->add(
@@ -217,10 +217,10 @@ function local_dataseteditor_extends_settings_navigation($settings, $denode) {
         $index_type = navigation_node::TYPE_CUSTOM;
     }
 
-    $category = optional_param('category', '', PARAM_SEQUENCE);
+    $topcategory = optional_param('topcategory', '', PARAM_SEQUENCE);
 
-    if ($category) {
-        $urlparams['category'] = $category;
+    if ($topcategory) {
+        $urlparams['topcategory'] = $topcategory;
     }
 
     $indexnode = $questionbank->add(
