@@ -91,8 +91,6 @@ if ($topcategory) {
             )
         );
     }
-
-    $urlargs['topcategory'] = $topcategory;
 }
 
 if ($cmid > 0) {
