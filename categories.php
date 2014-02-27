@@ -37,6 +37,26 @@ $topcategory = optional_param('topcategory', 0, PARAM_INT);
 $urlargs = array();
 
 
+$defaultcat = intval(local_dataseteditor_get_category_preference($courseid));
+
+
+/* Clean up user preference, in case a stale preference was the *cause*
+ * of errors.
+ *
+ * Need to save original $courseid used for user preference.
+ */
+$orig_courseid = $courseid;
+function local_dataseteditor_error_cleanup() {
+    if ($defaultcat > 0) {
+        local_dataseteditor_unset_category_preference($orig_courseid);
+    }
+}
+
+
+if (($defaultcat > 0) && ($topcategory <= 0)) {
+    $topcategory = $defaultcat;
+}
+
 $tocontext = null;
 if ($topcategory) {
     $cat_contextid = local_dataseteditor_get_cat_contextid($topcategory);
@@ -52,6 +72,8 @@ if ($topcategory) {
         $cmid = $tocontext->instanceid;
 
     } else {
+        local_dataseteditor_error_cleanup();
+
         print_error(
             'unexpextedcontext',
             'local_dataseteditor',
@@ -78,6 +100,8 @@ if ($cmid > 0) {
 
     if ($tocontext !== null) {
         if ($modulecontext !== $tocontext) {
+            local_dataseteditor_error_cleanup();
+
             print_error(
                 'unexpectedcontext',
                 'local_dataseteditor',
@@ -107,6 +131,8 @@ if ($cmid > 0) {
 
     if ($tocontext !== null) {
         if ($coursecontext !== $tocontext) {
+            local_dataseteditor_error_cleanup();
+
             print_error(
                 'unexpectedcontext',
                 'local_dataseteditor',
@@ -132,6 +158,10 @@ if ($cmid > 0) {
         local_dataseteditor_get_cm($courseid, $cmid));
 } else {
     require_login($courseid);
+}
+
+if ($defaultcat != $topcategory) {
+    local_dataseteditor_set_category_preference($courseid, $topcategory);
 }
 
 $urlargs['courseid'] = $courseid;
