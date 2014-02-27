@@ -489,7 +489,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
         $select = new single_select(
             $desturl,
-            'category',
+            'topcategory',
             $catmenu,
             $current,
             null,

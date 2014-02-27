@@ -32,19 +32,16 @@ define('LOCAL_DATASETEDITOR_NUM_VALUESETS', 1);
 
 $courseid = required_param('courseid', PARAM_INT);
 $cmid = optional_param('cmid', 0, PARAM_INT);
-$category = optional_param('category', '', PARAM_SEQUENCE);
+$topcategory = optional_param('topcategory', 0, PARAM_INT);
 
 $urlargs = array();
 
 
 $tocontext = null;
-$tocategoryid = 0;
-if ($category) {
-    list($categoryid, $contextid) = explode(',', $category);
-    $tocategoryid = intval($categoryid);
+if ($topcategory) {
     $tocontextid = intval($contextid);
 
-    $cat_contextid = local_dataseteditor_get_cat_contextid($tocategoryid);
+    $cat_contextid = local_dataseteditor_get_cat_contextid($topcategory);
     if ($tocontextid != $cat_contextid) {
         print_error(
             'unexpectedcontext',
@@ -52,7 +49,7 @@ if ($category) {
             '',
             null,
             (
-                $tocategoryid .
+                $topcategory .
                 ', ' .
                 $tocontextid .
                 ' != ' .
@@ -90,7 +87,7 @@ if ($category) {
         );
     }
 
-    $urlargs['category'] = $category;
+    $urlargs['topcategory'] = $topcategory;
 }
 
 if ($cmid > 0) {
@@ -216,8 +213,8 @@ $contextid2cats = array();
 if (empty($contextids)) {
     $results = array();
 
-} else if ($tocategoryid > 0) {
-    $catids = question_categorylist($tocategoryid);
+} else if ($topcategory > 0) {
+    $catids = question_categorylist($topcategory);
 
     list($where_ids, $params) = $DB->get_in_or_equal($catids);
     $results = $DB->get_records_sql(
@@ -264,11 +261,11 @@ foreach ($contexts as $cid => $context) {
 }
 
 $categorychoiceurl = new moodle_url($PAGE->url);
-$categorychoiceurl->remove_params('category');
+$categorychoiceurl->remove_params('topcategory');
 echo $renderer->render_category_form(
     $categorychoiceurl,
     $contexts,
-    $category
+    $topcategory
 );
 
 echo "<br />\n";
