@@ -109,12 +109,6 @@ function local_dataseteditor_extends_navigation($nav) {
         $index_type = navigation_node::TYPE_CUSTOM;
     }
 
-    $topcategory = optional_param('topcategory', '', PARAM_SEQUENCE);
-
-    if ($topcategory) {
-        $urlparams['topcategory'] = $topcategory;
-    }
-
     $indexnode = $mainnode->add(
         get_string('pluginname', 'local_dataseteditor'),
         new moodle_url(
@@ -215,12 +209,6 @@ function local_dataseteditor_extends_settings_navigation($settings, $denode) {
         $index_type = navigation_node::TYPE_CONTAINER;
     } else {
         $index_type = navigation_node::TYPE_CUSTOM;
-    }
-
-    $topcategory = optional_param('topcategory', '', PARAM_SEQUENCE);
-
-    if ($topcategory) {
-        $urlparams['topcategory'] = $topcategory;
     }
 
     $indexnode = $questionbank->add(
