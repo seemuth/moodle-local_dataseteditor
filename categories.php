@@ -37,7 +37,9 @@ $param_topcategory = optional_param('topcategory', -1, PARAM_INT);
 $urlargs = array();
 
 
-$defaultcat = intval(local_dataseteditor_get_category_preference($courseid));
+$defaultcat = intval(
+    local_dataseteditor_get_category_preference($param_courseid)
+);
 
 
 /* Clean up user preference, in case a stale preference was the *cause*
