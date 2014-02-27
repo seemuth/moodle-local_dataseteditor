@@ -29,7 +29,7 @@ require_once(dirname(__FILE__) . '/locallib.php');
 
 define('LOCAL_DATASETEDITOR_NUM_EXTRA_ROWS', 3);
 define('LOCAL_DATASETEDITOR_DEFAULT_TYPE', 1);
-define('LOCAL_DATASETEDITOR_DEFAULT_OPTIONS', 'uniform:1.0:10.0:1');
+define('LOCAL_DATASETEDITOR_DEFAULT_OPTIONS', 'uniform:0:0:0');
 define('LOCAL_DATASETEDITOR_DEFAULT_ITEMCOUNT', 0);
 
 
