@@ -187,10 +187,29 @@ function local_dataseteditor_extends_settings_navigation($settings, $denode) {
     if (($courseadmin === null) || ($courseadmin === false)) {
         return;
     }
+    $topnode = $courseadmin;
+
+
+    /* Find the Quiz administration settings block, if it exists. */
+    foreach ($settings->children as $node) {
+        if ($node->text == get_string('pluginadministration', 'quiz')) {
+            $topnode = $node;
+            break;
+        }
+    }
+
+    /* If Quiz admin settings block is shown, place nodes there instead. */
+    $quizadmin = $settings->find(
+        'quizadmin',
+        navigation_node::TYPE_COURSE
+    );
+    if (($quizadmin !== null) && ($quizadmin !== false)) {
+        $topnode = $quizadmin;
+    }
 
     /* Find question bank node. */
     $questionbank = null;
-    foreach ($courseadmin->children as $node) {
+    foreach ($topnode->children as $node) {
         if ($node->text == get_string('questionbank', 'question')) {
             $questionbank = $node;
             break;
