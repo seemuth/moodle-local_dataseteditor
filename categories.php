@@ -166,16 +166,7 @@ if ($defaultcat != $topcategory) {
 
 $urlargs['courseid'] = $courseid;
 
-$pageurlargs = $urlargs;
-if ($param_topcategory >= 0) {
-    /* Param topcategory was present in URL. Include it for navigation. */
-    $pageurlargs['topcategory'] = $param_topcategory;
-}
-$PAGE->set_url(
-    LOCAL_DATASETEDITOR_PLUGINPREFIX.'/categories.php',
-    $pageurlargs
-);
-
+$PAGE->set_url(LOCAL_DATASETEDITOR_PLUGINPREFIX.'/categories.php', $urlargs);
 $PAGE->set_heading($SITE->fullname);
 $PAGE->set_title(
     $SITE->fullname .
