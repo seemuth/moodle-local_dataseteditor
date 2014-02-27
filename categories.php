@@ -30,9 +30,9 @@ require_once(dirname(__FILE__) . '/locallib.php');
 define('LOCAL_DATASETEDITOR_NUM_VALUESETS', 1);
 
 
-$courseid = required_param('courseid', PARAM_INT);
-$cmid = optional_param('cmid', 0, PARAM_INT);
-$topcategory = optional_param('topcategory', 0, PARAM_INT);
+$param_courseid = required_param('courseid', PARAM_INT);
+$param_cmid = optional_param('cmid', 0, PARAM_INT);
+$param_topcategory = optional_param('topcategory', -1, PARAM_INT);
 
 $urlargs = array();
 
@@ -42,20 +42,22 @@ $defaultcat = intval(local_dataseteditor_get_category_preference($courseid));
 
 /* Clean up user preference, in case a stale preference was the *cause*
  * of errors.
- *
- * Need to save original $courseid used for user preference.
  */
-$orig_courseid = $courseid;
 function local_dataseteditor_error_cleanup() {
     if ($defaultcat > 0) {
-        local_dataseteditor_unset_category_preference($orig_courseid);
+        local_dataseteditor_unset_category_preference($param_courseid);
     }
 }
 
 
-if (($defaultcat > 0) && ($topcategory <= 0)) {
+if ($param_topcategory > 0) {
+    $topcategory = $param_topcategory;
+} else {
     $topcategory = $defaultcat;
 }
+
+$courseid = $param_courseid;
+$cmid = $param_cmid;
 
 $tocontext = null;
 if ($topcategory) {
