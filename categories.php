@@ -160,10 +160,6 @@ if ($cmid > 0) {
     require_login($courseid);
 }
 
-if ($defaultcat != $topcategory) {
-    local_dataseteditor_set_category_preference($courseid, $topcategory);
-}
-
 $urlargs['courseid'] = $courseid;
 
 $PAGE->set_url(LOCAL_DATASETEDITOR_PLUGINPREFIX.'/categories.php', $urlargs);
@@ -176,6 +172,15 @@ $PAGE->set_title(
     get_string('viewcategories', 'local_dataseteditor')
 );
 $PAGE->set_pagelayout('incourse');
+
+
+if ($defaultcat != $topcategory) {
+    /* Save preference and redirect (so navigation works consistently). */
+    local_dataseteditor_set_category_preference($courseid, $topcategory);
+
+    redirect($PAGE->url);
+}
+
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('viewcategories', 'local_dataseteditor'));
