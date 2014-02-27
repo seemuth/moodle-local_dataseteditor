@@ -53,8 +53,10 @@ function local_dataseteditor_error_cleanup() {
 }
 
 
+$used_defaultcat = false;
 if (($defaultcat > 0) && ($topcategory <= 0)) {
     $topcategory = $defaultcat;
+    $used_defaultcat = true;
 }
 
 $tocontext = null;
@@ -166,7 +168,15 @@ if ($defaultcat != $topcategory) {
 
 $urlargs['courseid'] = $courseid;
 
-$PAGE->set_url(LOCAL_DATASETEDITOR_PLUGINPREFIX.'/categories.php', $urlargs);
+$pageurlargs = $urlargs;
+if ($used_defaultcat) {
+    unset($pageurlargs['topcategory']);
+}
+$PAGE->set_url(
+    LOCAL_DATASETEDITOR_PLUGINPREFIX.'/categories.php',
+    $pageurlargs
+);
+
 $PAGE->set_heading($SITE->fullname);
 $PAGE->set_title(
     $SITE->fullname .
