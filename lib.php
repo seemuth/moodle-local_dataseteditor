@@ -29,6 +29,63 @@ require_once(dirname(__FILE__) . '/defines.php');
 require_once(dirname(__FILE__) . '/locallib.php');
 
 
+function local_dataseteditor_add_navigation_nodes($topnode, $urlparams) {
+
+    $categoryid = optional_param('categoryid', 0, PARAM_INT);
+
+    if ($categoryid > 0) {
+        $index_type = navigation_node::TYPE_CONTAINER;
+    } else {
+        $index_type = navigation_node::TYPE_CUSTOM;
+    }
+
+    $indexnode = $topnode->add(
+        get_string('pluginname', 'local_dataseteditor'),
+        new moodle_url(
+            LOCAL_DATASETEDITOR_PLUGINPREFIX.'/categories.php',
+            $urlparams
+        ),
+        $index_type
+    );
+
+    if ($categoryid > 0) {
+        $urlparams['categoryid'] = $categoryid;
+
+        $indexnode->add(
+            get_string('editwildcards', 'local_dataseteditor'),
+            new moodle_url(
+                LOCAL_DATASETEDITOR_PLUGINPREFIX.'/wildcards.php',
+                $urlparams
+            )
+        );
+
+        $indexnode->add(
+            get_string('editdataset', 'local_dataseteditor'),
+            new moodle_url(
+                LOCAL_DATASETEDITOR_PLUGINPREFIX.'/dataset.php',
+                $urlparams
+            )
+        );
+
+        $indexnode->add(
+            get_string('exportdataset', 'local_dataseteditor'),
+            new moodle_url(
+                LOCAL_DATASETEDITOR_PLUGINPREFIX.'/export_dataset.php',
+                $urlparams
+            )
+        );
+
+        $indexnode->add(
+            get_string('importdataset', 'local_dataseteditor'),
+            new moodle_url(
+                LOCAL_DATASETEDITOR_PLUGINPREFIX.'/import_dataset.php',
+                $urlparams
+            )
+        );
+    }
+}
+
+
 function local_dataseteditor_extends_navigation($nav) {
     /* REPLACED by settings navigation nodes. */
     return;
@@ -101,58 +158,7 @@ function local_dataseteditor_extends_navigation($nav) {
         $urlparams['cmid'] = $cmid;
     }
 
-    $categoryid = optional_param('categoryid', 0, PARAM_INT);
-
-    if ($categoryid > 0) {
-        $index_type = navigation_node::TYPE_CONTAINER;
-    } else {
-        $index_type = navigation_node::TYPE_CUSTOM;
-    }
-
-    $indexnode = $mainnode->add(
-        get_string('pluginname', 'local_dataseteditor'),
-        new moodle_url(
-            LOCAL_DATASETEDITOR_PLUGINPREFIX.'/categories.php',
-            $urlparams
-        ),
-        $index_type
-    );
-
-    if ($categoryid > 0) {
-        $urlparams['categoryid'] = $categoryid;
-
-        $indexnode->add(
-            get_string('editwildcards', 'local_dataseteditor'),
-            new moodle_url(
-                LOCAL_DATASETEDITOR_PLUGINPREFIX.'/wildcards.php',
-                $urlparams
-            )
-        );
-
-        $indexnode->add(
-            get_string('editdataset', 'local_dataseteditor'),
-            new moodle_url(
-                LOCAL_DATASETEDITOR_PLUGINPREFIX.'/dataset.php',
-                $urlparams
-            )
-        );
-
-        $indexnode->add(
-            get_string('exportdataset', 'local_dataseteditor'),
-            new moodle_url(
-                LOCAL_DATASETEDITOR_PLUGINPREFIX.'/export_dataset.php',
-                $urlparams
-            )
-        );
-
-        $indexnode->add(
-            get_string('importdataset', 'local_dataseteditor'),
-            new moodle_url(
-                LOCAL_DATASETEDITOR_PLUGINPREFIX.'/import_dataset.php',
-                $urlparams
-            )
-        );
-    }
+    local_dataseteditor_add_navigation_nodes($mainnode, $urlparams);
 }
 
 
@@ -178,100 +184,26 @@ function local_dataseteditor_extends_settings_navigation($settings, $denode) {
     $urlparams = array('courseid' => $courseid);
 
 
-    /* Place navigation nodes within Question bank in settings. */
-
-    $courseadmin = $settings->find(
-        'courseadmin',
-        navigation_node::TYPE_COURSE
-    );
-    if (($courseadmin === null) || ($courseadmin === false)) {
-        return;
-    }
-    $topnode = $courseadmin;
-
-
-    /* Find the Quiz administration settings block, if it exists. */
+    /* Find the Course administration and Quiz administration blocks. */
+    $topnodes = array();
     foreach ($settings->children as $node) {
-        if ($node->text == get_string('pluginadministration', 'quiz')) {
-            $topnode = $node;
-            break;
+        if (
+            ($node->key == 'courseadmin') ||
+            ($node->text == get_string('pluginadministration', 'quiz'))
+        ) {
+            $topnodes[] = $node;
         }
     }
 
-    /* If Quiz admin settings block is shown, place nodes there instead. */
-    $quizadmin = $settings->find(
-        'quizadmin',
-        navigation_node::TYPE_COURSE
-    );
-    if (($quizadmin !== null) && ($quizadmin !== false)) {
-        $topnode = $quizadmin;
-    }
 
-    /* Find question bank node. */
-    $questionbank = null;
-    foreach ($topnode->children as $node) {
-        if ($node->text == get_string('questionbank', 'question')) {
-            $questionbank = $node;
-            break;
+    foreach ($topnodes as $topnode) {
+        /* Find question bank node, if it exists. */
+        $questionbank = null;
+        foreach ($topnode->children as $node) {
+            if ($node->text == get_string('questionbank', 'question')) {
+                local_dataseteditor_add_navigation_nodes($node, $urlparams);
+                break;
+            }
         }
-    }
-    if ($questionbank === null) {
-        return;
-    }
-
-
-    /* Found question bank settings node! Add dataset editor node(s). */
-
-    $categoryid = optional_param('categoryid', 0, PARAM_INT);
-
-    if ($categoryid > 0) {
-        $index_type = navigation_node::TYPE_CONTAINER;
-    } else {
-        $index_type = navigation_node::TYPE_CUSTOM;
-    }
-
-    $indexnode = $questionbank->add(
-        get_string('pluginname', 'local_dataseteditor'),
-        new moodle_url(
-            LOCAL_DATASETEDITOR_PLUGINPREFIX.'/categories.php',
-            $urlparams
-        ),
-        $index_type
-    );
-
-    if ($categoryid > 0) {
-        $urlparams['categoryid'] = $categoryid;
-
-        $indexnode->add(
-            get_string('editwildcards', 'local_dataseteditor'),
-            new moodle_url(
-                LOCAL_DATASETEDITOR_PLUGINPREFIX.'/wildcards.php',
-                $urlparams
-            )
-        );
-
-        $indexnode->add(
-            get_string('editdataset', 'local_dataseteditor'),
-            new moodle_url(
-                LOCAL_DATASETEDITOR_PLUGINPREFIX.'/dataset.php',
-                $urlparams
-            )
-        );
-
-        $indexnode->add(
-            get_string('exportdataset', 'local_dataseteditor'),
-            new moodle_url(
-                LOCAL_DATASETEDITOR_PLUGINPREFIX.'/export_dataset.php',
-                $urlparams
-            )
-        );
-
-        $indexnode->add(
-            get_string('importdataset', 'local_dataseteditor'),
-            new moodle_url(
-                LOCAL_DATASETEDITOR_PLUGINPREFIX.'/import_dataset.php',
-                $urlparams
-            )
-        );
     }
 }
