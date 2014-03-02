@@ -36,15 +36,10 @@ define('LOCAL_DATASETEDITOR_DEFAULT_ITEMCOUNT', 0);
 $categoryid = required_param('categoryid', PARAM_INT);
 $courseid = required_param('courseid', PARAM_INT);
 $cmid = optional_param('cmid', 0, PARAM_INT);
-$category = optional_param('category', '', PARAM_SEQUENCE);
 
 $urlargs = array(
     'categoryid' => $categoryid
 );
-
-if ($category) {
-    $urlargs['category'] = $category;
-}
 
 if ($cmid > 0) {
     $modulecontext = context_module::instance($cmid);
