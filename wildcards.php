@@ -89,73 +89,73 @@ echo $OUTPUT->heading(get_string('editwildcards', 'local_dataseteditor'));
 $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 
 /* Set to true to use wildcards from user-submitted form. */
-$wildcards_from_user = false;
+$wildcardsfromuser = false;
 
 if (!empty($_POST)) {
     require_sesskey();
 
-    $attr_types = array(
+    $attrtypes = array(
         'id' => PARAM_INT,
         'name' => PARAM_ALPHANUMEXT,
         'orig' => PARAM_ALPHANUMEXT,
         'del' => PARAM_BOOL,
     );
 
-    $num_rows = required_param('num_wildcard_rows', PARAM_INT);
+    $numrows = required_param('num_wildcard_rows', PARAM_INT);
 
-    $new_wildcards = array();
-    $wildcards_from_user = true;
+    $newwildcards = array();
+    $wildcardsfromuser = true;
 
-    for ($i = 0; $i < $num_rows; $i++) {
+    for ($i = 0; $i < $numrows; $i++) {
         $suffix = '_' . $i;
         $wc = new stdClass();
 
-        foreach ($attr_types as $n => $t) {
+        foreach ($attrtypes as $n => $t) {
             $varname = 'wc_' . $n . $suffix;
             $val = required_param($varname, $t);
             $wc->$n = $val;
         }
 
-        $new_wildcards[] = $wc;
+        $newwildcards[] = $wc;
     }
 
 
     /* Defaults for new wildcards.
      */
-    $wildcard_defaults = new stdClass();
-    $wildcard_defaults->category = $categoryid;
-    $wildcard_defaults->type = LOCAL_DATASETEDITOR_DEFAULT_TYPE;
-    $wildcard_defaults->options = LOCAL_DATASETEDITOR_DEFAULT_OPTIONS;
-    $wildcard_defaults->itemcount = LOCAL_DATASETEDITOR_DEFAULT_ITEMCOUNT;
+    $wildcarddefaults = new stdClass();
+    $wildcarddefaults->category = $categoryid;
+    $wildcarddefaults->type = LOCAL_DATASETEDITOR_DEFAULT_TYPE;
+    $wildcarddefaults->options = LOCAL_DATASETEDITOR_DEFAULT_OPTIONS;
+    $wildcarddefaults->itemcount = LOCAL_DATASETEDITOR_DEFAULT_ITEMCOUNT;
 
 
     if (isset($_POST['submit_cancel'])) {
-        $wildcards_from_user = false;
+        $wildcardsfromuser = false;
 
     } else if (isset($_POST['submit_saveandadd'])) {
-        $min_rows = $num_rows + LOCAL_DATASETEDITOR_NUM_EXTRA_ROWS;
+        $minrows = $numrows + LOCAL_DATASETEDITOR_NUM_EXTRA_ROWS;
         local_dataseteditor_save_wildcards(
-            $new_wildcards,
-            $wildcard_defaults,
+            $newwildcards,
+            $wildcarddefaults,
             $categoryid
         );
         echo $renderer->notification(
             get_string('saved_wildcards', 'local_dataseteditor'),
             'notifysuccess'
         );
-        $wildcards_from_user = false;
+        $wildcardsfromuser = false;
 
     } else if (isset($_POST['submit_save'])) {
         local_dataseteditor_save_wildcards(
-            $new_wildcards,
-            $wildcard_defaults,
+            $newwildcards,
+            $wildcarddefaults,
             $categoryid
         );
         echo $renderer->notification(
             get_string('saved_wildcards', 'local_dataseteditor'),
             'notifysuccess'
         );
-        $wildcards_from_user = false;
+        $wildcardsfromuser = false;
 
     } else {
         throw new coding_exception('Invalid submit button');
@@ -170,12 +170,12 @@ foreach ($wildcards as $k => $wc) {
     }
 }
 
-$form_dest = $PAGE->url;
-$uservals = ($wildcards_from_user) ? $new_wildcards : array();
-if (! isset($min_rows)) {
-    $min_rows = count($wildcards) + LOCAL_DATASETEDITOR_NUM_EXTRA_ROWS;
+$formdest = $PAGE->url;
+$uservals = ($wildcardsfromuser) ? $newwildcards : array();
+if (! isset($minrows)) {
+    $minrows = count($wildcards) + LOCAL_DATASETEDITOR_NUM_EXTRA_ROWS;
 }
 echo $renderer->render_wildcard_form($wildcards, $uservals,
-    $min_rows, $form_dest);
+    $minrows, $formdest);
 
 echo $OUTPUT->footer();

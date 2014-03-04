@@ -58,10 +58,10 @@ function local_dataseteditor_applicable_module($modulename) {
 function local_dataseteditor_get_cat_contextid($categoryid) {
     global $DB;
 
-    $table_categories = 'question_categories';
+    $tablecategories = 'question_categories';
 
     return $DB->get_field(
-        $table_categories,
+        $tablecategories,
         'contextid',
         array('id' => $categoryid),
         MUST_EXIST
@@ -78,7 +78,7 @@ function local_dataseteditor_get_cat_contextid($categoryid) {
 function local_dataseteditor_get_wildcard_categoryids($wildcardids) {
     global $DB;
 
-    $table_definitions = 'question_dataset_definitions';
+    $tabledefinitions = 'question_dataset_definitions';
 
     if (empty($wildcardids)) {
         return array();
@@ -86,11 +86,11 @@ function local_dataseteditor_get_wildcard_categoryids($wildcardids) {
 
     $ret = array();
 
-    list($where_ids, $params) = $DB->get_in_or_equal($wildcardids);
+    list($whereids, $params) = $DB->get_in_or_equal($wildcardids);
 
     $sql = 'SELECT category, COUNT(id) AS num_wc ' .
-        'FROM {' . $table_definitions . '} ' .
-        'WHERE id ' . $where_ids . ' ' .
+        'FROM {' . $tabledefinitions . '} ' .
+        'WHERE id ' . $whereids . ' ' .
         'GROUP BY category';
 
     $results = $DB->get_records_sql($sql, $params);
@@ -112,8 +112,8 @@ function local_dataseteditor_get_wildcard_categoryids($wildcardids) {
 function local_dataseteditor_get_dataset_item_categoryids($itemids) {
     global $DB;
 
-    $table_definitions = 'question_dataset_definitions';
-    $table_values = 'question_dataset_items';
+    $tabledefinitions = 'question_dataset_definitions';
+    $tablevalues = 'question_dataset_items';
 
     if (empty($itemids)) {
         return array();
@@ -121,12 +121,12 @@ function local_dataseteditor_get_dataset_item_categoryids($itemids) {
 
     $ret = array();
 
-    list($where_ids, $params) = $DB->get_in_or_equal($itemids);
+    list($whereids, $params) = $DB->get_in_or_equal($itemids);
 
     $sql = 'SELECT d.category, COUNT(v.id) AS num_v ' .
-        'FROM {' . $table_definitions . '} d ' .
-        'INNER JOIN {' . $table_values . '} v ON v.definition = d.id ' .
-        'WHERE v.id ' . $where_ids . ' ' .
+        'FROM {' . $tabledefinitions . '} d ' .
+        'INNER JOIN {' . $tablevalues . '} v ON v.definition = d.id ' .
+        'WHERE v.id ' . $whereids . ' ' .
         'GROUP BY d.category';
 
     $results = $DB->get_records_sql($sql, $params);
@@ -154,16 +154,16 @@ function local_dataseteditor_all_wildcards_in_cat($wildcardids, $categoryid) {
 
     $categories = local_dataseteditor_get_wildcard_categoryids($wildcardids);
 
-    $found_cats = 0;
+    $foundcats = 0;
     foreach ($categories as $id => $num) {
         if ($id != $categoryid) {
             return false;
         }
 
-        $found_cats += $num;
+        $foundcats += $num;
     }
 
-    if ($found_cats != count(array_unique($wildcardids))) {
+    if ($foundcats != count(array_unique($wildcardids))) {
         return false;
     }
 
@@ -186,16 +186,16 @@ function local_dataseteditor_all_dataset_items_in_cat($itemids, $categoryid) {
 
     $categories = local_dataseteditor_get_dataset_item_categoryids($itemids);
 
-    $found_cats = 0;
+    $foundcats = 0;
     foreach ($categories as $id => $num) {
         if ($id != $categoryid) {
             return false;
         }
 
-        $found_cats += $num;
+        $foundcats += $num;
     }
 
-    if ($found_cats != count(array_unique($itemids))) {
+    if ($foundcats != count(array_unique($itemids))) {
         return false;
     }
 
@@ -207,17 +207,17 @@ function local_dataseteditor_all_dataset_items_in_cat($itemids, $categoryid) {
  * Returns array of id => wildcard
  *
  * @param int $categoryid Category from which to retrieve wildcards
- * @param int $val_limit Limit values to this many results
+ * @param int $vallimit Limit values to this many results
  * @return array array[id] => stdClass{->id ->name ->values}
  */
-function local_dataseteditor_get_wildcards($categoryid, $val_limit=4) {
+function local_dataseteditor_get_wildcards($categoryid, $vallimit=4) {
     global $DB;
 
-    $table_definitions = 'question_dataset_definitions';
-    $table_values = 'question_dataset_items';
+    $tabledefinitions = 'question_dataset_definitions';
+    $tablevalues = 'question_dataset_items';
 
-    $wildcard_results = $DB->get_records(
-        $table_definitions,
+    $wildcardresults = $DB->get_records(
+        $tabledefinitions,
         array('category' => $categoryid),
         'name',
         'id,name'
@@ -226,7 +226,7 @@ function local_dataseteditor_get_wildcards($categoryid, $val_limit=4) {
     $wildcards = array();
 
     /* Retrieve wildcard definitions. */
-    foreach ($wildcard_results as $row) {
+    foreach ($wildcardresults as $row) {
         $wc = new stdClass();
         $wc->id = $row->id;
         $wc->name = $row->name;
@@ -237,16 +237,16 @@ function local_dataseteditor_get_wildcards($categoryid, $val_limit=4) {
     }
 
     /* Retrieve sampling of wildcard values. */
-    $value_results = $DB->get_records_list(
-        $table_values,
+    $valueresults = $DB->get_records_list(
+        $tablevalues,
         'definition',
         array_keys($wildcards),
         'itemnumber',
         'id,definition,value'
     );
 
-    foreach ($value_results as $row) {
-        if (count($wildcards[$row->definition]->values) < $val_limit) {
+    foreach ($valueresults as $row) {
+        if (count($wildcards[$row->definition]->values) < $vallimit) {
             $wildcards[$row->definition]->values[] = $row->value;
         } else {
             $wildcards[$row->definition]->num_more_values++;
@@ -270,8 +270,8 @@ function local_dataseteditor_get_wildcards($categoryid, $val_limit=4) {
 function local_dataseteditor_save_wildcards(
     $wildcards, $defaults, $categoryid
 ) {
-    $table_definitions = 'question_dataset_definitions';
-    $table_values = 'question_dataset_items';
+    $tabledefinitions = 'question_dataset_definitions';
+    $tablevalues = 'question_dataset_items';
 
     $fields = array('category', 'name', 'type', 'options', 'itemcount');
 
@@ -300,17 +300,17 @@ function local_dataseteditor_save_wildcards(
         if ($wc->id > 0) {
             if ($wc->del) {
                 /* Delete this wildcard and its dataset item values. */
-                $DB->delete_records($table_definitions, array(
+                $DB->delete_records($tabledefinitions, array(
                     'id' => $wc->id,
                 ));
-                $DB->delete_records($table_values, array(
+                $DB->delete_records($tablevalues, array(
                     'definition' => $wc->id,
                 ));
 
             } else {
                 /* Existing wildcard! Update only if changed. */
                 if ($wc->name != $wc->orig) {
-                    $DB->set_field($table_definitions, 'name', $wc->name,
+                    $DB->set_field($tabledefinitions, 'name', $wc->name,
                         array('id' => $wc->id));
                 }
 
@@ -324,19 +324,19 @@ function local_dataseteditor_save_wildcards(
                 continue;
             }
 
-            $new_wc = new stdClass();
+            $newwc = new stdClass();
 
             foreach ($fields as $field) {
                 if (isset($wc->$field)) {
-                    $new_wc->$field = $wc->$field;
+                    $newwc->$field = $wc->$field;
                 } else if (isset($defaults->$field)) {
-                    $new_wc->$field = $defaults->$field;
+                    $newwc->$field = $defaults->$field;
                 } else {
                     throw new coding_exception('Undefined field: ' . $field);
                 }
             }
 
-            $DB->insert_record($table_definitions, $new_wc);
+            $DB->insert_record($tabledefinitions, $newwc);
         }
     }
 }
@@ -351,10 +351,10 @@ function local_dataseteditor_save_wildcards(
 function local_dataseteditor_get_dataset_items($wildcardids) {
     global $DB;
 
-    $table_values = 'question_dataset_items';
+    $tablevalues = 'question_dataset_items';
 
-    $value_results = $DB->get_records_list(
-        $table_values,
+    $valueresults = $DB->get_records_list(
+        $tablevalues,
         'definition',
         $wildcardids,
         '',
@@ -364,7 +364,7 @@ function local_dataseteditor_get_dataset_items($wildcardids) {
     $items = array();
 
     /* Retrieve wildcard definitions. */
-    foreach ($value_results as $row) {
+    foreach ($valueresults as $row) {
         $item = new stdClass();
         $item->id = $row->id;
         $item->val = $row->value;
@@ -394,8 +394,8 @@ function local_dataseteditor_save_dataset_items(
     $items, $deleteitems, $categoryid
 ) {
 
-    $table_definitions = 'question_dataset_definitions';
-    $table_values = 'question_dataset_items';
+    $tabledefinitions = 'question_dataset_definitions';
+    $tablevalues = 'question_dataset_items';
 
     global $DB;
 
@@ -421,10 +421,10 @@ function local_dataseteditor_save_dataset_items(
      * Modify subsequent item numbers by subtracting this number.
      * This ensures that item numbers always start at 1 and are consecutive.
      */
-    $num_deleted = 0;
+    $numdeleted = 0;
 
     /* Keep track of how many items remain. */
-    $num_data = 0;
+    $numdata = 0;
 
     foreach ($items as $itemnum => $def2val) {
         if (isset($deleteitems[$itemnum])) {
@@ -433,20 +433,20 @@ function local_dataseteditor_save_dataset_items(
              */
 
             foreach ($def2val as $defnum => $item) {
-                $DB->delete_records($table_values, array(
+                $DB->delete_records($tablevalues, array(
                     'definition' => $defnum,
                     'itemnumber' => $itemnum,
                 ));
             }
 
-            $num_deleted++;
+            $numdeleted++;
             continue;
         }
 
         /* Not marked for deletion! Update $itemnum as needed. */
-        $itemnum -= $num_deleted;
+        $itemnum -= $numdeleted;
 
-        $item_has_data = false;
+        $itemhasdata = false;
         foreach ($def2val as $defnum => $item) {
             if ((! isset($item->val)) || ($item->val === null)) {
                 throw new coding_exception(
@@ -454,40 +454,40 @@ function local_dataseteditor_save_dataset_items(
                 );
             }
 
-            $item_has_data = true;
+            $itemhasdata = true;
 
             if ($item->id > 0) {
                 /* Existing value! Update only if changed. */
                 if ($item->val != $item->orig) {
-                    $DB->set_field($table_values, 'value', $item->val,
+                    $DB->set_field($tablevalues, 'value', $item->val,
                         array('id' => $item->id));
                 }
 
                 /* Update item number if any items have been deleted. */
-                if ($num_deleted) {
-                    $DB->set_field($table_values, 'itemnumber', $itemnum,
+                if ($numdeleted) {
+                    $DB->set_field($tablevalues, 'itemnumber', $itemnum,
                         array('id' => $item->id));
                 }
 
             } else {
                 /* New value! Insert into database. */
 
-                $new_item = new stdClass();
-                $new_item->definition = $defnum;
-                $new_item->itemnumber = $itemnum;
-                $new_item->value = $item->val;
+                $newitem = new stdClass();
+                $newitem->definition = $defnum;
+                $newitem->itemnumber = $itemnum;
+                $newitem->value = $item->val;
 
-                $DB->insert_record($table_values, $new_item);
+                $DB->insert_record($tablevalues, $newitem);
             }
         }
 
-        if ($item_has_data) {
-            $num_data++;
+        if ($itemhasdata) {
+            $numdata++;
         }
     }
 
     /* Update wildcards' itemcount field. */
-    $DB->set_field($table_definitions, 'itemcount', $num_data, array(
+    $DB->set_field($tabledefinitions, 'itemcount', $numdata, array(
         'category' => $categoryid
     ));
 }
@@ -507,28 +507,28 @@ function local_dataseteditor_overwrite_wildcard_dataset(
     $requirefulldataset = true
 ) {
 
-    $table_definitions = 'question_dataset_definitions';
-    $table_values = 'question_dataset_items';
+    $tabledefinitions = 'question_dataset_definitions';
+    $tablevalues = 'question_dataset_items';
 
     global $DB;
 
-    $cur_wildcards = local_dataseteditor_get_wildcards($categoryid, 0);
-    $cur_name2id = array();
-    foreach ($cur_wildcards as $wc) {
-        $cur_name2id[$wc->name] = $wc->id;
+    $curwildcards = local_dataseteditor_get_wildcards($categoryid, 0);
+    $curname2id = array();
+    foreach ($curwildcards as $wc) {
+        $curname2id[$wc->name] = $wc->id;
     }
 
-    if (count($cur_wildcards) != count($cur_name2id)) {
+    if (count($curwildcards) != count($curname2id)) {
         throw new coding_exception('Duplicate wildcard names');
     }
 
     /* Compile list of deleted and new wildcards.  */
-    $new_name2id = array();
+    $newname2id = array();
     foreach ($wildcards as $name) {
-        if (array_key_exists($name, $cur_name2id)) {
-            $new_name2id[$name] = $cur_name2id[$name];
+        if (array_key_exists($name, $curname2id)) {
+            $newname2id[$name] = $curname2id[$name];
         } else {
-            $new_name2id[$name] = null;
+            $newname2id[$name] = null;
         }
     }
 
@@ -546,21 +546,21 @@ function local_dataseteditor_overwrite_wildcard_dataset(
     }
 
     /* Delete old, unused wildcards. */
-    $delete_ids = array();
-    foreach ($cur_name2id as $name => $id) {
-        if (! array_key_exists($name, $new_name2id)) {
-            $delete_ids[] = $id;
+    $deleteids = array();
+    foreach ($curname2id as $name => $id) {
+        if (! array_key_exists($name, $newname2id)) {
+            $deleteids[] = $id;
         }
     }
 
-    if (! empty($delete_ids)) {
-        list($where_ids, $params) = $DB->get_in_or_equal($delete_ids);
-        $DB->delete_records_select($table_definitions, 'id ' . $where_ids,
+    if (! empty($deleteids)) {
+        list($whereids, $params) = $DB->get_in_or_equal($deleteids);
+        $DB->delete_records_select($tabledefinitions, 'id ' . $whereids,
             $params);
     }
 
     /* Add new wildcards. */
-    foreach ($new_name2id as $name => $id) {
+    foreach ($newname2id as $name => $id) {
         if ($id === null) {
             $o = new stdClass();
             $o->category = $categoryid;
@@ -569,39 +569,39 @@ function local_dataseteditor_overwrite_wildcard_dataset(
             $o->options = LOCAL_DATASETEDITOR_DEFAULT_WILDCARD_OPTIONS;
             $o->itemcount = 0;  /* Will be updated. */
 
-            $id = $DB->insert_record($table_definitions, $o);
-            $new_name2id[$name] = $id;
+            $id = $DB->insert_record($tabledefinitions, $o);
+            $newname2id[$name] = $id;
         }
     }
 
     /* Delete old values. */
-    if (! empty($cur_wildcards)) {
-        list($where_ids, $params) = $DB->get_in_or_equal(
-            array_keys($cur_wildcards));
-        $DB->delete_records_select($table_values, 'definition ' . $where_ids,
+    if (! empty($curwildcards)) {
+        list($whereids, $params) = $DB->get_in_or_equal(
+            array_keys($curwildcards));
+        $DB->delete_records_select($tablevalues, 'definition ' . $whereids,
             $params);
     }
 
     /* Insert new values. */
     $itemnum = 0;
     foreach ($wildcards as $i => $name) {
-        $wc_id = $new_name2id[$name];
+        $wcid = $newname2id[$name];
 
         $itemnum = 0;
         foreach ($items as $values) {
             $itemnum++;
 
             $o = new stdClass();
-            $o->definition = $wc_id;
+            $o->definition = $wcid;
             $o->itemnumber = $itemnum;
             $o->value = $values[$i];
 
-            $DB->insert_record($table_values, $o);
+            $DB->insert_record($tablevalues, $o);
         }
     }
 
     /* Update wildcards' itemcount field. */
-    $DB->set_field($table_definitions, 'itemcount', $itemnum, array(
+    $DB->set_field($tabledefinitions, 'itemcount', $itemnum, array(
         'category' => $categoryid
     ));
 }
@@ -612,7 +612,7 @@ function local_dataseteditor_overwrite_wildcard_dataset(
  *
  * @param string $capability Require the user to have this capability
  * @param int $categoryid Question category id
- * @return void terminates with an error if the user does not have the given 
+ * @return void terminates with an error if the user does not have the given
  * capability.
  */
 function local_dataseteditor_require_capability_cat(

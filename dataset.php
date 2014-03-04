@@ -90,12 +90,12 @@ echo $OUTPUT->heading(get_string('editdataset', 'local_dataseteditor'));
 $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 
 /* Set to true to use data from user-submitted form. */
-$show_user_data = false;
+$showuserdata = false;
 
 if (!empty($_POST)) {
     require_sesskey();
 
-    $attr_types = array(
+    $attrtypes = array(
         'id' => PARAM_INT,
         'val' => PARAM_RAW,
         'orig' => PARAM_RAW,
@@ -104,35 +104,35 @@ if (!empty($_POST)) {
     $itemkeys = array_map('intval',
         explode(',', required_param('itemkeys', PARAM_SEQUENCE))
     );
-    $wc_keys = array_map('intval',
+    $wckeys = array_map('intval',
         explode(',', required_param('wc_keys', PARAM_SEQUENCE))
     );
 
-    $num_rows = count($itemkeys);
+    $numrows = count($itemkeys);
 
 
-    $new_items = array();
+    $newitems = array();
     $deleteitems = array();
-    $show_user_data = true;
+    $showuserdata = true;
     $success = true;
 
     foreach ($itemkeys as $i) {
         $suffix = '_i' . $i;
 
         $varname = 'data_del' . $suffix;
-        $delete_row = required_param($varname, PARAM_BOOL);
-        if ($delete_row) {
+        $deleterow = required_param($varname, PARAM_BOOL);
+        if ($deleterow) {
             $deleteitems[$i] = LOCAL_DATASETEDITOR_DELETE_GIVEN;
         }
 
-        $any_data = false;
-        $any_empty = false;
+        $anydata = false;
+        $anyempty = false;
 
-        foreach ($wc_keys as $wc) {
+        foreach ($wckeys as $wc) {
             $suffix = '_i' . $i . '_w' . $wc;
             $item = new stdClass();
 
-            foreach ($attr_types as $n => $t) {
+            foreach ($attrtypes as $n => $t) {
                 $varname = 'data_' . $n . $suffix;
                 $val = required_param($varname, $t);
 
@@ -145,19 +145,19 @@ if (!empty($_POST)) {
             }
 
             if (trim($item->val) === '') {
-                $any_empty = true;
+                $anyempty = true;
             } else {
-                $any_data = true;
+                $anydata = true;
             }
 
-            $new_items[$i][$wc] = $item;
+            $newitems[$i][$wc] = $item;
         }
 
         if (
             (! isset($_POST['submit_cancel'])) &&
-            $any_data &&
-            $any_empty &&
-            (! $delete_row)
+            $anydata &&
+            $anyempty &&
+            (! $deleterow)
         ) {
             echo $renderer->notification(
                 get_string('missing_data_in_X', 'local_dataseteditor', $i),
@@ -167,7 +167,7 @@ if (!empty($_POST)) {
             $success = false;
         }
 
-        if (! $any_data) {
+        if (! $anydata) {
             /* Assume that we should delete this item. */
             $deleteitems[$i] = LOCAL_DATASETEDITOR_DELETE_ASSUME;
         }
@@ -176,14 +176,14 @@ if (!empty($_POST)) {
 
 
     if (isset($_POST['submit_cancel'])) {
-        $show_user_data = false;
+        $showuserdata = false;
 
     } else if (isset($_POST['submit_saveandadd'])) {
-        $min_rows = $num_rows + LOCAL_DATASETEDITOR_NUM_EXTRA_ROWS;
+        $minrows = $numrows + LOCAL_DATASETEDITOR_NUM_EXTRA_ROWS;
 
         if ($success) {
             local_dataseteditor_save_dataset_items(
-                $new_items,
+                $newitems,
                 $deleteitems,
                 $categoryid
             );
@@ -191,14 +191,14 @@ if (!empty($_POST)) {
                 get_string('saved_dataset_items', 'local_dataseteditor'),
                 'notifysuccess'
             );
-            $show_user_data = false;
+            $showuserdata = false;
         }
 
     } else if (isset($_POST['submit_save'])) {
 
         if ($success) {
             local_dataseteditor_save_dataset_items(
-                $new_items,
+                $newitems,
                 $deleteitems,
                 $categoryid
             );
@@ -206,7 +206,7 @@ if (!empty($_POST)) {
                 get_string('saved_dataset_items', 'local_dataseteditor'),
                 'notifysuccess'
             );
-            $show_user_data = false;
+            $showuserdata = false;
         }
 
     } else {
@@ -219,24 +219,24 @@ if (!empty($_POST)) {
 $wildcards = local_dataseteditor_get_wildcards($categoryid, 0);
 $items = local_dataseteditor_get_dataset_items(array_keys($wildcards));
 
-$form_dest = $PAGE->url;
-$uservals = ($show_user_data) ? $new_items : array();
-$deleteitems_form = ($show_user_data) ? $deleteitems : array();
+$formdest = $PAGE->url;
+$uservals = ($showuserdata) ? $newitems : array();
+$deleteitemsform = ($showuserdata) ? $deleteitems : array();
 
 /* Do not check delete boxes for rows to be automatically deleted. */
-foreach ($deleteitems_form as $k => $v) {
+foreach ($deleteitemsform as $k => $v) {
     if ($v == LOCAL_DATASETEDITOR_DELETE_ASSUME) {
-        unset($deleteitems_form[$k]);
+        unset($deleteitemsform[$k]);
     }
 }
 
-if (! isset($min_rows)) {
-    $min_rows = count($items) + LOCAL_DATASETEDITOR_NUM_EXTRA_ROWS;
+if (! isset($minrows)) {
+    $minrows = count($items) + LOCAL_DATASETEDITOR_NUM_EXTRA_ROWS;
 }
 echo $renderer->render_dataset_form(
     $wildcards, $items,
-    $uservals, $deleteitems_form,
-    $min_rows, $form_dest
+    $uservals, $deleteitemsform,
+    $minrows, $formdest
 );
 
 echo $OUTPUT->footer();

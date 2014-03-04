@@ -30,15 +30,15 @@ require_once(dirname(__FILE__) . '/locallib.php');
 define('LOCAL_DATASETEDITOR_NUM_VALUESETS', 1);
 
 
-$param_courseid = required_param('courseid', PARAM_INT);
-$param_cmid = optional_param('cmid', 0, PARAM_INT);
-$param_topcategory = optional_param('topcategory', -1, PARAM_INT);
+$paramcourseid = required_param('courseid', PARAM_INT);
+$paramcmid = optional_param('cmid', 0, PARAM_INT);
+$paramtopcategory = optional_param('topcategory', -1, PARAM_INT);
 
 $urlargs = array();
 
 
 $defaultcat = intval(
-    local_dataseteditor_get_category_preference($param_courseid)
+    local_dataseteditor_get_category_preference($paramcourseid)
 );
 
 
@@ -47,25 +47,25 @@ $defaultcat = intval(
  */
 function local_dataseteditor_error_cleanup() {
     if ($defaultcat > 0) {
-        local_dataseteditor_unset_category_preference($param_courseid);
+        local_dataseteditor_unset_category_preference($paramcourseid);
     }
 }
 
 
-if ($param_topcategory >= 0) {
-    $topcategory = $param_topcategory;
+if ($paramtopcategory >= 0) {
+    $topcategory = $paramtopcategory;
 } else {
     $topcategory = $defaultcat;
 }
 
-$courseid = $param_courseid;
-$cmid = $param_cmid;
+$courseid = $paramcourseid;
+$cmid = $paramcmid;
 
 $tocontext = null;
 if ($topcategory) {
-    $cat_contextid = local_dataseteditor_get_cat_contextid($topcategory);
+    $catcontextid = local_dataseteditor_get_cat_contextid($topcategory);
 
-    $tocontext = context::instance_by_id($cat_contextid);
+    $tocontext = context::instance_by_id($catcontextid);
 
     if ($tocontext->contextlevel == CONTEXT_COURSE) {
         $courseid = $tocontext->instanceid;
@@ -190,19 +190,19 @@ echo $OUTPUT->heading(get_string('viewcategories', 'local_dataseteditor'));
 $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
 
 
-$wildcard_url = new moodle_url(
+$wildcardurl = new moodle_url(
     LOCAL_DATASETEDITOR_PLUGINPREFIX.'/wildcards.php',
     $urlargs
 );
-$dataset_url = new moodle_url(
+$dataseturl = new moodle_url(
     LOCAL_DATASETEDITOR_PLUGINPREFIX.'/dataset.php',
     $urlargs
 );
-$export_url = new moodle_url(
+$exporturl = new moodle_url(
     LOCAL_DATASETEDITOR_PLUGINPREFIX.'/export_dataset.php',
     $urlargs
 );
-$import_url = new moodle_url(
+$importurl = new moodle_url(
     LOCAL_DATASETEDITOR_PLUGINPREFIX.'/import_dataset.php',
     $urlargs
 );
@@ -215,11 +215,11 @@ if (isset($modulecontext)) {
     $thiscontext = $coursecontext;
 }
 
-$all_contexts = $thiscontext->get_parent_context_ids(true);
+$allcontexts = $thiscontext->get_parent_context_ids(true);
 
 $contexts = array();
 $contextids = array();
-foreach ($all_contexts as $cid) {
+foreach ($allcontexts as $cid) {
     $c = context::instance_by_id($cid);
     if (has_capability(LOCAL_DATASETEDITOR_VIEW_CAPABILITY, $c)) {
         $contexts[$cid] = $c;
@@ -236,20 +236,20 @@ if (empty($contextids)) {
 } else if ($topcategory > 0) {
     $catids = question_categorylist($topcategory);
 
-    list($where_ids, $params) = $DB->get_in_or_equal($catids);
+    list($whereids, $params) = $DB->get_in_or_equal($catids);
     $results = $DB->get_records_sql(
         'SELECT cat.* FROM {question_categories} AS cat
-        WHERE cat.id ' . $where_ids .
+        WHERE cat.id ' . $whereids .
         '
         ORDER BY cat.sortorder, cat.name, cat.id',
         $params
     );
 
 } else {
-    list($where_ids, $params) = $DB->get_in_or_equal($contextids);
+    list($whereids, $params) = $DB->get_in_or_equal($contextids);
     $results = $DB->get_records_sql(
         'SELECT cat.* FROM {question_categories} AS cat
-        WHERE cat.contextid ' . $where_ids .
+        WHERE cat.contextid ' . $whereids .
         '
         ORDER BY cat.sortorder, cat.name, cat.id',
         $params
@@ -267,7 +267,7 @@ foreach ($results as $row) {
     $contextid2cats[$row->contextid][] = $o;
 }
 
-$context_cats = array();
+$contextcats = array();
 foreach ($contexts as $cid => $context) {
     if (! isset($contextid2cats[$cid])) {
         continue;
@@ -277,7 +277,7 @@ foreach ($contexts as $cid => $context) {
     $o->context = $context;
     $o->categories = $contextid2cats[$cid];
 
-    $context_cats[] = $o;
+    $contextcats[] = $o;
 }
 
 $categorychoiceurl = new moodle_url($PAGE->url);
@@ -291,8 +291,8 @@ echo $renderer->render_category_form(
 echo "<br />\n";
 
 echo $renderer->render_category_tables(
-    $context_cats, LOCAL_DATASETEDITOR_NUM_VALUESETS,
-    $wildcard_url, $dataset_url, $export_url, $import_url
+    $contextcats, LOCAL_DATASETEDITOR_NUM_VALUESETS,
+    $wildcardurl, $dataseturl, $exporturl, $importurl
 );
 
 echo $OUTPUT->footer();

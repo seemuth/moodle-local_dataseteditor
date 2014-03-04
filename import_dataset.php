@@ -84,14 +84,14 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('importdataset', 'local_dataseteditor'));
 
 $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
-$form_dest = $PAGE->url;
+$formdest = $PAGE->url;
 
 
 // Don't need any data values.
 $wildcards = local_dataseteditor_get_wildcards($categoryid, 0);
 
-$display_confirmation = false;
-$have_all_data = false;
+$displayconfirmation = false;
+$havealldata = false;
 
 if (!empty($_POST)) {
     require_sesskey();
@@ -106,8 +106,8 @@ if (!empty($_POST)) {
             );
 
         } else {
-            $new_wildcards = array();
-            $new_items = array();
+            $newwildcards = array();
+            $newitems = array();
 
             $filename = $file['tmp_name'];
             $fin = fopen($filename, 'r');
@@ -131,24 +131,24 @@ if (!empty($_POST)) {
 
                     $words = explode("\t", $line);
 
-                    if (!$new_wildcards) {
+                    if (!$newwildcards) {
                         foreach ($words as $w) {
                             $w = clean_param($w, PARAM_ALPHANUMEXT);
-                            $new_wildcards[] = $w;
+                            $newwildcards[] = $w;
                         }
 
                     } else {
-                        $data_row = array();
+                        $datarow = array();
                         $i = 0;
                         foreach ($words as $w) {
                             $w = clean_param($w, PARAM_RAW);
                             if (strlen($w) > 0) {
-                                $data_row[$i] = unformat_float($w);
+                                $datarow[$i] = unformat_float($w);
                             }
                             $i++;
                         }
 
-                        $new_items[$itemkey] = $data_row;
+                        $newitems[$itemkey] = $datarow;
                         $itemkey++;
                     }
                 }
@@ -156,19 +156,19 @@ if (!empty($_POST)) {
                 fclose($fin);
 
 
-                $display_confirmation = true;
+                $displayconfirmation = true;
             }
         }
 
         /* Ensure all data is defined. */
-        $have_all_data = true;
-        foreach ($new_items as $itemkey => $item) {
-            foreach ($new_wildcards as $wc_id => $wc_name) {
-                if (! isset($item[$wc_id])) {
-                    $have_all_data = false;
+        $havealldata = true;
+        foreach ($newitems as $itemkey => $item) {
+            foreach ($newwildcards as $wcid => $wcname) {
+                if (! isset($item[$wcid])) {
+                    $havealldata = false;
 
                     $eo = new stdClass();
-                    $eo->name = $wc_name;
+                    $eo->name = $wcname;
                     $eo->num = $itemkey + 1;
 
                     echo $renderer->notification(
@@ -182,7 +182,7 @@ if (!empty($_POST)) {
             }
         }
 
-        if (! $have_all_data) {
+        if (! $havealldata) {
             echo $renderer->notification(
                 get_string(
                     'cannot_save_dataset_asis',
@@ -195,45 +195,45 @@ if (!empty($_POST)) {
     } else {
         /* No uploaded file: must be save or cancel! */
 
-        $submit_overwrite = (
+        $submitoverwrite = (
             optional_param('submit_overwrite', 0, PARAM_RAW) ? true : false
         );
-        $submit_cancel = (
+        $submitcancel = (
             optional_param('submit_cancel', 0, PARAM_RAW) ? true : false
         );
 
-        if ($submit_cancel) {
+        if ($submitcancel) {
             echo $renderer->notification(
                 get_string('cancelled', 'local_dataseteditor'),
                 'notifyproblem'
             );
 
-        } else if ($submit_overwrite) {
+        } else if ($submitoverwrite) {
 
             $success = true;
 
             $itemcount = required_param('itemcount', PARAM_INT);
             $wildcardcount = required_param('wildcardcount', PARAM_INT);
 
-            $new_wildcards = array();
-            for ($wc_num = 0; $wc_num < $wildcardcount; $wc_num++) {
-                $field = 'wc_name_w' . $wc_num;
+            $newwildcards = array();
+            for ($wcnum = 0; $wcnum < $wildcardcount; $wcnum++) {
+                $field = 'wc_name_w' . $wcnum;
                 $name = required_param($field, PARAM_ALPHANUMEXT);
-                $new_wildcards[$wc_num] = $name;
+                $newwildcards[$wcnum] = $name;
             }
 
-            $new_items = array();
-            for ($item_num = 0; $item_num < $itemcount; $item_num++) {
+            $newitems = array();
+            for ($itemnum = 0; $itemnum < $itemcount; $itemnum++) {
                 $thisitem = array();
 
-                for ($wc_num = 0; $wc_num < $wildcardcount; $wc_num++) {
-                    $field = 'val_i' . $item_num . '_w' . $wc_num;
+                for ($wcnum = 0; $wcnum < $wildcardcount; $wcnum++) {
+                    $field = 'val_i' . $itemnum . '_w' . $wcnum;
                     $val = required_param($field, PARAM_RAW);
 
                     if (strtolower($val) == 'null') {
                         $eo = new stdClass();
-                        $eo->name = $new_wildcards[$wc_num];
-                        $eo->num = $item_num + 1;
+                        $eo->name = $newwildcards[$wcnum];
+                        $eo->num = $itemnum + 1;
 
                         echo $renderer->notification(
                             get_string(
@@ -245,18 +245,18 @@ if (!empty($_POST)) {
                         $success = false;
 
                     } else {
-                        $thisitem[$wc_num] = unformat_float($val);
+                        $thisitem[$wcnum] = unformat_float($val);
                     }
                 }
 
-                $new_items[$item_num] = $thisitem;
+                $newitems[$itemnum] = $thisitem;
             }
 
             if ($success) {
                 local_dataseteditor_overwrite_wildcard_dataset(
                     $categoryid,
-                    $new_wildcards,
-                    $new_items
+                    $newwildcards,
+                    $newitems
                 );
 
                 echo $renderer->notification(
@@ -265,43 +265,43 @@ if (!empty($_POST)) {
                 );
 
             } else {
-                $display_confirmation = true;
+                $displayconfirmation = true;
             }
         }
     }
 }
 
-if ($display_confirmation) {
+if ($displayconfirmation) {
 
     /* Compile list of changes to commit. */
-    $old_name2num = array();
+    $oldname2num = array();
     foreach ($wildcards as $wc) {
-        $old_name2num[$wc->name] = $wc->id;
+        $oldname2num[$wc->name] = $wc->id;
     }
-    $new_name2num = array_flip($new_wildcards);
+    $newname2num = array_flip($newwildcards);
 
-    $to_delete = array_diff_key($old_name2num, $new_name2num);
-    $to_add = array_diff_key($new_name2num, $old_name2num);
+    $todelete = array_diff_key($oldname2num, $newname2num);
+    $toadd = array_diff_key($newname2num, $oldname2num);
 
     $changelist = array();
-    foreach ($to_delete as $name => $num) {
+    foreach ($todelete as $name => $num) {
         $changelist[] = get_string('delete_wildcardX',
             'local_dataseteditor', $name);
     }
-    foreach ($to_add as $name => $num) {
+    foreach ($toadd as $name => $num) {
         $changelist[] = get_string('add_wildcardX',
             'local_dataseteditor', $name);
     }
     $changelist[] = get_string('update_all_data', 'local_dataseteditor');
 
     echo $renderer->render_dataset_import_confirm(
-        $new_wildcards, $new_items, $form_dest, $changelist
+        $newwildcards, $newitems, $formdest, $changelist
     );
 
 }
 
-if (! $have_all_data) {
-    echo $renderer->render_dataset_upload_form($form_dest);
+if (! $havealldata) {
+    echo $renderer->render_dataset_upload_form($formdest);
 }
 
 echo $OUTPUT->footer();

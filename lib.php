@@ -34,9 +34,9 @@ function local_dataseteditor_add_navigation_nodes($topnode, $urlparams) {
     $categoryid = optional_param('categoryid', 0, PARAM_INT);
 
     if ($categoryid > 0) {
-        $index_type = navigation_node::TYPE_CONTAINER;
+        $indextype = navigation_node::TYPE_CONTAINER;
     } else {
-        $index_type = navigation_node::TYPE_CUSTOM;
+        $indextype = navigation_node::TYPE_CUSTOM;
     }
 
     $indexnode = $topnode->add(
@@ -45,7 +45,7 @@ function local_dataseteditor_add_navigation_nodes($topnode, $urlparams) {
             LOCAL_DATASETEDITOR_PLUGINPREFIX.'/categories.php',
             $urlparams
         ),
-        $index_type
+        $indextype
     );
 
     if ($categoryid > 0) {

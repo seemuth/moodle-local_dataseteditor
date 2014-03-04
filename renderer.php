@@ -78,20 +78,20 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
      * @param array $wildcards[] = stdClass(->id ->name ->values)
      * @param array $uservals[] = stdClass(->id ->name ->del ->orig)
      * Override starting values on form
-     * @param int $min_rows Minimum number of wildcard rows to show
-     * @param url $form_dest URL to which this form submits
+     * @param int $minrows Minimum number of wildcard rows to show
+     * @param url $formdest URL to which this form submits
      * @return string html code
      */
     public function render_wildcard_form($wildcards, $uservals,
-        $min_rows, $form_dest
+        $minrows, $formdest
     ) {
         global $CFG;
 
-        $form_attributes = array(
-            'action' => $form_dest->out(false),
+        $formattributes = array(
+            'action' => $formdest->out(false),
             'method' => 'POST'
         );
-        $form_contents = '';
+        $formcontents = '';
 
         $table = new html_table();
         $table->attributes['class'] = 'flexible generaltable';
@@ -111,21 +111,21 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         uasort($wildcards, 'local_dataseteditor_wildcard_cmp');
 
         /* Split $newvals into two arrays:
-         *      $val_override[id] = stdClass
-         *      $new_vals[] = stdClass
+         *      $valoverride[id] = stdClass
+         *      $newvals[] = stdClass
          */
 
-        $val_override = array();
-        $new_vals = array();
+        $valoverride = array();
+        $newvals = array();
         foreach ($uservals as $uv) {
             if ($uv->id > 0) {
-                $val_override[$uv->id] = $uv;
+                $valoverride[$uv->id] = $uv;
             } else {
-                $new_vals[] = $uv;
+                $newvals[] = $uv;
             }
         }
 
-        $override_fields = array('name', 'del', 'orig');
+        $overridefields = array('name', 'del', 'orig');
 
         /* Set defaults for each wildcard, then override fields as needed.
          */
@@ -133,15 +133,15 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             $wc->orig = $wc->name;
             $wc->del = 0;
 
-            if (isset($val_override[$wc->id])) {
-                foreach ($override_fields as $field) {
-                    $wc->$field = $val_override[$wc->id]->$field;
+            if (isset($valoverride[$wc->id])) {
+                foreach ($overridefields as $field) {
+                    $wc->$field = $valoverride[$wc->id]->$field;
                 }
             }
         }
 
         /* Make sure we have the minimum number of wildcard fields. */
-        $need = $min_rows - count($wildcards);
+        $need = $minrows - count($wildcards);
         for ($i = 0; $i < $need; $i++) {
             $wc = new stdClass();
             $wc->id = 0;
@@ -150,9 +150,9 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             $wc->del = 0;
             $wc->values = array();
 
-            if (isset($new_vals[$i])) {
-                foreach ($override_fields as $field) {
-                    $wc->$field = $new_vals[$i]->$field;
+            if (isset($newvals[$i])) {
+                foreach ($overridefields as $field) {
+                    $wc->$field = $newvals[$i]->$field;
                 }
             }
 
@@ -164,96 +164,96 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         foreach ($wildcards as $wc) {
             $suffix = '_' . $i;
 
-            $data_id = html_writer::empty_tag('input', array(
+            $dataid = html_writer::empty_tag('input', array(
                 'type' => 'hidden',
                 'name' => 'wc_id'. $suffix,
                 'value' => $wc->id,
             ));
 
-            $data_name = '{';
-            $data_name .= html_writer::empty_tag('input', array(
+            $dataname = '{';
+            $dataname .= html_writer::empty_tag('input', array(
                 'type' => 'text',
                 'name' => 'wc_name' . $suffix,
                 'value' => $wc->name,
             ));
-            $data_name .= '}';
-            $data_name .= $data_id;
-            $data_name .= html_writer::empty_tag('input', array(
+            $dataname .= '}';
+            $dataname .= $dataid;
+            $dataname .= html_writer::empty_tag('input', array(
                 'type' => 'hidden',
                 'name' => 'wc_orig' . $suffix,
                 'value' => $wc->orig,
             ));
 
-            $data_values = implode(', ', $wc->values);
+            $datavalues = implode(', ', $wc->values);
 
-            $data_del = html_writer::empty_tag('input', array(
+            $datadel = html_writer::empty_tag('input', array(
                 'type' => 'hidden',
                 'name' => 'wc_del' . $suffix,
                 'value' => '',
             ));
-            $del_checkbox_attr = array(
+            $delcheckboxattr = array(
                 'type' => 'checkbox',
                 'name' => 'wc_del' . $suffix,
                 'value' => 'yes',
             );
             if ($wc->del) {
-                $del_checkbox_attr['checked'] = 'checked';
+                $delcheckboxattr['checked'] = 'checked';
             }
-            $data_del .= html_writer::empty_tag('input', $del_checkbox_attr);
+            $datadel .= html_writer::empty_tag('input', $delcheckboxattr);
 
-            $data_row = array($data_name, $data_values, $data_del);
+            $datarow = array($dataname, $datavalues, $datadel);
             if ($CFG->localdataseteditordebug) {
-                array_unshift($data_row, $wc->id);
+                array_unshift($datarow, $wc->id);
             }
-            $table->data[] = $data_row;
+            $table->data[] = $datarow;
 
             $i++;
         }
 
-        $num_wildcard_rows = $i;
+        $numwildcardrows = $i;
 
-        $form_contents .= html_writer::tag(
+        $formcontents .= html_writer::tag(
             'div',
             html_writer::table($table),
             array('class' => 'no-overflow')
         );
 
-        $form_contents .= html_writer::empty_tag('input', array(
+        $formcontents .= html_writer::empty_tag('input', array(
             'type' => 'hidden',
             'name' => 'num_wildcard_rows',
-            'value' => $num_wildcard_rows,
+            'value' => $numwildcardrows,
         ));
 
-        $form_contents .= html_writer::empty_tag('input', array(
+        $formcontents .= html_writer::empty_tag('input', array(
             'type' => 'hidden',
             'name' => 'sesskey',
             'value' => sesskey(),
         ));
 
-        $button_contents = '';
-        $button_contents .= html_writer::empty_tag('input', array(
+        $buttoncontents = '';
+        $buttoncontents .= html_writer::empty_tag('input', array(
             'type' => 'submit',
             'name' => 'submit_saveandadd',
             'value' => get_string('saveandadd', 'local_dataseteditor'),
         ));
-        $button_contents .= html_writer::empty_tag('input', array(
+        $buttoncontents .= html_writer::empty_tag('input', array(
             'type' => 'reset',
             'value' => get_string('reset', 'local_dataseteditor'),
         ));
-        $button_contents .= html_writer::empty_tag('br');
-        $button_contents .= html_writer::empty_tag('input', array(
+        $buttoncontents .= html_writer::empty_tag('br');
+        $buttoncontents .= html_writer::empty_tag('input', array(
             'type' => 'submit',
             'name' => 'submit_save',
             'value' => get_string('save', 'local_dataseteditor'),
         ));
-        $button_contents .= html_writer::empty_tag('input', array(
+        $buttoncontents .= html_writer::empty_tag('input', array(
             'type' => 'submit',
             'name' => 'submit_cancel',
             'value' => get_string('cancel', 'local_dataseteditor'),
         ));
-        $form_contents .= html_writer::tag('p', $button_contents);
+        $formcontents .= html_writer::tag('p', $buttoncontents);
 
-        return html_writer::tag('form', $form_contents, $form_attributes);
+        return html_writer::tag('form', $formcontents, $formattributes);
     }
 
 
@@ -264,20 +264,20 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
      * @param array $items[itemnum] = array(defnum => stdClass(->id ->val))
      * @param array $uservals[itemnum] = array(defnum => stdClass(->val))
      * @param array $deleteitems[itemnum] = (don't care)
-     * @param int $min_rows Minimum number of item rows to show
-     * @param url $form_dest URL to which this form submits
+     * @param int $minrows Minimum number of item rows to show
+     * @param url $formdest URL to which this form submits
      * @return string html code
      */
     public function render_dataset_form($wildcards, $items,
-        $uservals, $deleteitems, $min_rows, $form_dest
+        $uservals, $deleteitems, $minrows, $formdest
     ) {
         global $CFG;
 
-        $form_attributes = array(
-            'action' => $form_dest->out(false),
+        $formattributes = array(
+            'action' => $formdest->out(false),
             'method' => 'POST'
         );
-        $form_contents = '';
+        $formcontents = '';
 
         $table = new html_table();
         $table->attributes['class'] = 'flexible generaltable';
@@ -296,7 +296,7 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
 
         /* Make sure we have the minimum number of item fields. */
         $itemkeys = array_keys($items);
-        $need = $min_rows - count($itemkeys);
+        $need = $minrows - count($itemkeys);
 
         if (empty($itemkeys)) {
             $itemkey = 0;
@@ -316,15 +316,15 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         ksort($items);
         foreach ($items as $itemkey => $item) {
 
-            $any_data = false;  /* True if any data is currently defined */
+            $anydata = false;  /* True if any data is currently defined */
 
-            $data_row = array();
+            $datarow = array();
 
             foreach ($wildcards as $wc) {
                 $suffix = '_i' . $itemkey . '_w' . $wc->id;
 
                 if (isset($item[$wc->id])) {
-                    $any_data = true;
+                    $anydata = true;
 
                     $id = $item[$wc->id]->id;
                     $val = $item[$wc->id]->val;
@@ -339,105 +339,105 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                     $orig = $uservals[$itemkey][$wc->id]->orig;
                 }
 
-                $data_id = html_writer::empty_tag('input', array(
+                $dataid = html_writer::empty_tag('input', array(
                     'type' => 'hidden',
                     'name' => 'data_id'. $suffix,
                     'value' => $id,
                 ));
 
                 if ($CFG->localdataseteditordebug) {
-                    $data_id .= $id . ' ';
+                    $dataid .= $id . ' ';
                 }
 
-                $data_val = html_writer::empty_tag('input', array(
+                $dataval = html_writer::empty_tag('input', array(
                     'type' => 'text',
                     'name' => 'data_val' . $suffix,
                     'value' => $val,
                 ));
-                $data_val .= html_writer::empty_tag('input', array(
+                $dataval .= html_writer::empty_tag('input', array(
                     'type' => 'hidden',
                     'name' => 'data_orig' . $suffix,
                     'value' => $orig,
                 ));
 
-                $data_row[] = $data_id . $data_val;
+                $datarow[] = $dataid . $dataval;
             }
 
             /* Add row label, including annotation for new data. */
             $rowlabel = $itemkey;
-            if (! $any_data) {
+            if (! $anydata) {
                 $rowlabel .= ' ' . get_string('paren_newdata',
                     'local_dataseteditor');
             }
-            array_unshift($data_row, $rowlabel);
+            array_unshift($datarow, $rowlabel);
 
-            $data_del = html_writer::empty_tag('input', array(
+            $datadel = html_writer::empty_tag('input', array(
                 'type' => 'hidden',
                 'name' => 'data_del_i' . $itemkey,
                 'value' => '',
             ));
-            $del_checkbox_attr = array(
+            $delcheckboxattr = array(
                 'type' => 'checkbox',
                 'name' => 'data_del_i' . $itemkey,
                 'value' => 'yes',
             );
             if (isset($deleteitems[$itemkey])) {
-                $del_checkbox_attr['checked'] = 'checked';
+                $delcheckboxattr['checked'] = 'checked';
             }
-            $data_del .= html_writer::empty_tag('input', $del_checkbox_attr);
-            $data_row[] = $data_del;
+            $datadel .= html_writer::empty_tag('input', $delcheckboxattr);
+            $datarow[] = $datadel;
 
-            $table->data[] = $data_row;
+            $table->data[] = $datarow;
         }
 
-        $form_contents .= html_writer::tag(
+        $formcontents .= html_writer::tag(
             'div',
             html_writer::table($table),
             array('class' => 'no-overflow')
         );
 
-        $form_contents .= html_writer::empty_tag('input', array(
+        $formcontents .= html_writer::empty_tag('input', array(
             'type' => 'hidden',
             'name' => 'itemkeys',
             'value' => implode(',', array_keys($items)),
         ));
 
-        $form_contents .= html_writer::empty_tag('input', array(
+        $formcontents .= html_writer::empty_tag('input', array(
             'type' => 'hidden',
             'name' => 'wc_keys',
             'value' => implode(',', array_keys($wildcards)),
         ));
 
-        $form_contents .= html_writer::empty_tag('input', array(
+        $formcontents .= html_writer::empty_tag('input', array(
             'type' => 'hidden',
             'name' => 'sesskey',
             'value' => sesskey(),
         ));
 
-        $button_contents = '';
-        $button_contents .= html_writer::empty_tag('input', array(
+        $buttoncontents = '';
+        $buttoncontents .= html_writer::empty_tag('input', array(
             'type' => 'submit',
             'name' => 'submit_saveandadd',
             'value' => get_string('saveandadd', 'local_dataseteditor'),
         ));
-        $button_contents .= html_writer::empty_tag('input', array(
+        $buttoncontents .= html_writer::empty_tag('input', array(
             'type' => 'reset',
             'value' => get_string('reset', 'local_dataseteditor'),
         ));
-        $button_contents .= html_writer::empty_tag('br');
-        $button_contents .= html_writer::empty_tag('input', array(
+        $buttoncontents .= html_writer::empty_tag('br');
+        $buttoncontents .= html_writer::empty_tag('input', array(
             'type' => 'submit',
             'name' => 'submit_save',
             'value' => get_string('save', 'local_dataseteditor'),
         ));
-        $button_contents .= html_writer::empty_tag('input', array(
+        $buttoncontents .= html_writer::empty_tag('input', array(
             'type' => 'submit',
             'name' => 'submit_cancel',
             'value' => get_string('cancel', 'local_dataseteditor'),
         ));
-        $form_contents .= html_writer::tag('p', $button_contents);
+        $formcontents .= html_writer::tag('p', $buttoncontents);
 
-        return html_writer::tag('form', $form_contents, $form_attributes);
+        return html_writer::tag('form', $formcontents, $formattributes);
     }
 
 
@@ -510,22 +510,22 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
      * @param array $context2cats[] = array(stdClass(->context ->categories=
      *      array(stdClass(->id ->name ->numquestions ->wildcards))
      * )
-     * @param int $num_valuesets Number of value sets to show per category
-     * @param url $wildcard_url URL for editing wildcards
-     * @param url $value_url URL for editing values
-     * @param url $export_url URL for exporting datasets
-     * @param url $import_url URL for importing datasets
+     * @param int $numvaluesets Number of value sets to show per category
+     * @param url $wildcardurl URL for editing wildcards
+     * @param url $valueurl URL for editing values
+     * @param url $exporturl URL for exporting datasets
+     * @param url $importurl URL for importing datasets
      * @return string html code
      */
-    public function render_category_tables($context_cats, $num_valuesets,
-        $wildcard_url, $value_url, $export_url, $import_url
+    public function render_category_tables($contextcats, $numvaluesets,
+        $wildcardurl, $valueurl, $exporturl, $importurl
     ) {
 
         $contents = '';
 
-        foreach ($context_cats as $context_cat) {
-            $context = $context_cat->context;
-            $cats = $context_cat->categories;
+        foreach ($contextcats as $contextcat) {
+            $context = $contextcat->context;
+            $cats = $contextcat->categories;
 
             if (empty($cats)) {
                 continue;
@@ -542,43 +542,43 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             $table->data = array();
 
             foreach ($cats as $cat) {
-                $wildcard_names = array();
+                $wildcardnames = array();
                 foreach ($cat->wildcards as $wc) {
-                    $wildcard_names[] = '{' . $wc->name . '}';
+                    $wildcardnames[] = '{' . $wc->name . '}';
                 }
-                $wildcardstr = implode(', ', $wildcard_names);
+                $wildcardstr = implode(', ', $wildcardnames);
 
                 $valuesets = array();
-                for ($i = 0; $i < $num_valuesets; $i++) {
+                for ($i = 0; $i < $numvaluesets; $i++) {
                     $valueset = array();
-                    $any_values = false;
+                    $anyvalues = false;
                     foreach ($cat->wildcards as $wc) {
                         if (isset($wc->values[$i])) {
                             $v = $wc->values[$i];
-                            $any_values = true;
+                            $anyvalues = true;
                         } else {
                             $v = '';
                         }
                         $valueset[] = $v;
                     }
 
-                    if ($any_values) {
+                    if ($anyvalues) {
                         $valuesets[] = '(' . implode(',', $valueset) . ')';
                     }
                 }
 
-                $more_values = false;
+                $morevalues = false;
                 foreach ($cat->wildcards as $wc) {
                     if (
                         isset($wc->values[$i]) ||
                         ($wc->num_more_values > 0)
                     ) {
-                        $more_values = true;
+                        $morevalues = true;
                         break;
                     }
                 }
 
-                if ($more_values) {
+                if ($morevalues) {
                     $valuesets[] = '...';
                 }
 
@@ -593,32 +593,32 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                         'local_dataseteditor');
                 }
 
-                $w_url = new moodle_url($wildcard_url);
-                $w_url->param('categoryid', $cat->id);
-                $d_url = new moodle_url($value_url);
-                $d_url->param('categoryid', $cat->id);
-                $e_url = new moodle_url($export_url);
-                $e_url->param('categoryid', $cat->id);
-                $i_url = new moodle_url($import_url);
-                $i_url->param('categoryid', $cat->id);
+                $wurl = new moodle_url($wildcardurl);
+                $wurl->param('categoryid', $cat->id);
+                $durl = new moodle_url($valueurl);
+                $durl->param('categoryid', $cat->id);
+                $eurl = new moodle_url($exporturl);
+                $eurl->param('categoryid', $cat->id);
+                $iurl = new moodle_url($importurl);
+                $iurl->param('categoryid', $cat->id);
 
                 $row = array();
                 $row[] = $cat->name;
-                $row[] = html_writer::link($w_url, $wildcardstr);
-                $row[] = html_writer::link($d_url, $valuestr);
-                $row[] = html_writer::link($e_url,
+                $row[] = html_writer::link($wurl, $wildcardstr);
+                $row[] = html_writer::link($durl, $valuestr);
+                $row[] = html_writer::link($eurl,
                     get_string('exportdataset', 'local_dataseteditor'));
-                $row[] = html_writer::link($i_url,
+                $row[] = html_writer::link($iurl,
                     get_string('importdataset', 'local_dataseteditor'));
 
                 $table->data[] = $row;
             }
 
-            $context_contents = $context->get_context_name(true);
-            $context_contents .= html_writer::empty_tag('br');
-            $context_contents .= html_writer::table($table);
+            $contextcontents = $context->get_context_name(true);
+            $contextcontents .= html_writer::empty_tag('br');
+            $contextcontents .= html_writer::table($table);
 
-            $contents .= html_writer::tag('p', $context_contents);
+            $contents .= html_writer::tag('p', $contextcontents);
         }
 
         return $contents;
@@ -636,16 +636,16 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         $contents = '';
 
         /* Include row of wildcard names. */
-        $wildcard_names = array();
+        $wildcardnames = array();
         foreach ($wildcards as $wc) {
-            $wildcard_names[] = str_replace("\t", '', $wc->name);
+            $wildcardnames[] = str_replace("\t", '', $wc->name);
         }
-        $contents .= implode("\t", $wildcard_names) . "\n";
+        $contents .= implode("\t", $wildcardnames) . "\n";
 
         /* Include each dataset item. */
         ksort($items);
         foreach ($items as $itemkey => $item) {
-            $data_row = array();
+            $datarow = array();
 
             foreach ($wildcards as $wc) {
                 if (isset($item[$wc->id])) {
@@ -654,10 +654,10 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                     $val = '';
                 }
 
-                $data_row[] = $val;
+                $datarow[] = $val;
             }
 
-            $contents .= implode("\t", $data_row) . "\n";
+            $contents .= implode("\t", $datarow) . "\n";
         }
 
         return $contents;
@@ -667,46 +667,46 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
     /**
      * Renders dataset import file upload form
      *
-     * @param url $form_dest URL to which this form submits
+     * @param url $formdest URL to which this form submits
      * @return string html code
      */
-    public function render_dataset_upload_form($form_dest) {
-        $form_attributes = array(
-            'action' => $form_dest->out(false),
+    public function render_dataset_upload_form($formdest) {
+        $formattributes = array(
+            'action' => $formdest->out(false),
             'method' => 'POST',
             'enctype' => 'multipart/form-data',
         );
-        $form_contents = '';
+        $formcontents = '';
 
-        $form_contents .= get_string('import_from_spreadsheet',
+        $formcontents .= get_string('import_from_spreadsheet',
             'local_dataseteditor');
-        $form_contents .= html_writer::empty_tag('br');
+        $formcontents .= html_writer::empty_tag('br');
 
-        $form_contents .= html_writer::tag('label',
+        $formcontents .= html_writer::tag('label',
             get_string('lbl_filename', 'local_dataseteditor'),
             array('for' => 'file')
         );
-        $form_contents .= html_writer::empty_tag('input', array(
+        $formcontents .= html_writer::empty_tag('input', array(
             'type' => 'file',
             'name' => 'file',
             'id' => 'file',
         ));
 
-        $form_contents .= html_writer::empty_tag('input', array(
+        $formcontents .= html_writer::empty_tag('input', array(
             'type' => 'hidden',
             'name' => 'sesskey',
             'value' => sesskey(),
         ));
 
-        $form_contents .= html_writer::empty_tag('br');
-        $form_contents .= html_writer::empty_tag('input', array(
+        $formcontents .= html_writer::empty_tag('br');
+        $formcontents .= html_writer::empty_tag('input', array(
             'type' => 'submit',
             'name' => 'import',
             'value' => get_string('import', 'local_dataseteditor'),
         ));
-        $form_contents = html_writer::tag('p', $form_contents);
+        $formcontents = html_writer::tag('p', $formcontents);
 
-        return html_writer::tag('form', $form_contents, $form_attributes);
+        return html_writer::tag('form', $formcontents, $formattributes);
     }
 
 
@@ -715,19 +715,19 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
      *
      * @param array $wildcards[id] = name
      * @param array $items[itemnum] = array(defnum => val)
-     * @param url $form_dest URL to which this form submits
+     * @param url $formdest URL to which this form submits
      * @param array $changelist List of changes to confirm
      * @return string html code
      */
     public function render_dataset_import_confirm($wildcards, $items,
-        $form_dest, $changelist
+        $formdest, $changelist
     ) {
 
-        $form_attributes = array(
-            'action' => $form_dest->out(false),
+        $formattributes = array(
+            'action' => $formdest->out(false),
             'method' => 'POST'
         );
-        $form_contents = '';
+        $formcontents = '';
 
         $table = new html_table();
         $table->attributes['class'] = 'flexible generaltable';
@@ -736,71 +736,71 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
         );
         $table->data = array();
 
-        $unsorted_wildcards = array();
+        $unsortedwildcards = array();
         foreach ($wildcards as $name) {
-            $unsorted_wildcards[] = $name;
+            $unsortedwildcards[] = $name;
         }
 
         asort($wildcards);
 
-        foreach ($wildcards as $wc_id => $wc_name) {
-            $table->head[] = '{' . $wc_name . '}';
+        foreach ($wildcards as $wcid => $wcname) {
+            $table->head[] = '{' . $wcname . '}';
         }
 
         /* Add fields for each dataset item. */
         ksort($items);
-        $have_all_data = true;
+        $havealldata = true;
         foreach ($items as $itemkey => $item) {
 
-            $data_row = array();
+            $datarow = array();
 
-            foreach ($wildcards as $wc_id => $wc_name) {
-                $suffix = '_i' . $itemkey . '_w' . $wc_id;
+            foreach ($wildcards as $wcid => $wcname) {
+                $suffix = '_i' . $itemkey . '_w' . $wcid;
 
-                if (isset($item[$wc_id])) {
-                    $val = $item[$wc_id];
+                if (isset($item[$wcid])) {
+                    $val = $item[$wcid];
 
-                    $data_val = $val;
+                    $dataval = $val;
 
                 } else {
-                    $data_val = get_string('no_data', 'local_dataseteditor');
+                    $dataval = get_string('no_data', 'local_dataseteditor');
                     $val = 'NULL';
-                    $have_all_data = false;
+                    $havealldata = false;
                 }
 
-                $data_val .= html_writer::empty_tag('input', array(
+                $dataval .= html_writer::empty_tag('input', array(
                     'type' => 'hidden',
                     'name' => 'val' . $suffix,
                     'value' => $val,
                 ));
 
-                $data_row[] = $data_val;
+                $datarow[] = $dataval;
             }
 
             /* Add row label. */
             $rowlabel = $itemkey + 1;
-            array_unshift($data_row, $rowlabel);
+            array_unshift($datarow, $rowlabel);
 
-            $table->data[] = $data_row;
+            $table->data[] = $datarow;
         }
 
-        $form_contents .= html_writer::tag(
+        $formcontents .= html_writer::tag(
             'div',
             html_writer::table($table),
             array('class' => 'no-overflow')
         );
 
-        $form_contents .= html_writer::empty_tag('input', array(
+        $formcontents .= html_writer::empty_tag('input', array(
             'type' => 'hidden',
             'name' => 'itemcount',
             'value' => count($items),
         ));
 
         $wildcardnum = 0;
-        foreach ($unsorted_wildcards as $name) {
+        foreach ($unsortedwildcards as $name) {
             $suffix = '_w' . $wildcardnum;
 
-            $form_contents .= html_writer::empty_tag('input', array(
+            $formcontents .= html_writer::empty_tag('input', array(
                 'type' => 'hidden',
                 'name' => 'wc_name' . $suffix,
                 'value' => $name,
@@ -809,48 +809,48 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             $wildcardnum++;
         }
 
-        $form_contents .= html_writer::empty_tag('input', array(
+        $formcontents .= html_writer::empty_tag('input', array(
             'type' => 'hidden',
             'name' => 'wildcardcount',
             'value' => $wildcardnum,
         ));
 
-        $form_contents .= html_writer::empty_tag('input', array(
+        $formcontents .= html_writer::empty_tag('input', array(
             'type' => 'hidden',
             'name' => 'sesskey',
             'value' => sesskey(),
         ));
 
-        if ($have_all_data) {
+        if ($havealldata) {
             if (! empty($changelist)) {
-                $form_contents .= get_string('changes_to_commit',
+                $formcontents .= get_string('changes_to_commit',
                     'local_dataseteditor');
-                $ul_contents = '';
+                $ulcontents = '';
                 foreach ($changelist as $change) {
-                    $ul_contents .= html_writer::tag('li', $change);
+                    $ulcontents .= html_writer::tag('li', $change);
                 }
-                $form_contents .= html_writer::tag('ul', $ul_contents);
+                $formcontents .= html_writer::tag('ul', $ulcontents);
             }
 
-            $button_contents = '';
-            $button_contents .= get_string('save_overwrite_p',
+            $buttoncontents = '';
+            $buttoncontents .= get_string('save_overwrite_p',
                 'local_dataseteditor');
-            $button_contents .= html_writer::empty_tag('br');
-            $button_contents .= html_writer::empty_tag('input', array(
+            $buttoncontents .= html_writer::empty_tag('br');
+            $buttoncontents .= html_writer::empty_tag('input', array(
                 'type' => 'submit',
                 'name' => 'submit_overwrite',
                 'value' => get_string('save',
                 'local_dataseteditor'),
             ));
-            $button_contents .= html_writer::empty_tag('input', array(
+            $buttoncontents .= html_writer::empty_tag('input', array(
                 'type' => 'submit',
                 'name' => 'submit_cancel',
                 'value' => get_string('cancel', 'local_dataseteditor'),
             ));
-            $form_contents .= html_writer::tag('p', $button_contents);
+            $formcontents .= html_writer::tag('p', $buttoncontents);
         }
 
-        return html_writer::tag('form', $form_contents, $form_attributes);
+        return html_writer::tag('form', $formcontents, $formattributes);
     }
 
 }
