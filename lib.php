@@ -107,7 +107,6 @@ function local_dataseteditor_extends_settings_navigation($settings, $denode) {
 
     $urlparams = array('courseid' => $courseid);
 
-
     /* Find the Course administration and Quiz administration blocks. */
     $topnodes = array();
     foreach ($settings->children as $node) {
@@ -118,7 +117,6 @@ function local_dataseteditor_extends_settings_navigation($settings, $denode) {
             $topnodes[] = $node;
         }
     }
-
 
     foreach ($topnodes as $topnode) {
         /* Find question bank node, if it exists. */

@@ -166,7 +166,7 @@ if (!empty($_POST)) {
 $wildcards = local_dataseteditor_get_wildcards($categoryid);
 foreach ($wildcards as $k => $wc) {
     if ($wc->num_more_values > 0) {
-        $wc->values[count($wc->values)-1] = '...';
+        $wc->values[count($wc->values) - 1] = '...';
     }
 }
 

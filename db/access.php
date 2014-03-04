@@ -33,7 +33,7 @@ $capabilities = array(
             'editingteacher' => CAP_ALLOW,
             'admin' => CAP_ALLOW,
         ),
-        'clonepermissionsfrom' =>  'moodle/question:managecategory',
+        'clonepermissionsfrom' => 'moodle/question:managecategory',
     ),
     'local/dataseteditor:edit' => array(
         'captype' => 'write',
@@ -43,7 +43,7 @@ $capabilities = array(
             'editingteacher' => CAP_ALLOW,
             'admin' => CAP_ALLOW,
         ),
-        'clonepermissionsfrom' =>  'moodle/question:managecategory',
+        'clonepermissionsfrom' => 'moodle/question:managecategory',
     ),
     'local/dataseteditor:export' => array(
         'captype' => 'read',
@@ -52,7 +52,7 @@ $capabilities = array(
             'editingteacher' => CAP_ALLOW,
             'admin' => CAP_ALLOW,
         ),
-        'clonepermissionsfrom' =>  'moodle/question:managecategory',
+        'clonepermissionsfrom' => 'moodle/question:managecategory',
     ),
     'local/dataseteditor:import' => array(
         'captype' => 'write',
@@ -62,6 +62,6 @@ $capabilities = array(
             'editingteacher' => CAP_ALLOW,
             'admin' => CAP_ALLOW,
         ),
-        'clonepermissionsfrom' =>  'moodle/question:managecategory',
+        'clonepermissionsfrom' => 'moodle/question:managecategory',
     ),
 );
