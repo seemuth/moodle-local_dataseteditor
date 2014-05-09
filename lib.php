@@ -97,15 +97,26 @@ function local_dataseteditor_extends_settings_navigation($settings, $denode) {
 
     $courseid = $PAGE->course->id;
 
-    $coursecontext = context_course::instance($courseid);
+    if ($PAGE->context === null) {
+        return;
+    }
+
     if (! has_capability(
         LOCAL_DATASETEDITOR_VIEW_CAPABILITY,
-        $coursecontext)
+        $PAGE->context)
     ) {
         return;
     }
 
     $urlparams = array('courseid' => $courseid);
+
+    if ($PAGE->context->contextlevel == CONTEXT_MODULE) {
+        if ($PAGE->cm !== null) {
+            if (local_dataseteditor_applicable_module($PAGE->cm->modname)) {
+                $urlparams['cmid'] = $PAGE->context->instanceid;
+            }
+        }
+    }
 
     /* Find the Course administration and Quiz administration blocks. */
     $topnodes = array();
