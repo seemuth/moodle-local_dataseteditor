@@ -271,6 +271,10 @@ function local_dataseteditor_validate_wildcards($wildcards) {
             continue;
         }
 
+        if (empty($wc->name)) {
+            continue;
+        }
+
         if (isset($seenwildcards[$wc->name])) {
             return get_string('dup_wildcard_X', 'local_dataseteditor', $wc->name);
         }
