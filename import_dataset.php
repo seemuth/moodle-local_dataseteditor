@@ -100,10 +100,15 @@ if (!empty($_POST)) {
 
     if (isset($_FILES['file'])) {
         $file = $_FILES['file'];
-        if ($file['error']) {
+        if ($fileerror = $file['error']) {
+
+            if ($fileerror === UPLOAD_ERR_NO_FILE) {
+                $fileerror = get_string('no_file', 'local_dataseteditor');
+            }
+
             echo $renderer->notification(
-                get_string('error_upload', 'local_dataseteditor') .
-                ':' . $file['error'],
+                get_string('error_upload_X', 'local_dataseteditor',
+                    $fileerror),
                 'notifyproblem'
             );
 
