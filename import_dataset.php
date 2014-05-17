@@ -333,7 +333,7 @@ if ($displayconfirmation) {
 
 }
 
-if (! $havealldata) {
+if ((! $havealldata) || (! $displayconfirmation)) {
     echo $renderer->render_dataset_upload_form($formdest);
 }
 
