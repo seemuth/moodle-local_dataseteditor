@@ -92,6 +92,8 @@ $wildcards = local_dataseteditor_get_wildcards($categoryid, 0);
 
 $displayconfirmation = false;
 $havealldata = false;
+$newwildcards = null;
+$newitems = null;
 
 if (!empty($_POST)) {
     require_sesskey();
@@ -161,35 +163,37 @@ if (!empty($_POST)) {
         }
 
         /* Ensure all data is defined. */
-        $havealldata = true;
-        foreach ($newitems as $itemkey => $item) {
-            foreach ($newwildcards as $wcid => $wcname) {
-                if (! isset($item[$wcid])) {
-                    $havealldata = false;
+        if ($newitems) {
+            $havealldata = true;
+            foreach ($newitems as $itemkey => $item) {
+                foreach ($newwildcards as $wcid => $wcname) {
+                    if (! isset($item[$wcid])) {
+                        $havealldata = false;
 
-                    $eo = new stdClass();
-                    $eo->name = $wcname;
-                    $eo->num = $itemkey + 1;
+                        $eo = new stdClass();
+                        $eo->name = $wcname;
+                        $eo->num = $itemkey + 1;
 
-                    echo $renderer->notification(
-                        get_string(
-                            'missing_data_X_in_X',
-                            'local_dataseteditor',
-                            $eo),
-                        'notifyproblem'
-                    );
+                        echo $renderer->notification(
+                            get_string(
+                                'missing_data_X_in_X',
+                                'local_dataseteditor',
+                                $eo),
+                            'notifyproblem'
+                        );
+                    }
                 }
             }
-        }
 
-        if (! $havealldata) {
-            echo $renderer->notification(
-                get_string(
-                    'cannot_save_dataset_asis',
-                    'local_dataseteditor'
-                ),
-                'notifyproblem'
-            );
+            if (! $havealldata) {
+                echo $renderer->notification(
+                    get_string(
+                        'cannot_save_dataset_asis',
+                        'local_dataseteditor'
+                    ),
+                    'notifyproblem'
+                );
+            }
         }
 
     } else {
