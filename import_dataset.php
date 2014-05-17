@@ -125,6 +125,7 @@ if (!empty($_POST)) {
                 );
 
             } else {
+                $success = true;
                 $linenum = 0;
                 $itemkey = 0;
                 while (!feof($fin)) {
@@ -141,6 +142,29 @@ if (!empty($_POST)) {
                     if (!$newwildcards) {
                         foreach ($words as $w) {
                             $w = clean_param($w, PARAM_ALPHANUMEXT);
+
+                            if (strlen($w) < 0) {
+                                $success = false;
+
+                                echo $renderer->notification(
+                                    get_string(
+                                        'empty_wildcard',
+                                        'local_dataseteditor'
+                                    )
+                                );
+
+                            } else if (in_array($w, $newwildcards)) {
+                                $success = false;
+
+                                echo $renderer->notification(
+                                    get_string(
+                                        'dup_wildcard_X',
+                                        'local_dataseteditor',
+                                        $w
+                                    )
+                                );
+                            }
+
                             $newwildcards[] = $w;
                         }
 
@@ -163,7 +187,7 @@ if (!empty($_POST)) {
                 fclose($fin);
 
 
-                $displayconfirmation = true;
+                $displayconfirmation = $success;
             }
         }
 
