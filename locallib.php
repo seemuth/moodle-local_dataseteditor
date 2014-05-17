@@ -257,6 +257,32 @@ function local_dataseteditor_get_wildcards($categoryid, $vallimit=4) {
 }
 
 /**
+ * Validate wildcard names. Ignore wildcards that are marked for deletion.
+ *
+ * @param array $wildcards[] = stdClass(->id ->name ->del ->orig)
+ * @return false|string error string if problem, or false if no errors
+ * @throws coding_exception
+ */
+function local_dataseteditor_validate_wildcards($wildcards) {
+    $seenwildcards = array();
+
+    foreach ($wildcards as $wc) {
+        if ($wc->del) {
+            continue;
+        }
+
+        if (isset($seenwildcards[$wc->name])) {
+            return get_string('dup_wildcard_X', 'local_dataseteditor', $wc->name);
+        }
+
+        $seenwildcards[$wc->name] = $wc;
+    }
+
+    // No errors.
+    return false;
+}
+
+/**
  * Updates database with changed wildcard names. Also deletes orphan dataset
  * item values.
  *

@@ -134,28 +134,39 @@ if (!empty($_POST)) {
 
     } else if (isset($_POST['submit_saveandadd'])) {
         $minrows = $numrows + LOCAL_DATASETEDITOR_NUM_EXTRA_ROWS;
-        local_dataseteditor_save_wildcards(
-            $newwildcards,
-            $wildcarddefaults,
-            $categoryid
-        );
-        echo $renderer->notification(
-            get_string('saved_wildcards', 'local_dataseteditor'),
-            'notifysuccess'
-        );
-        $wildcardsfromuser = false;
+
+        if ($errormsg = local_dataseteditor_validate_wildcards($newwildcards)) {
+            echo $renderer->notification($errormsg, 'notifyproblem');
+
+        } else {
+            local_dataseteditor_save_wildcards(
+                $newwildcards,
+                $wildcarddefaults,
+                $categoryid
+            );
+            echo $renderer->notification(
+                get_string('saved_wildcards', 'local_dataseteditor'),
+                'notifysuccess'
+            );
+            $wildcardsfromuser = false;
+        }
 
     } else if (isset($_POST['submit_save'])) {
-        local_dataseteditor_save_wildcards(
-            $newwildcards,
-            $wildcarddefaults,
-            $categoryid
-        );
-        echo $renderer->notification(
-            get_string('saved_wildcards', 'local_dataseteditor'),
-            'notifysuccess'
-        );
-        $wildcardsfromuser = false;
+        if ($errormsg = local_dataseteditor_validate_wildcards($newwildcards)) {
+            echo $renderer->notification($errormsg, 'notifyproblem');
+
+        } else {
+            local_dataseteditor_save_wildcards(
+                $newwildcards,
+                $wildcarddefaults,
+                $categoryid
+            );
+            echo $renderer->notification(
+                get_string('saved_wildcards', 'local_dataseteditor'),
+                'notifysuccess'
+            );
+            $wildcardsfromuser = false;
+        }
 
     } else {
         throw new coding_exception('Invalid submit button');
