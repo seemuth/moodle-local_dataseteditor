@@ -19,7 +19,7 @@
  *
  * @package    local
  * @subpackage dataseteditor
- * @copyright  Daniel Seemuth
+ * @copyright  2013-2015 Daniel Seemuth
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

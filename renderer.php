@@ -19,7 +19,7 @@
  *
  * @package    local
  * @subpackage dataseteditor
- * @copyright  2013 Daniel Seemuth
+ * @copyright  2013-2015 Daniel Seemuth
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -54,7 +54,7 @@ function local_dataseteditor_wildcard_cmp($a, $b) {
 /**
  * Dataset editor renderer class
  *
- * @copyright 2013 Daniel Seemuth
+ * @copyright  2013-2015 Daniel Seemuth
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class local_dataseteditor_renderer extends plugin_renderer_base {

@@ -3,7 +3,7 @@ moodle-local_dataseteditor
 
 This Moodle plugin allows teachers to easily edit datasets associated with quiz question categories.
 
-It was created at the University of Wisconsin - Madison by Dan Seemuth.
+It was created at the University of Wisconsin - Madison by Daniel Seemuth.
 
 To install using git, type this command in the root of your Moodle install:
 
