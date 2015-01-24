@@ -73,6 +73,7 @@ $mainurl = new moodle_url(
 
 if (! local_dataseteditor_get_cat_contextid($categoryid, false)) {
     /* Invalid category ID. */
+    $mainurl->remove_params('categoryid');
     print_error(
         'catnotexist',
         'local_dataseteditor',
