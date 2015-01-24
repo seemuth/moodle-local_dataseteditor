@@ -53,18 +53,28 @@ function local_dataseteditor_applicable_module($modulename) {
  * Returns context ID for the given question category
  *
  * @param int $categoryid Question category ID
+ * @param bool $mustexist If true and the category does not exist, throw error
  * @return int $contextid
  */
-function local_dataseteditor_get_cat_contextid($categoryid) {
+function local_dataseteditor_get_cat_contextid(
+    $categoryid,
+    $mustexist = true
+) {
     global $DB;
 
     $tablecategories = 'question_categories';
+
+    if ($mustexist) {
+        $strictness = MUST_EXIST;
+    } else {
+        $strictness = IGNORE_MISSING;
+    }
 
     return $DB->get_field(
         $tablecategories,
         'contextid',
         array('id' => $categoryid),
-        MUST_EXIST
+        $strictness
     );
 }
 
@@ -648,7 +658,7 @@ function local_dataseteditor_overwrite_wildcard_dataset(
 function local_dataseteditor_require_capability_cat(
     $capability, $categoryid
 ) {
-    $contextid = local_dataseteditor_get_cat_contextid($categoryid);
+    $contextid = local_dataseteditor_get_cat_contextid($categoryid, true);
     $context = context::instance_by_id($contextid);
     require_capability($capability, $context);
 }
