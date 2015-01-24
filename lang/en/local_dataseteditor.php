@@ -81,4 +81,4 @@ $string['dataseteditor:import'] = 'Import datasets';
 $string['unexpectedcontext'] = 'Unexpected context';
 
 /* Define warning messages. */
-$string['catnotexist'] = 'That category no longer exists';
+$string['catnotexist'] = 'The desired category no longer exists';
