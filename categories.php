@@ -46,6 +46,7 @@ $defaultcat = intval(
  * of errors.
  */
 function local_dataseteditor_error_cleanup() {
+    global $defaultcat, $paramcourseid;
     if ($defaultcat > 0) {
         local_dataseteditor_unset_category_preference($paramcourseid);
     }
