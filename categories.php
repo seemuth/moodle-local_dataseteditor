@@ -75,7 +75,7 @@ if ($topcategory) {
         local_dataseteditor_error_cleanup();
 
         $problemnotifications[] = get_string(
-            'catnoexist',
+            'catnotexist',
             'local_dataseteditor'
         );
     }
