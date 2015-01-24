@@ -67,7 +67,7 @@ $mainurl = new moodle_url(
     $urlargs
 );
 
-if (! local_dataseteditor_get_cat_contextid($categoryid)) {
+if (! local_dataseteditor_get_cat_contextid($categoryid, false)) {
     /* Invalid category ID. */
     print_error(
         'catnotexist',
