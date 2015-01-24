@@ -61,12 +61,27 @@ if ($paramtopcategory >= 0) {
 $courseid = $paramcourseid;
 $cmid = $paramcmid;
 
+$problemnotifications = array();
+
 $tocontext = null;
 if ($topcategory) {
-    $catcontextid = local_dataseteditor_get_cat_contextid($topcategory);
+    /* Get context ID, or false if the category does not exist. */
+    $catcontextid = local_dataseteditor_get_cat_contextid($topcategory, false);
 
-    $tocontext = context::instance_by_id($catcontextid);
+    if ($catcontextid) {
+        $tocontext = context::instance_by_id($catcontextid);
 
+    } else {
+        local_dataseteditor_error_cleanup();
+
+        $problemnotifications[] = get_string(
+            'catnoexist',
+            'local_dataseteditor'
+        );
+    }
+}
+
+if ($tocontext) {
     if ($tocontext->contextlevel == CONTEXT_COURSE) {
         $courseid = $tocontext->instanceid;
         $cmid = 0;
@@ -188,6 +203,10 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('viewcategories', 'local_dataseteditor'));
 
 $renderer = $PAGE->theme->get_renderer($PAGE, 'local_dataseteditor');
+
+foreach ($problemnotifications as $msg) {
+    echo $renderer->notification($msg, 'notifyproblem');
+}
 
 
 $wildcardurl = new moodle_url(
