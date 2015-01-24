@@ -62,6 +62,20 @@ if ($cmid > 0) {
     require_login($courseid);
 }
 
+$mainurl = new moodle_url(
+    LOCAL_DATASETEDITOR_PLUGINPREFIX.'/categories.php',
+    $urlargs
+);
+
+if (! local_dataseteditor_get_cat_contextid($categoryid)) {
+    /* Invalid category ID. */
+    print_error(
+        'catnotexist',
+        'local_dataseteditor',
+        $mainurl
+    );
+}
+
 require_capability(LOCAL_DATASETEDITOR_EXPORT_CAPABILITY, $thiscontext);
 local_dataseteditor_require_capability_cat(
     LOCAL_DATASETEDITOR_EXPORT_CAPABILITY,
