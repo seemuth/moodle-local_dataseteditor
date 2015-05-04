@@ -316,7 +316,11 @@ echo $renderer->render_category_form(
 echo "<br />\n";
 
 if ($topcategory > 0) {
-    $catname = $catid2cat[$topcategory];
+    if (isset($catid2cat[$topcategory])) {
+        $catname = $catid2cat[$topcategory]->name;
+    } else {
+        $catname = false;
+    }
 
     if ($catname) {
         $validateurl = new moodle_url(
