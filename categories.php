@@ -278,6 +278,8 @@ if (empty($contextids)) {
     );
 }
 
+$catid2cat = array();
+
 foreach ($results as $row) {
     $o = new stdClass();
     $o->id = $row->id;
@@ -287,6 +289,7 @@ foreach ($results as $row) {
         LOCAL_DATASETEDITOR_NUM_VALUESETS);
 
     $contextid2cats[$row->contextid][] = $o;
+    $catid2cat[$o->id] = $o;
 }
 
 $contextcats = array();
@@ -311,6 +314,25 @@ echo $renderer->render_category_form(
 );
 
 echo "<br />\n";
+
+if ($topcategory > 0) {
+    $catname = $catid2cat[$topcategory];
+
+    if ($catname) {
+        $validateurl = new moodle_url(
+            LOCAL_DATASETEDITOR_PLUGINPREFIX.'/validate.php',
+            $urlargs
+        );
+        $validateurl->param('categoryid', $topcategory);
+        $validatelink = html_writer::link($validateurl,
+            get_string(
+                'validatealldatasets_X',
+                'local_dataseteditor',
+                $catname
+            ));
+        echo html_writer::tag('p', $validatelink);
+    }
+}
 
 echo $renderer->render_category_tables(
     $contextcats, LOCAL_DATASETEDITOR_NUM_VALUESETS,

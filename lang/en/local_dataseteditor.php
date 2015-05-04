@@ -70,6 +70,7 @@ $string['add_wildcardX'] = 'Add wildcard {$a}';
 $string['delete_wildcardX'] = 'Delete wildcard {$a}';
 $string['update_all_data'] = 'Update all data';
 $string['cannot_save_dataset_asis'] = 'Cannot save dataset as-is. No changes were saved.';
+$string['validatealldatasets_X'] = 'Validate all datasets within {$a} (or any subcategory)';
 
 /* Define permission strings. */
 $string['dataseteditor:view'] = 'View datasets';
