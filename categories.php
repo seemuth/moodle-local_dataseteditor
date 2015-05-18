@@ -228,6 +228,10 @@ $importurl = new moodle_url(
     LOCAL_DATASETEDITOR_PLUGINPREFIX.'/import_dataset.php',
     $urlargs
 );
+$validateurl = new moodle_url(
+    LOCAL_DATASETEDITOR_PLUGINPREFIX.'/validate.php',
+    $urlargs
+);
 
 
 /* Retrieve all related contexts for which the user has permissions. */
@@ -323,10 +327,6 @@ if ($topcategory > 0) {
     }
 
     if ($catname) {
-        $validateurl = new moodle_url(
-            LOCAL_DATASETEDITOR_PLUGINPREFIX.'/validate.php',
-            $urlargs
-        );
         $validateurl->param('categoryid', $topcategory);
         $validatelink = html_writer::link($validateurl,
             get_string(
@@ -340,7 +340,7 @@ if ($topcategory > 0) {
 
 echo $renderer->render_category_tables(
     $contextcats, LOCAL_DATASETEDITOR_NUM_VALUESETS,
-    $wildcardurl, $dataseturl, $exporturl, $importurl
+    $wildcardurl, $dataseturl, $exporturl, $importurl, $validateurl
 );
 
 echo $OUTPUT->footer();

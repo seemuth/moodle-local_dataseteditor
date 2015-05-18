@@ -515,10 +515,11 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
      * @param url $valueurl URL for editing values
      * @param url $exporturl URL for exporting datasets
      * @param url $importurl URL for importing datasets
+     * @param url $validateurl URL for validating datasets
      * @return string html code
      */
     public function render_category_tables($contextcats, $numvaluesets,
-        $wildcardurl, $valueurl, $exporturl, $importurl
+        $wildcardurl, $valueurl, $exporturl, $importurl, $validateurl
     ) {
 
         $contents = '';
@@ -614,7 +615,16 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
                 $table->data[] = $row;
             }
 
+            $vurl = new moodle_url($validateurl);
+            $vurl->param('contextid', $context->id);
+
             $contextcontents = $context->get_context_name(true);
+            $contextcontents .= ' ' . html_writer::link($vurl,
+                get_string(
+                    'validatealldatasets_X',
+                    'local_dataseteditor',
+                    $context->get_context_name(true)
+                ));
             $contextcontents .= html_writer::empty_tag('br');
             $contextcontents .= html_writer::table($table);
 
