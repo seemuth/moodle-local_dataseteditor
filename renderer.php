@@ -619,7 +619,8 @@ class local_dataseteditor_renderer extends plugin_renderer_base {
             $vurl->param('contextid', $context->id);
 
             $contextcontents = $context->get_context_name(true);
-            $contextcontents .= ' ' . html_writer::link($vurl,
+            $contextcontents .= html_writer::empty_tag('br');
+            $contextcontents .= html_writer::link($vurl,
                 get_string(
                     'validatealldatasets_X',
                     'local_dataseteditor',
