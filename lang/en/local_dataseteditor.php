@@ -71,6 +71,8 @@ $string['delete_wildcardX'] = 'Delete wildcard {$a}';
 $string['update_all_data'] = 'Update all data';
 $string['cannot_save_dataset_asis'] = 'Cannot save dataset as-is. No changes were saved.';
 $string['validatealldatasets_X'] = 'Validate all datasets within {$a} (or any subcategory)';
+$string['alldatasetsvalid'] = 'All datasets are valid!';
+$string['problemindataset'] = 'Problem in dataset';
 
 /* Define permission strings. */
 $string['dataseteditor:view'] = 'View datasets';
